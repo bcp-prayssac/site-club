@@ -13178,6 +13178,12 @@
     );
   }
   function PageAccueil({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react.useState)(false);
+    (0, import_react.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react.useState)(DEFAULT_LOGOS);
     const [conseil, setConseil] = (0, import_react.useState)(DEFAULT_CONSEIL);
     const [honneur, setHonneur] = (0, import_react.useState)(DEFAULT_HONNEUR);
@@ -13714,7 +13720,36 @@
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.btnGhostSmall, onClick: closeNewsModal, children: "Annuler" })
           ] })
         ] }) })
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var NAVY = "#0a1628";
@@ -14475,6 +14510,12 @@
     ] });
   }
   function PagePresentationClub({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react2.useState)(false);
+    (0, import_react2.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react2.useState)(DEFAULT_LOGOS2);
     const [social, setSocial] = (0, import_react2.useState)(DEFAULT_SOCIAL2);
     const [edito, setEdito] = (0, import_react2.useState)(DEFAULT_EDITO);
@@ -14768,7 +14809,36 @@
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: social.facebook || "#", style: styles2.footerLink, target: "_blank", rel: "noreferrer", children: "Facebook" }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: social.whatsapp || "#", style: styles2.footerLink, target: "_blank", rel: "noreferrer", children: "WhatsApp" })
         ] })
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD = "#0a1628";
@@ -14834,7 +14904,7 @@
     adminToggleActive: { background: "#B1432F", borderColor: "#B1432F", color: CREAM2, fontWeight: 600 },
     statusBar: { margin: 0, padding: "5px 16px", background: "#fdf8f0", color: "#0a1628", fontSize: 12 },
     body: { padding: "18px 20px 24px", display: "flex", flexDirection: "column", gap: 16, background: "rgba(253,248,240,0.1)" },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     card: { background: "#fff", borderTop: "4px solid #c9a227", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 14 },
     cardHeadRow: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 },
     cardTitle: { margin: "0 0 10px", fontSize: 15, fontWeight: 700, color: WOOD },
@@ -15201,6 +15271,12 @@
     ] }) });
   }
   function PageTypesDeJeux({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react3.useState)(false);
+    (0, import_react3.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react3.useState)(DEFAULT_LOGOS3);
     const [social, setSocial] = (0, import_react3.useState)(DEFAULT_SOCIAL3);
     const [games, setGames] = (0, import_react3.useState)({});
@@ -15409,7 +15485,36 @@
             onClose: () => setOpenGameId(null)
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD2 = "#0a1628";
@@ -15437,8 +15542,8 @@
     adminToggleActive: { background: "#B1432F", borderColor: "#B1432F", color: CREAM3, fontWeight: 600 },
     statusBar: { margin: 0, padding: "5px 16px", background: "#fdf8f0", color: "#0a1628", fontSize: 12 },
     body: { padding: "18px 20px 24px", display: "flex", flexDirection: "column", gap: 10, background: "rgba(253,248,240,0.1)" },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD2 },
-    pageIntro: { margin: "0 0 6px", fontSize: 13, color: "#0a1628" },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
+    pageIntro: { margin: "0 0 6px", fontSize: 13, color: "#fdf8f0" },
     gameGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 },
     gameCard: {
       display: "flex",
@@ -15652,6 +15757,12 @@
     ] }) });
   }
   function PageInstancesReglements({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react4.useState)(false);
+    (0, import_react4.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react4.useState)(DEFAULT_LOGOS4);
     const [social, setSocial] = (0, import_react4.useState)(DEFAULT_SOCIAL4);
     const [tab, setTab] = (0, import_react4.useState)("A");
@@ -16061,7 +16172,36 @@
             } : null
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD3 = "#0a1628";
@@ -16085,7 +16225,7 @@
     adminToggleActive: { background: "#B1432F", borderColor: "#B1432F", color: CREAM4, fontWeight: 600 },
     statusBar: { margin: 0, padding: "5px 16px", background: "#fdf8f0", color: "#0a1628", fontSize: 12 },
     body: { padding: "18px 20px 24px", display: "flex", flexDirection: "column", gap: 12, background: "rgba(253,248,240,0.1)" },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD3 },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     tabRow: { display: "flex", gap: 6, flexWrap: "wrap" },
     tabBtnBig: { border: "1px solid #C9C2AE", background: "#f3ecd8", color: "#0a1628", padding: "9px 16px", borderRadius: 6, fontSize: 12.5, fontWeight: 600 },
     tabBtnBigActive: { background: WOOD3, color: CREAM4, borderColor: WOOD3 },
@@ -16163,14 +16303,17 @@
   var DEFAULT_LOGOS5 = { club: "", ffb: "" };
   var DEFAULT_SOCIAL5 = { facebook: "", whatsapp: "" };
   var DEFAULT_LABEL = { logoUrl: "", logoPos: { x: 50, y: 50 }, description: "\xC9cole labellis\xE9e par la F\xE9d\xE9ration Fran\xE7aise de Billard." };
+  var DEFAULT_FORMATEURS = [
+    { id: "form1", nom: "Nom Pr\xE9nom", photoUrl: "", photoPos: { x: 50, y: 50 }, jeux: [], niveaux: [] }
+  ];
   var DEFAULT_HORAIRES = [
     { id: "h1", jour: "Mercredi", debut: 14, fin: 16, tableId: "t1", formateurs: "Nom Pr\xE9nom", typesJeu: ["carambole"], categories: ["D\xE9butants"] },
     { id: "h2", jour: "Samedi", debut: 10, fin: 12, tableId: "t2", formateurs: "Nom Pr\xE9nom", typesJeu: ["unebande", "troisbandes"], categories: ["R4", "R3"] }
   ];
   var DEFAULT_FORMATIONS = [
-    { title: "Arbitrage", date: "", description: "Formation f\xE9d\xE9rale pour devenir arbitre officiel, propos\xE9e par la Ligue Occitane." },
-    { title: "Formateur", date: "", description: "Formation \xE0 l'encadrement et \xE0 la p\xE9dagogie du billard, propos\xE9e par la FFB." },
-    { title: "Directeur de salle ou de tournoi", date: "", description: "Formation \xE0 l'organisation et \xE0 la direction de comp\xE9titions." }
+    { title: "Arbitrage", date: "", description: "Formation f\xE9d\xE9rale pour devenir arbitre officiel, propos\xE9e par la Ligue Occitane.", liens: [] },
+    { title: "Formateur", date: "", description: "Formation \xE0 l'encadrement et \xE0 la p\xE9dagogie du billard, propos\xE9e par la FFB.", liens: [] },
+    { title: "Directeur de salle ou de tournoi", date: "", description: "Formation \xE0 l'organisation et \xE0 la direction de comp\xE9titions.", liens: [] }
   ];
   var DEFAULT_VIDEOS = [];
   function emptyVideo() {
@@ -16306,6 +16449,52 @@
   function clamp2(v, min, max) {
     return Math.min(max, Math.max(min, v));
   }
+  function FormateurCard({ formateur, editable, onChange, onRemove }) {
+    const jeux = formateur.jeux || [];
+    const niveaux = formateur.niveaux || [];
+    const toggleJeu = (id) => onChange({ jeux: jeux.includes(id) ? jeux.filter((j) => j !== id) : [...jeux, id] });
+    const toggleNiveau = (n) => onChange({ niveaux: niveaux.includes(n) ? niveaux.filter((x) => x !== n) : [...niveaux, n] });
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.formateurCard, children: [
+      editable && onRemove && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.formateurRemoveBtn, onClick: onRemove, title: "Retirer ce formateur", children: "\xD7" }),
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", gap: 10, alignItems: "center" }, children: [
+        editable ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          LogoDropRepositionable,
+          {
+            logoUrl: formateur.photoUrl,
+            pos: formateur.photoPos,
+            onChange: (v) => onChange({ photoUrl: v }),
+            onPosChange: (p) => onChange({ photoPos: p })
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles5.formateurPhotoWrap, children: formateur.photoUrl ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          "img",
+          {
+            src: formateur.photoUrl,
+            alt: formateur.nom,
+            style: { ...styles5.formateurPhotoImg, objectPosition: `${(formateur.photoPos || { x: 50 }).x}% ${(formateur.photoPos || { y: 50 }).y}%` }
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.formateurPhotoPlaceholder, children: "Photo" }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { flex: 1 }, children: editable ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("input", { value: formateur.nom, onChange: (e) => onChange({ nom: e.target.value }), placeholder: "Nom Pr\xE9nom", style: { fontWeight: 700 } }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.formateurName, children: formateur.nom || "Nom Pr\xE9nom" }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { marginTop: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.fieldLabel, children: "Types de jeux enseign\xE9s" }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.chipRow, children: [
+          GAME_LABELS2.map(
+            (g) => editable ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { onClick: () => toggleJeu(g.id), style: { ...styles5.chip, ...jeux.includes(g.id) ? styles5.chipActive : {} }, children: g.label }, g.id) : jeux.includes(g.id) ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: { ...styles5.chip, ...styles5.chipActive }, children: g.label }, g.id) : null
+          ),
+          !editable && jeux.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.emptyNote, children: "Non renseign\xE9" })
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { marginTop: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.fieldLabel, children: "Niveaux enseign\xE9s" }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.chipRow, children: [
+          CATEGORIES.map(
+            (n) => editable ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { onClick: () => toggleNiveau(n), style: { ...styles5.chip, ...niveaux.includes(n) ? styles5.chipActive : {} }, children: n }, n) : niveaux.includes(n) ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: { ...styles5.chip, ...styles5.chipActive }, children: n }, n) : null
+          ),
+          !editable && niveaux.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.emptyNote, children: "Non renseign\xE9" })
+        ] })
+      ] })
+    ] });
+  }
   function LogoDropRepositionable({ logoUrl, pos, onChange, onPosChange }) {
     const inputRef = (0, import_react5.useRef)(null);
     const containerRef = (0, import_react5.useRef)(null);
@@ -16351,7 +16540,7 @@
             ref: containerRef,
             onPointerDown: startDrag,
             title: "Glisser pour repositionner le logo",
-            style: { width: 90, height: 90, borderRadius: 8, background: "#fff", border: "1px solid #C9C2AE", cursor: "move", touchAction: "none", overflow: "hidden" },
+            style: { width: 56, height: 56, borderRadius: 8, background: "#fff", border: "1px solid #C9C2AE", cursor: "move", touchAction: "none", overflow: "hidden" },
             children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               "img",
               {
@@ -16386,8 +16575,8 @@
           handleFile(e.dataTransfer.files && e.dataTransfer.files[0]);
         },
         style: {
-          width: 90,
-          height: 90,
+          width: 56,
+          height: 56,
           borderRadius: 8,
           border: `2px dashed ${dragOver ? "#8A5A18" : "#B4831F"}`,
           background: dragOver ? "#F3E3C0" : "#FBF6E8",
@@ -16470,9 +16659,16 @@
     ] });
   }
   function PageEcoleBillard({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react5.useState)(false);
+    (0, import_react5.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react5.useState)(DEFAULT_LOGOS5);
     const [social, setSocial] = (0, import_react5.useState)(DEFAULT_SOCIAL5);
     const [label, setLabel] = (0, import_react5.useState)(DEFAULT_LABEL);
+    const [formateurs, setFormateurs] = (0, import_react5.useState)(DEFAULT_FORMATEURS);
     const [horaires, setHoraires] = (0, import_react5.useState)(DEFAULT_HORAIRES);
     const [formations, setFormations] = (0, import_react5.useState)(DEFAULT_FORMATIONS);
     const [videos, setVideos] = (0, import_react5.useState)(DEFAULT_VIDEOS);
@@ -16525,8 +16721,10 @@
         setLogos(await loadJSON5("home:logos", DEFAULT_LOGOS5));
         setSocial(await loadJSON5("home:social", DEFAULT_SOCIAL5));
         setLabel(await loadJSON5("p4:label", DEFAULT_LABEL));
+        setFormateurs(await loadJSON5("p4:formateurs", DEFAULT_FORMATEURS));
         setHoraires(await loadJSON5("p4:horaires", DEFAULT_HORAIRES));
-        setFormations(await loadJSON5("p4:formations", DEFAULT_FORMATIONS));
+        const loadedFormations = await loadJSON5("p4:formations", DEFAULT_FORMATIONS);
+        setFormations(loadedFormations.map((f) => ({ liens: [], ...f })));
         setVideos(await loadJSON5("p4:videos", DEFAULT_VIDEOS));
         setTables(await loadTables());
       })();
@@ -16550,6 +16748,13 @@
         return next;
       });
     };
+    const saveFormateurs = (next) => {
+      setFormateurs(next);
+      saveJSON5("p4:formateurs", next);
+    };
+    const updateFormateur = (id, patch) => saveFormateurs(formateurs.map((f) => f.id === id ? { ...f, ...patch } : f));
+    const addFormateur = () => saveFormateurs([...formateurs, { id: `form${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, nom: "Nom Pr\xE9nom", photoUrl: "", photoPos: { x: 50, y: 50 }, jeux: [], niveaux: [] }]);
+    const removeFormateur = (id) => saveFormateurs(formateurs.filter((f) => f.id !== id));
     const updateHoraires = (next) => {
       setHoraires(next);
       saveJSON5("p4:horaires", next);
@@ -16598,8 +16803,11 @@
       saveJSON5("p4:formations", next);
     };
     const updateFormation = (idx, patch) => updateFormations(formations.map((f, i) => i === idx ? { ...f, ...patch } : f));
-    const addFormation = () => updateFormations([...formations, { title: "Nouvelle formation", date: "", description: "" }]);
+    const addFormation = () => updateFormations([...formations, { title: "Nouvelle formation", date: "", description: "", liens: [] }]);
     const removeFormation = (idx) => updateFormations(formations.filter((_, i) => i !== idx));
+    const addFormationLien = (idx) => updateFormation(idx, { liens: [...formations[idx].liens || [], ""] });
+    const updateFormationLien = (idx, li, val) => updateFormation(idx, { liens: formations[idx].liens.map((l, i) => i === li ? val : l) });
+    const removeFormationLien = (idx, li) => updateFormation(idx, { liens: formations[idx].liens.filter((_, i) => i !== li) });
     const persistVideos = (next) => {
       setVideos(next);
       saveJSON5("p4:videos", next);
@@ -16714,7 +16922,7 @@
         status && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.statusBar, children: status }),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.body, children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.pageTitle, children: "L'\xE9cole du billard" }),
-          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles5.card, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.labelRow, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { ...styles5.card, padding: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { ...styles5.labelRow, gap: 10 }, children: [
             adminMode ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
               LogoDropRepositionable,
               {
@@ -16736,6 +16944,25 @@
               adminMode ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("textarea", { value: label.description, onChange: (e) => updateLabel({ description: e.target.value }), rows: 2, placeholder: "Description du label\u2026" }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.ruleText, children: label.description })
             ] })
           ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.card, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.cardHeadRow, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "L'\xE9quipe de formation" }),
+              adminMode && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.miniAdd, onClick: addFormateur, children: "+ Ajouter un formateur" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.formateursGrid, children: [
+              formateurs.map((f) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                FormateurCard,
+                {
+                  formateur: f,
+                  editable: adminMode,
+                  onChange: (patch) => updateFormateur(f.id, patch),
+                  onRemove: formateurs.length > 1 ? () => removeFormateur(f.id) : null
+                },
+                f.id
+              )),
+              formateurs.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.emptyNote, children: "Aucun formateur renseign\xE9 pour l'instant." })
+            ] })
+          ] }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.card, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "Horaires des cours" }),
@@ -16804,6 +17031,7 @@
               /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "Formations propos\xE9es par la F\xE9d\xE9ration et la Ligue" }),
               adminMode && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.miniAdd, onClick: addFormation, children: "+ Ajouter une formation" })
             ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.formationsIntro, children: "Si vous \xEAtes int\xE9ress\xE9(e) par ces formations, merci de vous rapprocher du pool Formation du club." }),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.formationsGrid, children: [
               formations.map((f, i) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles5.formationCard, children: adminMode ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
                 /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("input", { value: f.title, onChange: (e) => updateFormation(i, { title: e.target.value }), style: { fontWeight: 700 } }),
@@ -16819,6 +17047,16 @@
                   )
                 ] }),
                 /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("textarea", { value: f.description, onChange: (e) => updateFormation(i, { description: e.target.value }), rows: 3, placeholder: "Description de la formation\u2026" }),
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.fieldLabel, children: "Liens (PDF, vid\xE9o\u2026)" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 6, marginTop: 4 }, children: [
+                    (f.liens || []).map((l, li) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", gap: 6 }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("input", { value: l, onChange: (e) => updateFormationLien(i, li, e.target.value), placeholder: "https://\u2026", style: { flex: 1 } }),
+                      /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.miniRemove, onClick: () => removeFormationLien(i, li), children: "\xD7" })
+                    ] }, li)),
+                    (f.liens || []).length < 2 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.miniAdd, onClick: () => addFormationLien(i), children: "+ Ajouter un lien" })
+                  ] })
+                ] }),
                 /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.removePersonBtn, onClick: () => removeFormation(i), children: "Supprimer" })
               ] }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
                 /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.formationTitle, children: f.title }),
@@ -16826,7 +17064,12 @@
                   "\u{1F4C5} ",
                   f.date
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.formationDesc, children: f.description })
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.formationDesc, children: f.description }),
+                f.liens && f.liens.filter(Boolean).length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 4, marginTop: 6 }, children: f.liens.filter(Boolean).map((l, li) => /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("a", { href: l, target: "_blank", rel: "noreferrer", style: styles5.formationLink, children: [
+                  "\u{1F4CE} Document ",
+                  f.liens.filter(Boolean).length > 1 ? li + 1 : "",
+                  " \u2192"
+                ] }, li)) })
               ] }) }, i)),
               formations.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.emptyNote, children: "Aucune formation r\xE9f\xE9renc\xE9e pour l'instant." })
             ] })
@@ -16881,7 +17124,36 @@
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("a", { href: social.facebook || "#", style: styles5.footerLink, target: "_blank", rel: "noreferrer", children: "Facebook" }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("a", { href: social.whatsapp || "#", style: styles5.footerLink, target: "_blank", rel: "noreferrer", children: "WhatsApp" })
         ] })
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD4 = "#0a1628";
@@ -16905,7 +17177,7 @@
     adminToggleActive: { background: "#B1432F", borderColor: "#B1432F", color: CREAM5, fontWeight: 600 },
     statusBar: { margin: 0, padding: "5px 16px", background: "#fdf8f0", color: "#0a1628", fontSize: 12 },
     body: { padding: "18px 20px 24px", display: "flex", flexDirection: "column", gap: 14, background: "rgba(253,248,240,0.1)" },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD4 },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     card: { background: "#fff", borderTop: "4px solid #c9a227", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 14 },
     cardHeadRow: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8, marginBottom: 8 },
     cardTitle: { margin: "0 0 4px", fontSize: 15, fontWeight: 700, color: WOOD4 },
@@ -16916,7 +17188,14 @@
     fieldRow: { display: "flex", flexDirection: "column", gap: 3 },
     fieldLabel: { fontSize: 11, color: "#5F5E5A", fontWeight: 600 },
     labelRow: { display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" },
-    labelLogoWrap: { width: 90, height: 90, borderRadius: 8, background: CREAM5, border: "1px solid #C9C2AE", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden" },
+    labelLogoWrap: { width: 56, height: 56, borderRadius: 8, background: CREAM5, border: "1px solid #C9C2AE", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden" },
+    formateursGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 },
+    formateurCard: { position: "relative", border: "1px solid #E3DCC5", borderRadius: 8, padding: 10, background: CREAM5 },
+    formateurRemoveBtn: { position: "absolute", top: 6, right: 6, border: "none", background: "rgba(177,67,47,0.9)", color: "#fff", borderRadius: "50%", width: 20, height: 20, fontSize: 13, lineHeight: 1, cursor: "pointer" },
+    formateurPhotoWrap: { width: 56, height: 56, borderRadius: "50%", background: "#fff", border: "1px solid #C9C2AE", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, overflow: "hidden" },
+    formateurPhotoImg: { width: "100%", height: "100%", objectFit: "cover" },
+    formateurPhotoPlaceholder: { fontSize: 9, color: "#8A8368" },
+    formateurName: { margin: 0, fontWeight: 700, fontSize: 13, color: WOOD4 },
     photoMiniBtn: { border: "1px solid #C9C2AE", background: "#fff", color: "#4A2E1E", borderRadius: 4, padding: "2px 6px", fontSize: 9.5, cursor: "pointer" },
     labelLogoImg: { maxWidth: "100%", maxHeight: "100%", objectFit: "contain" },
     labelLogoPlaceholder: { fontSize: 9, fontWeight: 700, color: "#8A8368", textAlign: "center", padding: 6, lineHeight: 1.3 },
@@ -16932,6 +17211,8 @@
     formationTitle: { margin: 0, fontSize: 14, fontWeight: 700, color: WOOD4 },
     formationDate: { margin: 0, fontSize: 11.5, color: "#a07b10", fontWeight: 600 },
     formationDesc: { margin: 0, fontSize: 12.5, color: "#5F5E5A", lineHeight: 1.5 },
+    formationsIntro: { fontSize: 12, color: "#5F5E5A", fontStyle: "italic", margin: "0 0 10px" },
+    formationLink: { fontSize: 12, color: "#a07b10", fontWeight: 600, textDecoration: "none" },
     removePersonBtn: { border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "3px 8px", fontSize: 11, alignSelf: "flex-start" },
     miniAdd: { border: "1px dashed #8A8368", background: "transparent", color: WOOD4, borderRadius: 4, padding: "5px 10px", fontSize: 11.5 },
     miniRemove: { border: "none", background: "transparent", color: "#B1432F", fontSize: 14, fontWeight: 700, lineHeight: 1, padding: "0 2px" },
@@ -17004,8 +17285,8 @@
   var DEFAULT_SOCIAL6 = { facebook: "", whatsapp: "" };
   function emptyProjectData(meta) {
     const fields = {};
-    meta.extraFields.forEach((f) => fields[f.key] = "");
-    return { texte: "", photos: [], progress: 0, fields };
+    (meta.extraFields || []).forEach((f) => fields[f.key] = "");
+    return { texte: "", photos: [], progress: 0, fields, abandoned: false, abandonReason: "" };
   }
   async function loadJSON6(key, fallback) {
     try {
@@ -17131,13 +17412,21 @@
       ] })
     ] });
   }
-  function ProjectModal({ meta, data, adminMode, onChange, onClose }) {
+  function ProjectModal({ meta, data, adminMode, onChange, onClose, onDelete, onRename }) {
     const setField = (key, value) => onChange({ fields: { ...data.fields, [key]: value } });
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles6.modalOverlay, onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.modal, onClick: (e) => e.stopPropagation(), children: [
       /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.modalHead, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, flex: 1 }, children: [
           /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Gauge, { value: data.progress, color: meta.color }),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { className: "p6-serif", style: styles6.modalTitle, children: meta.title })
+          adminMode && onRename ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            "input",
+            {
+              value: meta.title,
+              onChange: (e) => onRename(e.target.value),
+              className: "p6-serif",
+              style: { ...styles6.modalTitle, border: "1px solid #C9C2AE", borderRadius: 4, padding: "4px 8px", flex: 1 }
+            }
+          ) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { className: "p6-serif", style: styles6.modalTitle, children: meta.title })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: styles6.btnGhostSmall, onClick: onClose, children: "Fermer" })
       ] }),
@@ -17155,24 +17444,46 @@
             max: 100,
             step: 5,
             value: data.progress,
-            onChange: (e) => onChange({ progress: parseInt(e.target.value, 10) })
+            onChange: (e) => onChange({ progress: parseInt(e.target.value, 10) }),
+            disabled: data.abandoned
           }
         )
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.fieldLabel, children: "Explicatif du projet" }),
       adminMode ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("textarea", { value: data.texte, onChange: (e) => onChange({ texte: e.target.value }), rows: 5, placeholder: "Description du projet\u2026" }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: styles6.ruleText, children: data.texte || /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.emptyNote, children: "Non renseign\xE9." }) }),
-      meta.extraFields.map((f) => /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { style: { ...styles6.fieldRow, marginTop: 8 }, children: [
+      (meta.extraFields || []).map((f) => /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { style: { ...styles6.fieldRow, marginTop: 8 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.fieldLabel, children: f.label }),
         adminMode ? f.type === "textarea" ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("textarea", { value: data.fields[f.key] || "", onChange: (e) => setField(f.key, e.target.value), rows: 2 }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("input", { value: data.fields[f.key] || "", onChange: (e) => setField(f.key, e.target.value) }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { fontSize: 12.5, color: "#241d12" }, children: data.fields[f.key] || "\u2014" })
       ] }, f.key)),
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { ...styles6.fieldLabel, marginTop: 10, display: "block" }, children: "Photo(s)" }),
-      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(PhotoGallery4, { photos: data.photos, editable: adminMode, onChange: (v) => onChange({ photos: v }) })
+      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(PhotoGallery4, { photos: data.photos, editable: adminMode, onChange: (v) => onChange({ photos: v }) }),
+      data.abandoned ? /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.abandonBox, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.fieldLabel, children: "Motif de l'abandon" }),
+        adminMode ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+          "textarea",
+          {
+            value: data.abandonReason,
+            onChange: (e) => onChange({ abandonReason: e.target.value }),
+            rows: 3,
+            placeholder: "Pourquoi ce projet a-t-il \xE9t\xE9 abandonn\xE9 ?"
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: styles6.ruleText, children: data.abandonReason || /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.emptyNote, children: "Non renseign\xE9." }) }),
+        adminMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: styles6.reactivateBtn, onClick: () => onChange({ abandoned: false }), children: "\u21BB R\xE9activer le projet" })
+      ] }) : adminMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: styles6.abandonBtn, onClick: () => onChange({ abandoned: true }), children: "\u26D4 Marquer ce projet comme abandonn\xE9" }),
+      adminMode && onDelete && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: styles6.deleteProjectBtn, onClick: onDelete, children: "Supprimer ce projet" })
     ] }) });
   }
   function PageNosProjets({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react6.useState)(false);
+    (0, import_react6.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react6.useState)(DEFAULT_LOGOS6);
     const [social, setSocial] = (0, import_react6.useState)(DEFAULT_SOCIAL6);
     const [projects, setProjects] = (0, import_react6.useState)({});
+    const [extraProjects, setExtraProjects] = (0, import_react6.useState)([]);
     const [openId, setOpenId] = (0, import_react6.useState)(null);
     const [localAdminMode, setLocalAdminMode] = (0, import_react6.useState)(false);
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
@@ -17218,9 +17529,12 @@
       (async () => {
         setLogos(await loadJSON6("home:logos", DEFAULT_LOGOS6));
         setSocial(await loadJSON6("home:social", DEFAULT_SOCIAL6));
+        const extras = await loadJSON6("p6:extraprojects", []);
+        setExtraProjects(extras);
+        const allMetaNow = [...PROJECTS_META, ...extras];
         const stored = await loadJSON6("p6:projects", {});
         const merged = {};
-        PROJECTS_META.forEach((m) => {
+        allMetaNow.forEach((m) => {
           merged[m.id] = { ...emptyProjectData(m), ...stored[m.id] || {}, fields: { ...emptyProjectData(m).fields, ...(stored[m.id] || {}).fields || {} } };
         });
         setProjects(merged);
@@ -17245,7 +17559,61 @@
         return next;
       });
     };
-    const openMeta = PROJECTS_META.find((m) => m.id === openId);
+    const openMeta = PROJECTS_META.find((m) => m.id === openId) || extraProjects.find((m) => m.id === openId);
+    const PROJECT_COLORS = ["#B1432F", "#c9a227", "#2A5CAA", "#3D7A5C", "#6B4226", "#7B5EA7", "#0a5c85"];
+    const addProject = () => {
+      const id = `proj${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      const meta = { id, title: "Nouveau projet", color: PROJECT_COLORS[extraProjects.length % PROJECT_COLORS.length], extraFields: [] };
+      const nextExtras = [...extraProjects, meta];
+      setExtraProjects(nextExtras);
+      saveJSON6("p6:extraprojects", nextExtras);
+      setProjects((prev) => {
+        const next = { ...prev, [id]: emptyProjectData(meta) };
+        saveJSON6("p6:projects", next);
+        return next;
+      });
+      setOpenId(id);
+    };
+    const renameProject = (id, title) => {
+      const nextExtras = extraProjects.map((m) => m.id === id ? { ...m, title } : m);
+      setExtraProjects(nextExtras);
+      saveJSON6("p6:extraprojects", nextExtras);
+    };
+    const removeProject = (id) => {
+      const nextExtras = extraProjects.filter((m) => m.id !== id);
+      setExtraProjects(nextExtras);
+      saveJSON6("p6:extraprojects", nextExtras);
+      setProjects((prev) => {
+        const next = { ...prev };
+        delete next[id];
+        saveJSON6("p6:projects", next);
+        return next;
+      });
+      setOpenId(null);
+    };
+    const allMeta = [...PROJECTS_META, ...extraProjects];
+    const dataFor = (m) => projects[m.id] || emptyProjectData(m);
+    const nonTermines = allMeta.filter((m) => {
+      const d = dataFor(m);
+      return !d.abandoned && d.progress < 100;
+    });
+    const termines = allMeta.filter((m) => {
+      const d = dataFor(m);
+      return !d.abandoned && d.progress >= 100;
+    });
+    const abandonnes = allMeta.filter((m) => dataFor(m).abandoned);
+    const renderCard = (m) => {
+      const data = dataFor(m);
+      const cardStyle = {
+        ...styles6.projectCard,
+        ...data.abandoned ? styles6.projectCardAbandoned : data.progress >= 100 ? styles6.projectCardDone : {}
+      };
+      return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("button", { className: "p6-project-card", style: cardStyle, onClick: () => setOpenId(m.id), children: [
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Gauge, { value: data.progress, color: m.color }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "p6-serif", style: styles6.projectLabel, children: m.title }),
+        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.projectHint, children: "Voir le d\xE9tail \u2192" })
+      ] }, m.id);
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.page, children: [
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("style", { children: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;500;600&display=swap');
@@ -17351,14 +17719,30 @@
         /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.body, children: [
           /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { className: "p6-serif", style: styles6.pageTitle, children: "Nos projets" }),
           /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: styles6.pageIntro, children: "Cliquez sur un projet pour consulter son d\xE9tail, ses photos et suivre son avancement." }),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles6.projectGrid, children: PROJECTS_META.map((m) => {
-            const data = projects[m.id] || emptyProjectData(m);
-            return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("button", { className: "p6-project-card", style: styles6.projectCard, onClick: () => setOpenId(m.id), children: [
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Gauge, { value: data.progress, color: m.color }),
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { className: "p6-serif", style: styles6.projectLabel, children: m.title }),
-              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.projectHint, children: "Voir le d\xE9tail \u2192" })
-            ] }, m.id);
-          }) })
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: styles6.sectionLabel, children: "Projets en cours" }),
+            adminMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: styles6.miniAddLight, onClick: addProject, children: "+ Ajouter un projet" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.projectGrid, children: [
+            nonTermines.map(renderCard),
+            nonTermines.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { ...styles6.emptyNote, color: "#fdf8f0" }, children: "Aucun projet en cours pour l'instant." })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.splitZone, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.splitCol, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: styles6.sectionLabel, children: "Projets r\xE9alis\xE9s (100%)" }),
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.projectGrid, children: [
+                termines.map(renderCard),
+                termines.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { ...styles6.emptyNote, color: "#fdf8f0" }, children: "Aucun projet r\xE9alis\xE9 pour l'instant." })
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.splitCol, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: styles6.sectionLabel, children: "Projets abandonn\xE9s" }),
+              /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.projectGrid, children: [
+                abandonnes.map(renderCard),
+                abandonnes.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { ...styles6.emptyNote, color: "#fdf8f0" }, children: "Aucun projet abandonn\xE9." })
+              ] })
+            ] })
+          ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.footer, children: [
           /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.footerLabel, children: "Suivez le club :" }),
@@ -17372,10 +17756,41 @@
             data: projects[openMeta.id] || emptyProjectData(openMeta),
             adminMode,
             onChange: (patch) => updateProject(openMeta.id, patch),
-            onClose: () => setOpenId(null)
+            onClose: () => setOpenId(null),
+            onDelete: extraProjects.some((m) => m.id === openMeta.id) ? () => removeProject(openMeta.id) : null,
+            onRename: extraProjects.some((m) => m.id === openMeta.id) ? (title) => renameProject(openMeta.id, title) : null
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD5 = "#0a1628";
@@ -17399,8 +17814,9 @@
     adminToggleActive: { background: "#B1432F", borderColor: "#B1432F", color: CREAM6, fontWeight: 600 },
     statusBar: { margin: 0, padding: "5px 16px", background: "#fdf8f0", color: "#0a1628", fontSize: 12 },
     body: { padding: "18px 20px 24px", display: "flex", flexDirection: "column", gap: 10, background: "rgba(253,248,240,0.1)" },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD5 },
-    pageIntro: { margin: "0 0 6px", fontSize: 13, color: "#0a1628" },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
+    pageIntro: { margin: "0 0 6px", fontSize: 13, color: "#fdf8f0" },
+    miniAddLight: { border: "1px dashed rgba(253,248,240,0.7)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12, fontWeight: 600 },
     projectGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 14 },
     projectCard: {
       display: "flex",
@@ -17414,8 +17830,17 @@
       cursor: "pointer",
       transition: "transform 0.15s, box-shadow 0.15s"
     },
+    projectCardDone: { background: "#E9F6EC" },
+    projectCardAbandoned: { background: "#FBEAEA" },
     projectLabel: { fontSize: 14, fontWeight: 700, color: "#241d12", textAlign: "center" },
     projectHint: { fontSize: 11, color: GOLD6, fontWeight: 600 },
+    sectionLabel: { fontSize: 13, fontWeight: 700, color: "#fdf8f0", textTransform: "uppercase", letterSpacing: "0.05em", margin: "18px 0 8px" },
+    splitZone: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18, marginTop: 6 },
+    splitCol: { display: "flex", flexDirection: "column" },
+    abandonBtn: { marginTop: 14, border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "8px 14px", fontSize: 12.5, fontWeight: 600, alignSelf: "flex-start" },
+    abandonBox: { marginTop: 14, border: "1px solid #e3b3b3", background: "#FBEAEA", borderRadius: 8, padding: 12, display: "flex", flexDirection: "column", gap: 6 },
+    reactivateBtn: { marginTop: 6, border: "1px solid #3D7A5C", background: "#3D7A5C", color: "#fff", borderRadius: 4, padding: "8px 14px", fontSize: 12.5, fontWeight: 700, alignSelf: "flex-start" },
+    deleteProjectBtn: { marginTop: 14, border: "1px solid #C9C2AE", background: "transparent", color: "#8A8368", borderRadius: 4, padding: "6px 12px", fontSize: 11.5, alignSelf: "flex-start" },
     footer: { display: "flex", alignItems: "center", gap: 14, background: WOOD5, padding: "7px 16px", flexWrap: "wrap" },
     footerLabel: { fontSize: 11.5, color: GOLD6, fontWeight: 600 },
     footerLink: { fontSize: 12, color: CREAM6, textDecoration: "underline" },
@@ -17465,6 +17890,8 @@
       logoUrl: p.logoUrl || "",
       logoPos: p.logoPos || { x: 50, y: 50 },
       adresse: p.adresse || "",
+      codePostal: p.codePostal || "",
+      commune: p.commune || "",
       tel: p.tel || "",
       email: p.email || "",
       website: p.website || "",
@@ -17707,6 +18134,8 @@
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: styles7.coordGrid, children: [
         { key: "adresse", label: "Adresse" },
+        { key: "codePostal", label: "Code postal" },
+        { key: "commune", label: "Commune" },
         { key: "tel", label: "T\xE9l\xE9phone" },
         { key: "email", label: "E-mail" },
         { key: "website", label: "Site web" }
@@ -17734,6 +18163,12 @@
     ] }) });
   }
   function PageNosPartenaires({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react7.useState)(false);
+    (0, import_react7.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react7.useState)(DEFAULT_LOGOS7);
     const [social, setSocial] = (0, import_react7.useState)(DEFAULT_SOCIAL7);
     const [partners, setPartners] = (0, import_react7.useState)([]);
@@ -17933,7 +18368,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: styles7.body, children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: styles7.cardHeadRow, children: [
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { className: "p7-serif", style: styles7.pageTitle, children: "Nos partenaires" }),
-            adminMode && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { style: styles7.miniAdd, onClick: addPartner, children: "+ Ajouter un partenaire" })
+            adminMode && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("button", { style: styles7.miniAddLight, onClick: addPartner, children: "+ Ajouter un partenaire" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("p", { style: styles7.pageIntro, children: "Cliquez sur un partenaire pour consulter ses coordonn\xE9es, photos et vid\xE9o. Cette liste alimente aussi le bandeau \xAB Partenaires \xBB de la page d'accueil." }),
           /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: styles7.partnerGrid, children: [
@@ -17982,7 +18417,36 @@
             onDelete: () => removePartner(openPartner.id)
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD6 = "#0a1628";
@@ -18011,9 +18475,10 @@
     thanksLayout: { display: "flex", gap: 16, flexWrap: "wrap", alignItems: "flex-start" },
     editoText: { whiteSpace: "pre-wrap", lineHeight: 1.6, color: "#241d12", margin: 0, fontSize: 13.5 },
     cardHeadRow: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD6 },
-    pageIntro: { margin: "0 0 6px", fontSize: 13, color: "#0a1628" },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
+    pageIntro: { margin: "0 0 6px", fontSize: 13, color: "#fdf8f0" },
     miniAdd: { border: "1px dashed #8A8368", background: "transparent", color: WOOD6, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    miniAddLight: { border: "1px dashed rgba(253,248,240,0.65)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     partnerGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))", gap: 14 },
     partnerCard: {
       display: "flex",
@@ -18071,6 +18536,7 @@
   var DEFAULT_SOCIAL8 = { facebook: "", whatsapp: "" };
   var DEFAULT_INFO = {
     adresse: "Salle du billard club, Prayssac, France",
+    accesPrecisions: "",
     tel: "",
     email: "",
     horaires: "Lundi au vendredi : 14h - 19h\nSamedi : 10h - 19h",
@@ -18182,6 +18648,12 @@
     ] });
   }
   function PageOuNousTrouver({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react8.useState)(false);
+    (0, import_react8.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react8.useState)(DEFAULT_LOGOS8);
     const [social, setSocial] = (0, import_react8.useState)(DEFAULT_SOCIAL8);
     const [info, setInfo] = (0, import_react8.useState)(DEFAULT_INFO);
@@ -18197,7 +18669,7 @@
       (async () => {
         setLogos(await loadJSON8("home:logos", DEFAULT_LOGOS8));
         setSocial(await loadJSON8("home:social", DEFAULT_SOCIAL8));
-        setInfo(await loadJSON8("p8:info", DEFAULT_INFO));
+        setInfo({ ...DEFAULT_INFO, ...await loadJSON8("p8:info", DEFAULT_INFO) });
       })();
     }, []);
     (0, import_react8.useEffect)(() => {
@@ -18359,6 +18831,15 @@
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "p8-serif", style: styles8.cardTitle, children: "Coordonn\xE9es" }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles8.fieldLabel, children: "Adresse" }),
               adminMode ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("input", { value: info.adresse, onChange: (e) => updateInfo({ adresse: e.target.value }) }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles8.ruleText, children: info.adresse || "\u2014" }),
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { ...styles8.fieldLabel, marginTop: 8 }, children: "Pr\xE9cisions d'acc\xE8s" }),
+              adminMode ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+                "input",
+                {
+                  value: info.accesPrecisions,
+                  onChange: (e) => updateInfo({ accesPrecisions: e.target.value }),
+                  placeholder: "ex. Entr\xE9e dans la cour, au fond \xE0 droite\u2026"
+                }
+              ) : info.accesPrecisions && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles8.ruleText, children: info.accesPrecisions }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: styles8.coordGrid, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("label", { style: styles8.fieldRow, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles8.fieldLabel, children: "T\xE9l\xE9phone" }),
@@ -18410,7 +18891,36 @@
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("a", { href: social.facebook || "#", style: styles8.footerLink, target: "_blank", rel: "noreferrer", children: "Facebook" }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("a", { href: social.whatsapp || "#", style: styles8.footerLink, target: "_blank", rel: "noreferrer", children: "WhatsApp" })
         ] })
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD7 = "#0a1628";
@@ -18434,7 +18944,7 @@
     adminToggleActive: { background: "#B1432F", borderColor: "#B1432F", color: CREAM8, fontWeight: 600 },
     statusBar: { margin: 0, padding: "5px 16px", background: "#fdf8f0", color: "#0a1628", fontSize: 12 },
     body: { padding: "18px 20px 24px", display: "flex", flexDirection: "column", gap: 14, background: "rgba(253,248,240,0.1)" },
-    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: WOOD7 },
+    pageTitle: { margin: 0, fontSize: 22, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px,1fr))", gap: 14 },
     card: { background: "#fff", borderTop: "4px solid #c9a227", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 14, display: "flex", flexDirection: "column", gap: 4 },
     cardTitle: { margin: "0 0 6px", fontSize: 15, fontWeight: 700, color: WOOD7 },
@@ -18482,10 +18992,12 @@
     if (!full) return "";
     if (full === EXTERIOR) return "EXT";
     const parts = full.trim().split(/\s+/);
-    if (parts.length < 2) return full.slice(0, 5).toUpperCase();
+    if (parts.length < 2) return full.slice(0, 2).toUpperCase();
     const prenom = parts[0];
     const nom = parts.slice(1).join("");
-    return (nom.slice(0, 3) + prenom.slice(0, 2)).toUpperCase();
+    const prenomPart = prenom.slice(0, 2).toUpperCase();
+    const nomPart = nom.length >= 2 ? nom[0].toUpperCase() + nom[1].toLowerCase() : nom.toUpperCase();
+    return `${prenomPart}-${nomPart}`;
   }
   function displayBooking(booking) {
     const guests = (booking.guests || []).filter(Boolean);
@@ -18546,6 +19058,12 @@
   var WEEK_SELECT_RANGE = { min: -6, max: 20 };
   var DEFAULT_PASSWORD = "bcp2025";
   function Reservations({ onNavigate, onSwitchTab, adminMode: adminModeProp, onAdminModeChange, unlocked: unlockedProp, onUnlockedChange, memberPassword: memberPasswordProp, onMemberPasswordChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react9.useState)(false);
+    (0, import_react9.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [localUnlocked, setLocalUnlocked] = (0, import_react9.useState)(false);
     const unlocked = unlockedProp !== void 0 ? unlockedProp : localUnlocked;
     const setUnlocked = onUnlockedChange || setLocalUnlocked;
@@ -18911,10 +19429,7 @@
       /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { className: "resa-root resa-app", style: styles9.appInner, children: [
         /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("header", { style: styles9.header, children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.headerTop, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { className: "resa-serif", style: styles9.brand, children: "Billard Club Prayssacois" }),
-              /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h1", { className: "resa-serif", style: styles9.title, children: "R\xE9servation des tables" })
-            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { className: "resa-serif", style: styles9.brand, children: "Billard Club Prayssacois" }) }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.actions, className: "no-print", children: [
               /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { position: "relative" }, ref: menuRef, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("button", { style: styles9.btnGhost, onClick: () => setMenuOpen((o) => !o), children: [
@@ -19035,7 +19550,7 @@
             ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.nameRow, className: "no-print", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: styles9.fieldLabel, children: "Vous r\xE9servez sous le nom :" }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: { ...styles9.fieldLabel, color: "#fdf8f0" }, children: "Vous r\xE9servez sous le nom :" }),
             /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(
               "select",
               {
@@ -19059,10 +19574,11 @@
         /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.subTabRow, className: "no-print", children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.subTab, onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("adherents") : null, disabled: typeof onSwitchTab !== "function", children: "Adh\xE9rents" }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.subTab, onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("calendrier") : null, disabled: typeof onSwitchTab !== "function", children: "Calendrier des comp\xE9titions" }),
-          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.subTab, onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("tournois") : null, disabled: typeof onSwitchTab !== "function", children: "Les tournois dans notre club" }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.subTab, onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("tournois") : null, disabled: typeof onSwitchTab !== "function", children: "Les tournois organis\xE9s dans notre club" }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: { ...styles9.subTab, ...styles9.subTabActive }, children: "R\xE9servations" }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.subTab, onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("documents") : null, disabled: typeof onSwitchTab !== "function", children: "Documents internes au club" })
         ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("h1", { className: "resa-serif", style: { ...styles9.title, padding: "12px 22px 0" }, children: "R\xE9servation des tables" }),
         !unlocked ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: styles9.gateWrap, className: "no-print", children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.gateCard, children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { className: "resa-serif", style: styles9.gateTitle, children: "Espace r\xE9serv\xE9 aux membres" }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { style: styles9.gateText, children: "Cette page est r\xE9serv\xE9e aux adh\xE9rents du club. Merci de saisir le mot de passe communiqu\xE9 par le club." }),
@@ -19333,7 +19849,36 @@
             editTarget.recurringGroup && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.btnDanger, onClick: () => cancelSeries(editTarget), disabled: loading, children: "Annuler la s\xE9rie \xE0 partir d'ici" })
           ] })
         ] }) })
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var styles9 = {
@@ -19395,7 +19940,7 @@
     btnGhostSmall: { border: "1px solid #C9C2AE", background: "transparent", color: "#0a1628", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     btnDanger: { border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 600 },
     btnPrimary: { border: "1px solid #c9a227", background: "#c9a227", color: "#0a1628", borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 600 },
-    subTabRow: { display: "flex", gap: 6, padding: "12px 22px 0", flexWrap: "wrap" },
+    subTabRow: { display: "flex", gap: 6, padding: "12px 22px 10px", flexWrap: "wrap", background: "#0a5c85" },
     subTab: { border: "1px solid #C9C2AE", background: "#f3ecd8", color: "#0a1628", padding: "8px 16px", borderRadius: "6px 6px 0 0", fontSize: 12.5, fontWeight: 500 },
     subTabActive: { background: "#fdf8f0", color: "#1E5A48", fontWeight: 700 },
     gateWrap: { display: "flex", justifyContent: "center", padding: "40px 20px" },
@@ -19436,6 +19981,7 @@
     { key: "arbitre", label: "Arbitre" },
     { key: "formateur", label: "Formateur" }
   ];
+  var SOUS_STATUT_ABBR = { competiteur: "Cpt.", arbitre: "Arb.", formateur: "For." };
   var CATEGORIES2 = ["R4", "R3", "R2", "R1", "N3"];
   var CATEGORIES_BY_KEY = {
     libre: ["R4", "R3", "R2", "R1", "N3"],
@@ -19993,6 +20539,60 @@
       }
     );
   }
+  function computeGeneralSeries(seasonOrder, seasons) {
+    const timelines = {};
+    GAME_TYPES2.forEach(({ key }) => {
+      const pts = [];
+      seasonOrder.forEach((seasonLabel) => {
+        const g = seasons[seasonLabel] && seasons[seasonLabel][key];
+        if (!g) return;
+        g.tq.forEach((row, idx) => {
+          const moyenne = num(row.reprises) > 0 ? num(row.points) / num(row.reprises) : null;
+          if (moyenne === null) return;
+          pts.push({
+            label: row.label,
+            seasonLabel,
+            excluded: !!row.excluded,
+            value: Number(moyenne.toFixed(3)),
+            sortKey: tqSortKey(row, seasonLabel, idx),
+            date: row.date || "",
+            rawPoints: row.points,
+            rawReprises: row.reprises
+          });
+        });
+      });
+      pts.sort((a, b) => a.sortKey - b.sortKey);
+      timelines[key] = pts;
+    });
+    const seasonAverages = {};
+    GAME_TYPES2.forEach(({ key }) => {
+      seasonAverages[key] = seasonOrder.map((seasonLabel) => {
+        const g = seasons[seasonLabel] && seasons[seasonLabel][key];
+        if (!g) return null;
+        const t = totals(g);
+        return {
+          seasonLabel,
+          debut: num(g.moyenneDebut) || null,
+          fin: isFinite(t.moyenneFin) ? Number(t.moyenneFin.toFixed(3)) : null
+        };
+      }).filter(Boolean);
+    });
+    const all = [];
+    GAME_TYPES2.forEach(({ key }) => {
+      (timelines[key] || []).forEach((p) => all.push({ ...p, gameKey: key }));
+    });
+    all.sort((a, b) => a.sortKey - b.sortKey);
+    return {
+      merged: all,
+      byGame: GAME_TYPES2.map(({ key, label, line }) => ({
+        key,
+        label,
+        color: line,
+        seasonAvg: seasonAverages[key],
+        points: all.map((p, idx) => p.gameKey === key ? { ...p, x: idx } : null).filter(Boolean)
+      }))
+    };
+  }
   function CompetitionModal({ adherent, adminMode, onClose }) {
     const storageKey = "p5:competition:" + adherent.id;
     const [seasons, setSeasons] = (0, import_react10.useState)({ [currentSeasonLabel()]: emptySeason() });
@@ -20392,6 +20992,8 @@
   }
   function AdherentModal({ adherent, adminMode, onChange, onClose, onDelete }) {
     const [showCompet, setShowCompet] = (0, import_react10.useState)(false);
+    const [printData, setPrintData] = (0, import_react10.useState)(null);
+    const [printLoading, setPrintLoading] = (0, import_react10.useState)(false);
     const toggleSousStatut = (key) => onChange({ sousStatuts: { ...adherent.sousStatuts, [key]: !adherent.sousStatuts[key] } });
     const diplomes = adherent.diplomes && adherent.diplomes.length ? adherent.diplomes : [{ titre: "", date: "" }];
     const updateDiplome = (idx, patch) => onChange({ diplomes: diplomes.map((d, i) => i === idx ? { ...d, ...patch } : d) });
@@ -20405,6 +21007,35 @@
       const d = /* @__PURE__ */ new Date(iso + "T00:00:00");
       if (isNaN(d.getTime())) return "";
       return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+    };
+    const engagedTypesPrint = GAME_TYPES2.filter((g) => adherent.engagements && adherent.engagements[g.key]);
+    const printFull = async () => {
+      setPrintLoading(true);
+      let seasonData = emptySeason();
+      let seasonLabel = currentSeasonLabel();
+      let general = null;
+      if (adherent.sousStatuts.competiteur) {
+        const storageKey = "p5:competition:" + adherent.id;
+        const data = await loadJSON9(storageKey, null);
+        if (data && data.order && data.seasons) {
+          seasonLabel = data.order[data.order.length - 1];
+          seasonData = normalizeSeason(data.seasons[seasonLabel]);
+          const normalizedSeasons = {};
+          data.order.forEach((label) => {
+            normalizedSeasons[label] = normalizeSeason(data.seasons[label]);
+          });
+          general = computeGeneralSeries(data.order, normalizedSeasons);
+        }
+      }
+      setPrintData({ seasonData, seasonLabel, general });
+      setPrintLoading(false);
+      document.body.classList.add("print-only-fiche");
+      const cleanup = () => {
+        document.body.classList.remove("print-only-fiche");
+        window.removeEventListener("afterprint", cleanup);
+      };
+      window.addEventListener("afterprint", cleanup);
+      setTimeout(() => window.print(), 80);
     };
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles10.modalOverlay, className: "no-print", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.modal, onClick: (e) => e.stopPropagation(), children: [
@@ -20461,7 +21092,11 @@
             adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("select", { value: adherent.depuis || "", onChange: (e) => onChange({ depuis: e.target.value }), style: { maxWidth: 100 }, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "", children: "\u2014" }),
               depuisYearOptions().map((y) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: y, children: y }, y))
-            ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: adherent.depuis ? `20${adherent.depuis}` : "\u2014" })
+            ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: adherent.depuis ? fullYearFromAA(adherent.depuis) : "\u2014" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles10.fieldRow, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "N\xB0 de licence" }),
+            adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { value: adherent.numeroLicence || "", onChange: (e) => onChange({ numeroLicence: e.target.value }), placeholder: "ex. 12345678", style: { maxWidth: 140 } }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: adherent.numeroLicence || "\u2014" })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 12, padding: 10, borderRadius: 6, background: adherent.desengage ? "#F2E4E0" : "#F6F1E4", border: `1px solid ${adherent.desengage ? "#B1432F" : "#E3DCC5"}` }, children: [
@@ -20558,9 +21193,102 @@
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("datalist", { id: "diplome-suggestions", children: DIPLOME_SUGGESTIONS.map((s) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: s }, s)) })
         ] }),
         adherent.sousStatuts.competiteur && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: { ...styles10.btnPrimary, marginTop: 14 }, onClick: () => setShowCompet(true), children: "Voir la fiche comp\xE9tition \u2192" }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+          "button",
+          {
+            className: "no-print",
+            style: { ...styles10.btnGhostSmall, marginTop: 14, marginLeft: 8 },
+            onClick: printFull,
+            disabled: printLoading,
+            children: printLoading ? "Pr\xE9paration\u2026" : "\u{1F5A8} Imprimer la fiche compl\xE8te"
+          }
+        ),
         adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: { ...styles10.removeBtn, marginTop: 14, marginLeft: adherent.sousStatuts.competiteur ? 8 : 0 }, onClick: onDelete, children: "Supprimer cet adh\xE9rent" })
       ] }) }),
-      showCompet && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CompetitionModal, { adherent, adminMode, onClose: () => setShowCompet(false) })
+      showCompet && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CompetitionModal, { adherent, adminMode, onClose: () => setShowCompet(false) }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "print-fiche-target", style: { position: "fixed", left: -9999, top: -9999, width: 1e3, background: "#fff", padding: 20, fontFamily: "Raleway, sans-serif" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: { fontSize: 22, fontWeight: 700, margin: "0 0 4px", color: WOOD8, fontFamily: "Playfair Display, serif" }, children: [
+          adherent.prenom,
+          " ",
+          adherent.nom
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: { fontSize: 12, color: "#5F5E5A", margin: "0 0 10px" }, children: [
+          adherent.statut,
+          adherent.numeroLicence ? ` \u2014 Licence n\xB0 ${adherent.numeroLicence}` : "",
+          adherent.depuis ? ` \u2014 Adh\xE9rent depuis ${fullYearFromAA(adherent.depuis)}` : ""
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: 24, fontSize: 11, marginBottom: 12, flexWrap: "wrap", borderBottom: "1px solid #C9C2AE", paddingBottom: 10 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+            "Adresse : ",
+            adherent.adresse || "\u2014",
+            adherent.codePostal ? `, ${adherent.codePostal}` : "",
+            " ",
+            adherent.commune || ""
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+            "Email : ",
+            adherent.email || "\u2014"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+            "T\xE9l. : ",
+            adherent.telephone || "\u2014"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+            "Sous-statuts : ",
+            SOUS_STATUTS.filter((s) => adherent.sousStatuts[s.key]).map((s) => s.label).join(", ") || "\u2014"
+          ] })
+        ] }),
+        adherent.sousStatuts.competiteur && printData && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: { fontSize: 15, fontWeight: 700, margin: "0 0 8px", color: WOOD8 }, children: [
+            "Fiche comp\xE9titeur \u2014 Saison ",
+            printData.seasonLabel
+          ] }),
+          engagedTypesPrint.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 11, color: "#8A8368", fontStyle: "italic" }, children: "Aucune discipline s\xE9lectionn\xE9e pour ce comp\xE9titeur." }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { display: "grid", gridTemplateColumns: `repeat(${engagedTypesPrint.length}, 1fr)`, gap: 12 }, children: engagedTypesPrint.map((g) => {
+            const game = printData.seasonData[g.key];
+            const t = totals(game);
+            return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { border: "1px solid #C9C2AE", borderRadius: 6, padding: 8 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontWeight: 700, fontSize: 12.5, margin: "0 0 4px", color: g.line }, children: g.label }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: { fontSize: 10, margin: "0 0 6px", color: "#5F5E5A" }, children: [
+                "Moy. d\xE9but : ",
+                game.moyenneDebut || "\u2014",
+                " \u2014 Moy. fin : ",
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: fmt(t.moyenneFin) })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { style: { width: "100%", borderCollapse: "collapse", fontSize: 9.5 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: styles10.printTh, children: "Tournoi" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: styles10.printTh, children: "Date" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: styles10.printTh, children: "Pts" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: styles10.printTh, children: "Rep." }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: styles10.printTh, children: "Moy." })
+                ] }) }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tbody", { children: [
+                  game.tq.map((row, i) => {
+                    const m = num(row.reprises) > 0 ? num(row.points) / num(row.reprises) : NaN;
+                    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: row.label }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: fmtDateShort3(row.date) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: row.points }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: row.reprises }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: fmt(m) })
+                    ] }, i);
+                  }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { style: { fontWeight: 700, background: "#f3ecd8" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, colSpan: 2, children: "Total" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: t.total1 }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: t.total2 }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: styles10.printTd, children: fmt(t.moyenneFin) })
+                  ] })
+                ] })
+              ] })
+            ] }, g.key);
+          }) }),
+          printData.general && printData.general.merged.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 16, borderTop: "1px solid #C9C2AE", paddingTop: 10 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 13, fontWeight: 700, margin: "0 0 6px", color: WOOD8 }, children: "\xC9volution g\xE9n\xE9rale \u2014 toutes disciplines" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(MultiTimelineChart, { merged: printData.general.merged, byGame: printData.general.byGame, height: 260 })
+          ] })
+        ] })
+      ] })
     ] });
   }
   function emptyAdherent() {
@@ -20576,6 +21304,7 @@
       photoUrl: "",
       statut: STATUTS[0],
       depuis: currentSeasonLabel().slice(0, 2),
+      numeroLicence: "",
       desengage: false,
       sousStatuts: { competiteur: false, arbitre: false, formateur: false },
       engagements: { libre: false, cadre: false, unebande: false, troisbandes: false },
@@ -20585,8 +21314,13 @@
   function depuisYearOptions() {
     const curYY = parseInt(currentSeasonLabel().slice(0, 2), 10);
     const years = [];
-    for (let y = curYY; y >= curYY - 29; y--) years.push(String((y % 100 + 100) % 100).padStart(2, "0"));
+    for (let y = curYY; y >= curYY - 31; y--) years.push(String((y % 100 + 100) % 100).padStart(2, "0"));
     return years;
+  }
+  function fullYearFromAA(aa) {
+    const n = parseInt(aa, 10);
+    if (isNaN(n)) return null;
+    return (n >= 50 ? 1900 : 2e3) + n;
   }
   var DIPLOME_SUGGESTIONS = [
     "DFA 1 \u2014 Billard de Bronze",
@@ -20599,6 +21333,12 @@
   ];
   var MAX_DIPLOMES = 10;
   function PageEspaceMembres({ onNavigate, onSwitchTab, adminMode: adminModeProp, onAdminModeChange, unlocked: unlockedProp, onUnlockedChange, memberPassword: memberPasswordProp, onMemberPasswordChange, onForceLogoutAllDevices } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react10.useState)(false);
+    (0, import_react10.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react10.useState)(DEFAULT_LOGOS9);
     const [social, setSocial] = (0, import_react10.useState)(DEFAULT_SOCIAL9);
     const [localPassword, setLocalPassword] = (0, import_react10.useState)(DEFAULT_PASSWORD2);
@@ -20723,6 +21463,7 @@
         "Telephone",
         "Statut",
         "Adherent depuis",
+        "Numero de licence",
         "Desengage",
         "Competiteur",
         "Arbitre",
@@ -20738,7 +21479,8 @@
           a.email,
           a.telephone,
           a.statut,
-          a.depuis ? `20${a.depuis}` : "",
+          a.depuis ? fullYearFromAA(a.depuis) : "",
+          a.numeroLicence || "",
           a.desengage ? "oui" : "non",
           a.sousStatuts && a.sousStatuts.competiteur ? "oui" : "non",
           a.sousStatuts && a.sousStatuts.arbitre ? "oui" : "non",
@@ -20779,7 +21521,9 @@
           statut: idx(["statut"]),
           competiteur: idx(["competiteur"]),
           arbitre: idx(["arbitre"]),
-          formateur: idx(["formateur"])
+          formateur: idx(["formateur"]),
+          depuis: idx(["adherent depuis", "depuis", "annee adhesion", "annee d'adhesion", "membre depuis"]),
+          numeroLicence: idx(["numero de licence", "n de licence", "n\xB0 de licence", "licence", "num licence"])
         };
         const imported = [];
         for (let i = 1; i < rows.length; i++) {
@@ -20791,8 +21535,9 @@
           const nom = get("nom");
           const prenom = get("prenom");
           if (!nom && !prenom) continue;
+          const depuisRaw = get("depuis").replace(/\D/g, "");
+          const depuis = depuisRaw.length === 4 ? depuisRaw.slice(2) : depuisRaw.length === 2 ? depuisRaw : "";
           imported.push({
-            id: `a${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}`,
             nom,
             prenom,
             adresse: get("adresse"),
@@ -20800,8 +21545,9 @@
             commune: get("commune"),
             email: get("email"),
             telephone: get("telephone"),
-            photoUrl: "",
             statut: matchStatutCell(get("statut"), STATUTS),
+            depuis,
+            numeroLicence: get("numeroLicence"),
             sousStatuts: {
               competiteur: parseBoolCell(get("competiteur")),
               arbitre: parseBoolCell(get("arbitre")),
@@ -20813,8 +21559,55 @@
           setImportStatus("Aucune ligne valide trouv\xE9e (les colonnes \xAB Nom \xBB et \xAB Pr\xE9nom \xBB sont introuvables ou vides).");
           return;
         }
-        persistAdherents([...adherents, ...imported]);
-        setImportStatus(`${imported.length} adh\xE9rent(s) import\xE9(s) avec succ\xE8s.`);
+        const byLicence = /* @__PURE__ */ new Map();
+        adherents.forEach((a) => {
+          if (a.numeroLicence) byLicence.set(a.numeroLicence, a);
+        });
+        const toCreate = [];
+        let nbUpdated = 0;
+        let nbReactivated = 0;
+        const matchedIds = /* @__PURE__ */ new Set();
+        const importedLicences = /* @__PURE__ */ new Set();
+        imported.forEach((row) => {
+          if (row.numeroLicence) importedLicences.add(row.numeroLicence);
+          const existing = row.numeroLicence ? byLicence.get(row.numeroLicence) : null;
+          if (existing) {
+            matchedIds.add(existing.id);
+            if (existing.desengage) nbReactivated++;
+            else nbUpdated++;
+          } else {
+            toCreate.push({
+              id: `a${Date.now()}-${toCreate.length}-${Math.random().toString(36).slice(2, 7)}`,
+              ...row,
+              photoUrl: "",
+              desengage: false
+            });
+          }
+        });
+        const toDesengageIds = new Set(
+          adherents.filter((a) => !a.desengage && a.numeroLicence && !importedLicences.has(a.numeroLicence)).map((a) => a.id)
+        );
+        const nbSansLicence = imported.filter((row) => !row.numeroLicence).length;
+        const confirmMsg = `Cet import va : cr\xE9er ${toCreate.length} nouvelle(s) fiche(s), mettre \xE0 jour ${nbUpdated} fiche(s) existante(s)` + (nbReactivated > 0 ? `, r\xE9activer ${nbReactivated} adh\xE9rent(s) d\xE9sengag\xE9(s)` : "") + (toDesengageIds.size > 0 ? `, et marquer d\xE9sengag\xE9(s) ${toDesengageIds.size} adh\xE9rent(s) absent(s) de cette liste (non-renouvellement)` : "") + `.` + (nbSansLicence > 0 ? `
+
+\u26A0\uFE0F ${nbSansLicence} ligne(s) du fichier n'ont pas de num\xE9ro de licence : elles seront cr\xE9\xE9es comme nouvelles fiches, sans pouvoir \xEAtre rapproch\xE9es d'une fiche existante.` : "") + `
+
+Continuer ?`;
+        if (!window.confirm(confirmMsg)) {
+          setImportStatus("Import annul\xE9.");
+          return;
+        }
+        const updated = adherents.map((a) => {
+          if (!matchedIds.has(a.id)) {
+            return toDesengageIds.has(a.id) ? { ...a, desengage: true } : a;
+          }
+          const row = imported.find((r) => r.numeroLicence && r.numeroLicence === a.numeroLicence);
+          return { ...a, ...row, desengage: false };
+        });
+        persistAdherents([...updated, ...toCreate]);
+        setImportStatus(
+          `Import termin\xE9 : ${toCreate.length} cr\xE9\xE9(s), ${nbUpdated} mis \xE0 jour, ${nbReactivated} r\xE9activ\xE9(s), ${toDesengageIds.size} d\xE9sengag\xE9(s).`
+        );
       } catch (e) {
         setImportStatus("\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
       }
@@ -20828,10 +21621,13 @@
     };
     const sortedAdherents = (0, import_react10.useMemo)(() => {
       const arr = [...adherents];
+      const sousStatutsLabel = (a) => SOUS_STATUTS.filter((s) => a.sousStatuts && a.sousStatuts[s.key]).map((s) => s.label).join(", ");
       arr.sort((a, b) => {
         if (!!a.desengage !== !!b.desengage) return a.desengage ? 1 : -1;
-        let va = (a[sortBy] || "").toString().toLowerCase();
-        let vb = (b[sortBy] || "").toString().toLowerCase();
+        let va = sortBy === "sousStatuts" ? sousStatutsLabel(a) : (a[sortBy] || "").toString().toLowerCase();
+        let vb = sortBy === "sousStatuts" ? sousStatutsLabel(b) : (b[sortBy] || "").toString().toLowerCase();
+        va = va.toLowerCase();
+        vb = vb.toLowerCase();
         if (va < vb) return sortDir === "asc" ? -1 : 1;
         if (va > vb) return sortDir === "asc" ? 1 : -1;
         return 0;
@@ -20842,12 +21638,29 @@
     const evolutionParAnnee = (0, import_react10.useMemo)(() => {
       const withYear = activeAdherents.filter((a) => a.depuis);
       if (withYear.length === 0) return [];
-      const years = Array.from(new Set(withYear.map((a) => a.depuis))).sort();
-      let running = 0;
-      return years.map((y) => {
-        running += withYear.filter((a) => a.depuis === y).length;
-        return { annee: `20${y}`, nouveaux: withYear.filter((a) => a.depuis === y).length, total: running };
-      });
+      const fullYears = withYear.map((a) => fullYearFromAA(a.depuis)).filter((y) => y !== null);
+      const minYear = Math.min(1995, ...fullYears);
+      const curYear = (/* @__PURE__ */ new Date()).getFullYear();
+      const cutoff = 2021;
+      const cumulatifA = (y) => fullYears.filter((yy) => yy <= y).length;
+      const points = [];
+      if (minYear < cutoff) {
+        const spanStart = minYear;
+        const spanEnd = cutoff - 1;
+        const nbAnnees = spanEnd - spanStart + 1;
+        let somme = 0;
+        for (let y = spanStart; y <= spanEnd; y++) somme += cumulatifA(y);
+        points.push({
+          label: `${spanStart}-${spanEnd} (moy.)`,
+          valeur: Math.ceil(somme / nbAnnees),
+          detail: `Moyenne du nombre d'adh\xE9rents actifs sur ${nbAnnees} saisons`
+        });
+      }
+      for (let y = Math.max(cutoff, minYear); y <= curYear; y++) {
+        const total = cumulatifA(y);
+        points.push({ label: String(y), valeur: total, detail: `${total} adh\xE9rent(s) actif(s) cette saison` });
+      }
+      return points;
     }, [activeAdherents]);
     const openAdherent = adherents.find((a) => a.id === openId);
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.page, children: [
@@ -20859,8 +21672,9 @@
         .p5-root button { cursor: pointer; font-family: 'Raleway', sans-serif; }
         .p5-table-scroll { overflow-x: auto; }
         .p5-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 12.5px; }
-        .p5-table th, .p5-table td { border: 1px solid #C9C2AE; padding: 7px 9px; text-align: left; }
+        .p5-table th, .p5-table td { border: 1px solid #C9C2AE; padding: 7px 9px; text-align: left; background: #fff; color: #241d12; }
         .p5-table th { background: #f3ecd8; color: #0a1628; font-weight: 600; font-size: 11.5px; cursor: pointer; white-space: nowrap; }
+        .p5-table tr.p5-row-desengage td { background: #F2F0E8; opacity: 0.65; }
         .p5-tq-table { width: 100%; border-collapse: collapse; font-size: 12px; }
         .p5-tq-table th, .p5-tq-table td { border: 1px solid #C9C2AE; padding: 5px 6px; text-align: center; }
         .p5-tq-table th { background: #f3ecd8; color: #0a1628; font-weight: 600; font-size: 10.5px; }
@@ -20880,6 +21694,13 @@
             width: 100% !important; height: auto !important; max-width: 100%;
           }
           body.print-only-chart .print-chart-target > div { overflow: visible !important; }
+          body.print-only-fiche #root { height: 0 !important; overflow: hidden !important; }
+          body.print-only-fiche * { visibility: hidden !important; }
+          body.print-only-fiche .print-fiche-target,
+          body.print-only-fiche .print-fiche-target * { visibility: visible !important; }
+          body.print-only-fiche .print-fiche-target {
+            position: fixed !important; left: 0 !important; top: 0 !important; width: 100% !important; height: auto !important;
+          }
         }
         @media (max-width: 720px) {
           .p5-compet-panels { grid-template-columns: 1fr !important; }
@@ -21031,7 +21852,7 @@
                 onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("tournois") : null,
                 disabled: typeof onSwitchTab !== "function",
                 title: typeof onSwitchTab === "function" ? "" : "Sera reli\xE9 une fois le site assembl\xE9",
-                children: "Les tournois dans notre club"
+                children: "Les tournois organis\xE9s dans notre club"
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -21092,18 +21913,44 @@
               ] })
             ] }),
             evolutionParAnnee.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles10.card, marginBottom: 14 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles10.cardTitle, children: "\xC9volution du nombre d'adh\xE9rents (saison par saison)" }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { style: { borderCollapse: "collapse", fontSize: 12.5, width: "100%" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { children: evolutionParAnnee.map((e) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { style: { padding: "4px 10px", borderBottom: "1px solid #C9C2AE", color: "#4A2E1E", whiteSpace: "nowrap" }, children: e.annee }, e.annee)) }) }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tbody", { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { children: evolutionParAnnee.map((e) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { padding: "4px 10px", textAlign: "center", fontWeight: 700, color: "#1E5A48" }, children: e.total }, e.annee)) }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { children: evolutionParAnnee.map((e) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("td", { style: { padding: "0 10px 4px", textAlign: "center", fontSize: 10.5, color: "#8A8368" }, children: [
-                    "+",
-                    e.nouveaux
-                  ] }, e.annee)) })
-                ] })
-              ] }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche. Les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s." })
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles10.cardTitle, children: "\xC9volution du nombre d'adh\xE9rents (par saison)" }),
+              (() => {
+                const maxVal = Math.max(1, ...evolutionParAnnee.map((e) => e.valeur));
+                const barW = 46;
+                const gap = 14;
+                const chartH = 130;
+                const padTop = 26;
+                const padBottom = 40;
+                const svgW = evolutionParAnnee.length * (barW + gap) + gap;
+                const svgH = chartH + padTop + padBottom;
+                const manyBars = evolutionParAnnee.length > 8;
+                const sideMargin = 34;
+                const svgW2 = svgW + sideMargin * 2;
+                return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: svgW2, height: svgH, style: { display: "block" }, children: evolutionParAnnee.map((e, i) => {
+                  const x = sideMargin + gap + i * (barW + gap);
+                  const h = e.valeur / maxVal * chartH;
+                  const y = padTop + (chartH - h);
+                  const labelY = padTop + chartH + (manyBars ? 14 : 16);
+                  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("g", { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("title", { children: e.detail }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("rect", { x, y, width: barW, height: Math.max(h, 1), rx: 3, fill: "#c9a227", stroke: "#a07b10" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: x + barW / 2, y: y - 6, textAnchor: "middle", fontSize: "12", fontWeight: "700", fill: "#4A2E1E", children: e.valeur }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      "text",
+                      {
+                        x: x + barW / 2,
+                        y: labelY,
+                        textAnchor: manyBars ? "end" : "middle",
+                        fontSize: "10.5",
+                        fill: "#5F5E5A",
+                        transform: manyBars ? `rotate(-40 ${x + barW / 2} ${labelY})` : void 0,
+                        children: e.label
+                      }
+                    )
+                  ] }, e.label);
+                }) }) });
+              })(),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Nombre total d'adh\xE9rents actifs cette saison-l\xE0 (un adh\xE9rent compte pour chaque saison depuis son adh\xE9sion, tant qu'il n'est pas d\xE9sengag\xE9) \u2014 moyenne pour la p\xE9riode fondatrice (1995-2020 selon les donn\xE9es), d\xE9tail saison par saison depuis 2021. Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche ; les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s. Ce graphique s'alimentera automatiquement des saisons futures." })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "p5-serif", style: styles10.pageTitle, children: [
@@ -21115,15 +21962,15 @@
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                   "button",
                   {
-                    style: styles10.miniAdd,
+                    style: styles10.miniAddLight,
                     onClick: exportAdherentsCSV,
                     title: "Pour l'int\xE9gration dans le tableur, choisir le s\xE9parateur \xAB point-virgule \xBB (pas la virgule) lors de l'ouverture du fichier.",
                     children: "\u2B73 Exporter (CSV)"
                   }
                 ),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.miniAdd, onClick: () => window.print(), children: "\u{1F5A8} Imprimer la liste" }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.miniAddLight, onClick: () => window.print(), children: "\u{1F5A8} Imprimer la liste" }),
                 adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.miniAdd, onClick: () => importInputRef.current && importInputRef.current.click(), children: "\u2B71 Importer un fichier (CSV)" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.miniAddLight, onClick: () => importInputRef.current && importInputRef.current.click(), children: "\u2B71 Importer un fichier (CSV)" }),
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                     "input",
                     {
@@ -21137,12 +21984,15 @@
                       }
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.miniAdd, onClick: addAdherent, children: "+ Nouveau joueur" })
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.miniAddLight, onClick: addAdherent, children: "+ Nouveau joueur" })
                 ] })
               ] })
             ] }),
             adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles10.importHint, className: "no-print", children: [
-              "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur. Pour les 3 derni\xE8res, indiquez \xAB oui \xBB ou \xAB 1 \xBB pour cocher. Exportez votre tableur existant au format CSV (dans Excel ou LibreOffice : Fichier \u2192 Enregistrer sous \u2192 CSV) puis importez-le ici.",
+              "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur, Adh\xE9rent depuis (ann\xE9e, ex. 2018 ou 18), Num\xE9ro de licence.",
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: "Import intelligent" }),
+              " : les fiches sont rapproch\xE9es par num\xE9ro de licence \u2014 une licence d\xE9j\xE0 connue met \xE0 jour la fiche existante (et la r\xE9active si elle \xE9tait d\xE9sengag\xE9e) au lieu d'en cr\xE9er une nouvelle ; une licence absente de la nouvelle liste marque automatiquement l'adh\xE9rent comme d\xE9sengag\xE9. Pour les 3 derni\xE8res, indiquez \xAB oui \xBB ou \xAB 1 \xBB pour cocher. Exportez votre tableur existant au format CSV (dans Excel ou LibreOffice : Fichier \u2192 Enregistrer sous \u2192 CSV) puis importez-le ici.",
               importStatus && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { display: "block", marginTop: 4, fontWeight: 600 }, children: importStatus })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "p5-table-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { className: "p5-table", children: [
@@ -21162,10 +22012,17 @@
                   "Statut ",
                   sortBy === "statut" ? sortDir === "asc" ? "\u25B2" : "\u25BC" : ""
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", { children: "Sous-statuts" })
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("th", { onClick: () => toggleSort("numeroLicence"), style: { whiteSpace: "nowrap" }, children: [
+                  "N\xB0 licence ",
+                  sortBy === "numeroLicence" ? sortDir === "asc" ? "\u25B2" : "\u25BC" : ""
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("th", { onClick: () => toggleSort("sousStatuts"), style: { width: 90 }, children: [
+                  "Sous-stat. ",
+                  sortBy === "sousStatuts" ? sortDir === "asc" ? "\u25B2" : "\u25BC" : ""
+                ] })
               ] }) }),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tbody", { children: [
-                sortedAdherents.map((a) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { style: a.desengage ? { background: "#F2F0E8", opacity: 0.65 } : void 0, children: [
+                sortedAdherents.map((a) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { className: a.desengage ? "p5-row-desengage" : void 0, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.photoUrl ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("img", { src: a.photoUrl, alt: "", style: styles10.rowPhoto }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles10.rowPhotoPlaceholder, children: initials4(a.prenom + " " + a.nom) }) }),
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("td", { children: [
                     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.nameLink, onClick: () => setOpenId(a.id), children: a.nom || "\u2014" }),
@@ -21175,7 +22032,8 @@
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.email || "\u2014" }),
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.telephone || "\u2014" }),
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.statut }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: SOUS_STATUTS.filter((s) => a.sousStatuts[s.key]).map((s) => s.label).join(", ") || "\u2014" })
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.numeroLicence || "\u2014" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { title: SOUS_STATUTS.filter((s) => a.sousStatuts[s.key]).map((s) => s.label).join(", ") || "", children: SOUS_STATUTS.filter((s) => a.sousStatuts[s.key]).map((s) => SOUS_STATUT_ABBR[s.key] || s.label).join(", ") || "\u2014" })
                 ] }, a.id)),
                 sortedAdherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { colSpan: 7, style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucun adh\xE9rent pour l'instant." }) })
               ] })
@@ -21197,7 +22055,36 @@
             onDelete: () => removeAdherent(openAdherent.id)
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD8 = "#0a1628";
@@ -21230,10 +22117,11 @@
     subTabActive: { background: "#fdf8f0", color: "#1E5A48", fontWeight: 700 },
     body: { padding: "16px 20px 24px", display: "flex", flexDirection: "column", gap: 12, background: "rgba(253,248,240,0.1)" },
     cardHeadRow: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 },
-    pageTitle: { margin: 0, fontSize: 18, fontWeight: 700, color: WOOD8 },
+    pageTitle: { margin: 0, fontSize: 18, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     card: { background: "#fff", borderTop: "4px solid #c9a227", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 14 },
     cardTitle: { margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: WOOD8 },
     miniAdd: { border: "1px dashed #8A8368", background: "transparent", color: WOOD8, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    miniAddLight: { border: "1px dashed rgba(253,248,240,0.65)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     miniRemove: { border: "1px solid #C9C2AE", background: "#fff", color: "#B1432F", borderRadius: 4, width: 26, height: 26, fontSize: 14, lineHeight: 1, cursor: "pointer" },
     importHint: { fontSize: 11, color: "#fdf8f0", opacity: 0.85, margin: "4px 0 10px", lineHeight: 1.4 },
     rowPhoto: { width: 30, height: 30, borderRadius: "50%", objectFit: "cover", border: "1px solid #C9C2AE" },
@@ -21253,6 +22141,8 @@
     btnGhostSmall: { border: "1px solid #C9C2AE", background: "transparent", color: "#0a1628", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     btnPrimary: { border: "1px solid #c9a227", background: "#c9a227", color: WOOD8, borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 700 },
     removeBtn: { border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "8px 14px", fontSize: 12.5 },
+    printTh: { border: "1px solid #ccc", padding: "2px 4px", background: "#f3ecd8" },
+    printTd: { border: "1px solid #ccc", padding: "2px 4px", textAlign: "center" },
     fieldRow: { display: "flex", flexDirection: "column", gap: 3 },
     fieldLabel: { fontSize: 11, color: "#5F5E5A", fontWeight: 600 },
     coordGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px,1fr))", gap: 8 },
@@ -21619,6 +22509,9 @@
   function LogoBox10({ label, url }) {
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { ...styles11.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("img", { src: url, alt: label, style: styles11.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(BallsCuesLogo10, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.logoPlaceholderText, children: label }) });
   }
+  function emptyLieu() {
+    return { id: `l${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, nom: "", joueurs: [""] };
+  }
   function emptyCompet() {
     return {
       id: `c${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
@@ -21626,7 +22519,7 @@
       categorie: "",
       type: "officielle",
       typeJeu: "carambole",
-      lieu: "",
+      lieux: [emptyLieu()],
       date: "",
       heureDebut: 9,
       heureFin: 12,
@@ -21635,7 +22528,7 @@
       photos: []
     };
   }
-  function CompetModal({ compet, tables, adminMode, onChange, onClose, onDelete }) {
+  function CompetModal({ compet, tables, competiteurs, adminMode, onChange, onClose, onDelete }) {
     const [syncStatus, setSyncStatus] = (0, import_react11.useState)("");
     const [syncing, setSyncing] = (0, import_react11.useState)(false);
     const typeMeta = TYPE_META.find((t) => t.id === compet.type) || TYPE_META[0];
@@ -21647,6 +22540,30 @@
       setSyncStatus(
         !applied ? "Cochez \xAB \xE0 domicile \xBB et renseignez date/horaires valides avant de synchroniser." : conflicts > 0 ? `Tables bloqu\xE9es pour cette date \u2014 ${conflicts} cr\xE9neau(x) d\xE9j\xE0 occup\xE9(s) laiss\xE9(s) inchang\xE9(s).` : "Tables bloqu\xE9es avec succ\xE8s sur le planning de r\xE9servation pour cette date."
       );
+    };
+    const lieux = compet.lieux && compet.lieux.length ? compet.lieux : [{ id: "legacy", nom: compet.lieu || "", joueurs: [""] }];
+    const updateLieu = (idx, patch) => onChange({ lieux: lieux.map((l, i) => i === idx ? { ...l, ...patch } : l) });
+    const addLieu = () => {
+      if (lieux.length >= 4) return;
+      onChange({ lieux: [...lieux, emptyLieu()] });
+    };
+    const removeLieu = (idx) => onChange({ lieux: lieux.filter((_, i) => i !== idx) });
+    const updateJoueur = (li, ji, val) => {
+      const joueurs = (lieux[li].joueurs && lieux[li].joueurs.length ? lieux[li].joueurs : [""]).map((j, i) => i === ji ? val : j);
+      updateLieu(li, { joueurs });
+    };
+    const addJoueur = (li) => {
+      const joueurs = lieux[li].joueurs && lieux[li].joueurs.length ? lieux[li].joueurs : [""];
+      if (joueurs.length >= 4) return;
+      updateLieu(li, { joueurs: [...joueurs, ""] });
+    };
+    const removeJoueur = (li, ji) => {
+      const joueurs = (lieux[li].joueurs && lieux[li].joueurs.length ? lieux[li].joueurs : [""]).filter((_, i) => i !== ji);
+      updateLieu(li, { joueurs });
+    };
+    const competiteurName = (id) => {
+      const c = (competiteurs || []).find((x) => x.id === id);
+      return c ? `${c.prenom} ${c.nom}` : "";
     };
     return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles11.modalOverlay, onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.modal, onClick: (e) => e.stopPropagation(), children: [
       /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.modalHead, children: [
@@ -21670,15 +22587,47 @@
           adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("input", { value: compet.categorie, onChange: (e) => onChange({ categorie: e.target.value }), placeholder: "ex. R2, Dames\u2026" }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: compet.categorie || "\u2014" })
         ] })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.coordGrid, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("label", { style: styles11.fieldRow, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.fieldLabel, children: "Date" }),
-          adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("input", { type: "date", value: compet.date, onChange: (e) => onChange({ date: e.target.value }) }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: fmtDateLong2(compet.date) })
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles11.coordGrid, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("label", { style: styles11.fieldRow, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.fieldLabel, children: "Date" }),
+        adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("input", { type: "date", value: compet.date, onChange: (e) => onChange({ date: e.target.value }) }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: fmtDateLong2(compet.date) })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { marginTop: 8 }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.fieldLabel, children: "Lieu(x)" }),
+          adminMode && lieux.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniAdd, onClick: addLieu, children: "+ Ajouter un lieu" })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("label", { style: styles11.fieldRow, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.fieldLabel, children: "Lieu" }),
-          adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("input", { value: compet.lieu, onChange: (e) => onChange({ lieu: e.target.value }), placeholder: "ex. Prayssac, Cahors\u2026" }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { children: compet.lieu || "\u2014" })
-        ] })
+        /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }, children: lieux.map((l, li) => {
+          const joueurs = l.joueurs && l.joueurs.length ? l.joueurs : [""];
+          return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.lieuBox, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: 6, alignItems: "center" }, children: [
+              adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("input", { value: l.nom, onChange: (e) => updateLieu(li, { nom: e.target.value }), placeholder: "ex. Prayssac, Cahors\u2026", style: { flex: 1 } }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontWeight: 600, fontSize: 13 }, children: l.nom || "(lieu non pr\xE9cis\xE9)" }),
+              adminMode && lieux.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniRemove, onClick: () => removeLieu(li), children: "\xD7" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { marginTop: 6 }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { ...styles11.fieldLabel, fontSize: 10.5 }, children: "Joueurs du club concern\xE9s" }),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4, marginTop: 3 }, children: [
+                joueurs.map(
+                  (j, ji) => adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: 6 }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("select", { value: j, onChange: (e) => updateJoueur(li, ji, e.target.value), style: { flex: 1 }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("option", { value: "", children: "\u2014 Choisir un comp\xE9titeur \u2014" }),
+                      (competiteurs || []).map((c) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("option", { value: c.id, children: [
+                        c.prenom,
+                        " ",
+                        c.nom
+                      ] }, c.id))
+                    ] }),
+                    joueurs.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniRemove, onClick: () => removeJoueur(li, ji), children: "\xD7" })
+                  ] }, ji) : j ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("span", { style: { fontSize: 12 }, children: [
+                    "\u2022 ",
+                    competiteurName(j)
+                  ] }, ji) : null
+                ),
+                !adminMode && joueurs.every((j) => !j) && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.emptyNote, children: "Aucun joueur assign\xE9." }),
+                adminMode && joueurs.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniAdd, onClick: () => addJoueur(li), children: "+ Ajouter un joueur" })
+              ] })
+            ] })
+          ] }, l.id || li);
+        }) })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("label", { style: styles11.fieldRow, children: [
         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.fieldLabel, children: "Horaire" }),
@@ -21712,6 +22661,12 @@
     ] }) });
   }
   function PageCalendrierCompetitions({ onNavigate, onSwitchTab, adminMode: adminModeProp, onAdminModeChange, unlocked: unlockedProp, onUnlockedChange, memberPassword: memberPasswordProp, onMemberPasswordChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react11.useState)(false);
+    (0, import_react11.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react11.useState)(DEFAULT_LOGOS10);
     const [social, setSocial] = (0, import_react11.useState)(DEFAULT_SOCIAL10);
     const [localPassword, setLocalPassword] = (0, import_react11.useState)(DEFAULT_PASSWORD3);
@@ -21725,6 +22680,7 @@
     const [pwdError, setPwdError] = (0, import_react11.useState)("");
     const [competitions, setCompetitions] = (0, import_react11.useState)([]);
     const [tables, setTables] = (0, import_react11.useState)([]);
+    const [competiteurs, setCompeteurs] = (0, import_react11.useState)([]);
     const [openId, setOpenId] = (0, import_react11.useState)(null);
     const [resultsId, setResultsId] = (0, import_react11.useState)(null);
     const [filterType, setFilterType] = (0, import_react11.useState)("tous");
@@ -21778,6 +22734,10 @@
         const loadedCompets = await loadJSON10("p5:competitions", []);
         setCompetitions(loadedCompets.map((c) => ({ photos: [], ...c })));
         setTables(await loadTables2());
+        const allAdherents = await loadJSON10("p5:adherents", []);
+        setCompeteurs(
+          allAdherents.filter((a) => !a.desengage && a.sousStatuts && a.sousStatuts.competiteur).sort((a, b) => (a.nom || "").localeCompare(b.nom || ""))
+        );
       })();
     }, []);
     (0, import_react11.useEffect)(() => {
@@ -21829,8 +22789,9 @@
           categorie: idx(["categorie", "cat\xE9gorie"]),
           type: idx(["type", "type de competition", "type de comp\xE9tition"]),
           lieu: idx(["lieu"]),
-          heureDebut: idx(["heure debut", "heure d\xE9but", "debut", "d\xE9but"]),
-          heureFin: idx(["heure fin", "fin"]),
+          heureDebut: idx(["heure debut", "heure d\xE9but", "heure de debut", "heure de d\xE9but", "debut", "d\xE9but", "horaire debut", "horaire d\xE9but"]),
+          heureFin: idx(["heure fin", "heure de fin", "horaire fin", "fin"]),
+          horaire: idx(["horaire", "horaires", "creneau", "cr\xE9neau"]),
           auClub: idx(["a domicile", "\xE0 domicile", "domicile"]),
           notes: idx(["notes", "remarque", "remarques"])
         };
@@ -21841,16 +22802,19 @@
           const nom = get("nom");
           const date = parseDateCell(get("date"));
           if (!nom && !date) continue;
+          const horaireRaw = get("horaire");
+          const horaireParts = horaireRaw ? horaireRaw.split(/[-–àa]/i).map((s) => s.trim()).filter(Boolean) : [];
+          const heureDebut = cols.heureDebut >= 0 ? parseHourCell(get("heureDebut"), 9) : parseHourCell(horaireParts[0], 9);
+          const heureFin = cols.heureFin >= 0 ? parseHourCell(get("heureFin"), 12) : parseHourCell(horaireParts[1], 12);
           imported.push({
-            id: `c${Date.now()}-${i}-${Math.random().toString(36).slice(2, 7)}`,
             nom: nom || "Comp\xE9tition import\xE9e",
             categorie: get("categorie"),
             type: matchIdCell(get("type"), TYPE_META, "officielle"),
             typeJeu: matchIdCell(get("typeJeu"), GAME_LABELS3, "carambole"),
-            lieu: get("lieu"),
+            lieuNom: get("lieu"),
             date,
-            heureDebut: parseHourCell(get("heureDebut"), 9),
-            heureFin: parseHourCell(get("heureFin"), 12),
+            heureDebut,
+            heureFin,
             notes: get("notes"),
             auClub: parseBoolCell2(get("auClub"))
           });
@@ -21859,8 +22823,59 @@
           setImportStatus("Aucune ligne valide trouv\xE9e (colonnes \xAB Nom \xBB et \xAB Date \xBB introuvables ou vides).");
           return;
         }
-        persist([...competitions, ...imported]);
-        setImportStatus(`${imported.length} comp\xE9tition(s) import\xE9e(s) avec succ\xE8s.`);
+        const matchKey = (nom, date) => `${(nom || "").trim().toLowerCase()}|${date || ""}`;
+        const byKey = /* @__PURE__ */ new Map();
+        competitions.forEach((c) => byKey.set(matchKey(c.nom, c.date), c));
+        const toCreate = [];
+        let nbUpdated = 0;
+        const matchedIds = /* @__PURE__ */ new Set();
+        imported.forEach((row) => {
+          const existing = byKey.get(matchKey(row.nom, row.date));
+          if (existing) {
+            matchedIds.add(existing.id);
+            nbUpdated++;
+          } else {
+            toCreate.push({
+              id: `c${Date.now()}-${toCreate.length}-${Math.random().toString(36).slice(2, 7)}`,
+              nom: row.nom,
+              categorie: row.categorie,
+              type: row.type,
+              typeJeu: row.typeJeu,
+              lieux: [{ id: `l${Date.now()}-${toCreate.length}`, nom: row.lieuNom, joueurs: [""] }],
+              date: row.date,
+              heureDebut: row.heureDebut,
+              heureFin: row.heureFin,
+              notes: row.notes,
+              auClub: row.auClub,
+              photos: []
+            });
+          }
+        });
+        const confirmMsg = `Cet import va : cr\xE9er ${toCreate.length} nouvelle(s) comp\xE9tition(s), mettre \xE0 jour ${nbUpdated} comp\xE9tition(s) d\xE9j\xE0 existante(s) (m\xEAme nom et m\xEAme date).
+
+Les lieux, joueurs assign\xE9s et photos d\xE9j\xE0 enregistr\xE9s sur les comp\xE9titions mises \xE0 jour sont conserv\xE9s.
+
+Continuer ?`;
+        if (!window.confirm(confirmMsg)) {
+          setImportStatus("Import annul\xE9.");
+          return;
+        }
+        const updated = competitions.map((c) => {
+          if (!matchedIds.has(c.id)) return c;
+          const row = imported.find((r) => matchKey(r.nom, r.date) === matchKey(c.nom, c.date));
+          return {
+            ...c,
+            categorie: row.categorie,
+            type: row.type,
+            typeJeu: row.typeJeu,
+            heureDebut: row.heureDebut,
+            heureFin: row.heureFin,
+            notes: row.notes,
+            auClub: row.auClub
+          };
+        });
+        persist([...updated, ...toCreate]);
+        setImportStatus(`Import termin\xE9 : ${toCreate.length} cr\xE9\xE9e(s), ${nbUpdated} mise(s) \xE0 jour.`);
       } catch (e) {
         setImportStatus("\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
       }
@@ -22049,7 +23064,7 @@
                 onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("tournois") : null,
                 disabled: typeof onSwitchTab !== "function",
                 title: typeof onSwitchTab === "function" ? "" : "Sera reli\xE9 une fois le site assembl\xE9",
-                children: "Les tournois dans notre club"
+                children: "Les tournois organis\xE9s dans notre club"
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
@@ -22077,9 +23092,9 @@
             /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.cardHeadRow, className: "no-print", children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { className: "p5c-serif", style: styles11.pageTitle, children: "Calendrier des comp\xE9titions" }),
               /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.btnGhostSmall, onClick: () => window.print(), children: "Imprimer (PDF, A4 paysage)" }),
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.btnGhostSmallLight, onClick: () => window.print(), children: "Imprimer (PDF, A4 paysage)" }),
                 adminMode && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniAdd, onClick: () => importInputRef.current && importInputRef.current.click(), children: "\u2B71 Importer un fichier (CSV)" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniAddLight, onClick: () => importInputRef.current && importInputRef.current.click(), children: "\u2B71 Importer un fichier (CSV)" }),
                   /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
                     "input",
                     {
@@ -22093,12 +23108,15 @@
                       }
                     }
                   ),
-                  /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniAdd, onClick: addCompet, children: "+ Ajouter une comp\xE9tition" })
+                  /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("button", { style: styles11.miniAddLight, onClick: addCompet, children: "+ Ajouter une comp\xE9tition" })
                 ] })
               ] })
             ] }),
             adminMode && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("p", { style: styles11.importHint, className: "no-print", children: [
               "Colonnes reconnues (dans n'importe quel ordre) : Date (JJ/MM/AAAA ou AAAA-MM-JJ), Nom, Type de jeu, Cat\xE9gorie, Type (officielle / interclub / interne), Lieu, Heure d\xE9but, Heure fin, \xC0 domicile (\xAB oui \xBB pour cocher), Notes.",
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("br", {}),
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { children: "Import intelligent" }),
+              " : les comp\xE9titions sont rapproch\xE9es par date + nom \u2014 une comp\xE9tition d\xE9j\xE0 connue est mise \xE0 jour (lieux, joueurs assign\xE9s et photos conserv\xE9s) au lieu d'\xEAtre dupliqu\xE9e.",
               importStatus && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { display: "block", marginTop: 4, fontWeight: 600 }, children: importStatus })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.legendRow, className: "no-print", children: [
@@ -22152,7 +23170,7 @@
                         /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { ...styles11.typeDot, background: meta.color, marginRight: 6 } }),
                         meta.label
                       ] }),
-                      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { children: c.lieu || "\u2014" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { children: c.lieux && c.lieux.length ? c.lieux.map((l) => l.nom).filter(Boolean).join(", ") || "\u2014" : c.lieu || "\u2014" }),
                       /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("td", { children: [
                         hourLabel3(c.heureDebut),
                         " \u2013 ",
@@ -22190,6 +23208,7 @@
           {
             compet: openCompet,
             tables,
+            competiteurs,
             adminMode,
             onChange: (patch) => updateCompet(openCompet.id, patch),
             onClose: () => setOpenId(null),
@@ -22203,7 +23222,36 @@
             onClose: () => setResultsId(null)
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD9 = "#0a1628";
@@ -22237,7 +23285,7 @@
     body: { padding: "16px 20px 24px", display: "flex", flexDirection: "column", gap: 10, background: "rgba(253,248,240,0.1)" },
     importHint: { fontSize: 11, color: "#fdf8f0", opacity: 0.85, margin: "-4px 0 4px", lineHeight: 1.4 },
     cardHeadRow: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 },
-    pageTitle: { margin: 0, fontSize: 18, fontWeight: 700, color: WOOD9 },
+    pageTitle: { margin: 0, fontSize: 18, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     printTitle: { display: "none" },
     card: { background: "#fff", borderTop: "4px solid #c9a227", borderRadius: 12, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 14 },
     legendRow: { display: "flex", gap: 8, flexWrap: "wrap" },
@@ -22245,6 +23293,9 @@
     legendChipActive: { background: "#f3ecd8", fontWeight: 700, borderColor: WOOD9 },
     typeDot: { width: 10, height: 10, borderRadius: "50%", display: "inline-block" },
     miniAdd: { border: "1px dashed #8A8368", background: "transparent", color: WOOD9, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    miniRemove: { border: "none", background: "transparent", color: "#B1432F", fontSize: 15, fontWeight: 700, lineHeight: 1, padding: "0 4px", cursor: "pointer" },
+    emptyNote: { color: "#8A8368", fontSize: 11.5, fontStyle: "italic" },
+    lieuBox: { border: "1px solid #E3DCC5", borderRadius: 6, padding: 8, background: "#FBF6E8" },
     footer: { display: "flex", alignItems: "center", gap: 14, background: WOOD9, padding: "7px 16px", flexWrap: "wrap" },
     footerLabel: { fontSize: 11.5, color: GOLD10, fontWeight: 600 },
     footerLink: { fontSize: 12, color: CREAM10, textDecoration: "underline" },
@@ -22253,6 +23304,8 @@
     modalHead: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, gap: 10 },
     modalTitle: { margin: 0, fontSize: 16, fontWeight: 700, color: WOOD9 },
     btnGhostSmall: { border: "1px solid #C9C2AE", background: "transparent", color: "#0a1628", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    btnGhostSmallLight: { border: "1px solid rgba(253,248,240,0.55)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    miniAddLight: { border: "1px dashed rgba(253,248,240,0.65)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     btnPrimary: { border: "1px solid #c9a227", background: "#c9a227", color: WOOD9, borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 700 },
     removeBtn: { border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "8px 14px", fontSize: 12.5 },
     fieldRow: { display: "flex", flexDirection: "column", gap: 3, marginTop: 8 },
@@ -22301,6 +23354,12 @@
       await window.storage.set(key, JSON.stringify(value), true);
     } catch (e) {
     }
+  }
+  function currentSeasonLabel2() {
+    const now = /* @__PURE__ */ new Date();
+    const y = now.getFullYear();
+    const startYear = now.getMonth() + 1 >= 9 ? y : y - 1;
+    return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
   }
   function fmtDateLong3(dateStr) {
     if (!dateStr) return "Date \xE0 d\xE9finir";
@@ -22420,14 +23479,18 @@
   function emptyTournoi() {
     return {
       id: `tn${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      nom: "",
       date: "",
       heureDebut: 9,
       heureFin: 18,
       typeJeu: "carambole",
       categorie: CATEGORIES3[2],
+      joueurs: ["", ""],
       directeurSalle: "",
-      arbitres: ["", "", "", ""],
-      marqueurs: [""]
+      arbitres: ["", ""],
+      marqueurs: [""],
+      archived: false,
+      saisonArchive: ""
     };
   }
   function VolunteerSelect({ value, onChange, adherents, placeholder }) {
@@ -22437,10 +23500,20 @@
       adherents.map((a) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("option", { value: a, children: a }, a))
     ] });
   }
-  function TournoiCard({ tournoi, adherents, tables, adminMode, onChange, onDelete }) {
+  function TournoiCard({ tournoi, adherents, competiteurs, tables, adminMode, onChange, onDelete, isDraft, onValidate, onCancel }) {
     const gameLabel = GAME_LABELS4.find((g) => g.id === tournoi.typeJeu)?.label || tournoi.typeJeu;
     const [syncStatus, setSyncStatus] = (0, import_react12.useState)("");
     const [syncing, setSyncing] = (0, import_react12.useState)(false);
+    const isPast = tournoi.date && tournoi.date < (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+    const [expanded, setExpanded] = (0, import_react12.useState)(!isPast);
+    if (isPast && !expanded) {
+      return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.tournoiCardCollapsed, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.expandBtn, onClick: () => setExpanded(true), title: "D\xE9plier", children: "\u25B8" }),
+        tournoi.nom && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontWeight: 700, color: WOOD10 }, children: tournoi.nom }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { color: "#5F5E5A" }, children: fmtDateLong3(tournoi.date) }),
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.tournoiTerminBadge, children: "Tournoi termin\xE9" })
+      ] });
+    }
     const doSync = async () => {
       setSyncing(true);
       setSyncStatus("Synchronisation\u2026");
@@ -22450,18 +23523,36 @@
         !applied ? "Renseignez une date et un horaire valide avant de synchroniser." : conflicts > 0 ? `Tables bloqu\xE9es \u2014 ${conflicts} cr\xE9neau(x) d\xE9j\xE0 occup\xE9(s) laiss\xE9(s) inchang\xE9(s).` : "Tables bloqu\xE9es avec succ\xE8s sur le planning de r\xE9servation pour cette date."
       );
     };
-    const updateArbitre = (idx, value) => {
-      const next = tournoi.arbitres.map((a, i) => i === idx ? value : a);
-      onChange({ arbitres: next });
+    const joueurs = tournoi.joueurs && tournoi.joueurs.length ? tournoi.joueurs : ["", ""];
+    const updateJoueur = (idx, value) => onChange({ joueurs: joueurs.map((j, i) => i === idx ? value : j) });
+    const addJoueur = () => {
+      if (joueurs.length >= 5) return;
+      onChange({ joueurs: [...joueurs, ""] });
     };
+    const removeJoueur = (idx) => onChange({ joueurs: joueurs.filter((_, i) => i !== idx) });
+    const arbitres = tournoi.arbitres && tournoi.arbitres.length ? tournoi.arbitres : ["", ""];
+    const updateArbitre = (idx, value) => onChange({ arbitres: arbitres.map((a, i) => i === idx ? value : a) });
+    const addArbitre = () => {
+      if (arbitres.length >= 4) return;
+      onChange({ arbitres: [...arbitres, ""] });
+    };
+    const removeArbitre = (idx) => onChange({ arbitres: arbitres.filter((_, i) => i !== idx) });
     const updateMarqueur = (idx, value) => {
       const next = tournoi.marqueurs.map((m, i) => i === idx ? value : m);
       onChange({ marqueurs: next });
     };
-    const addMarqueur = () => onChange({ marqueurs: [...tournoi.marqueurs, ""] });
+    const addMarqueur = () => {
+      if (tournoi.marqueurs.length >= 6) return;
+      onChange({ marqueurs: [...tournoi.marqueurs, ""] });
+    };
     const removeMarqueur = (idx) => onChange({ marqueurs: tournoi.marqueurs.filter((_, i) => i !== idx) });
     return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.tournoiCard, children: [
+      isPast && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.collapseBtn, onClick: () => setExpanded(false), title: "Replier", children: "\u25BE Replier (tournoi termin\xE9)" }),
       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles12.tournoiHead, children: adminMode ? /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.tournoiHeadEdit, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("label", { style: { ...styles12.fieldRow, minWidth: 200 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.fieldLabel, children: "D\xE9nomination de la comp\xE9tition" }),
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("input", { value: tournoi.nom || "", onChange: (e) => onChange({ nom: e.target.value }), placeholder: "ex. Tournoi interne de printemps" })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("label", { style: styles12.fieldRow, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.fieldLabel, children: "Date" }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("input", { type: "date", value: tournoi.date, onChange: (e) => onChange({ date: e.target.value }) })
@@ -22482,12 +23573,18 @@
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("select", { value: tournoi.heureFin, onChange: (e) => onChange({ heureFin: parseInt(e.target.value, 10) }), children: HOURS3.map((h) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("option", { value: h, children: hourLabel4(h) }, h)) })
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4 }, children: [
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: doSync, disabled: syncing, children: syncing ? "Synchronisation\u2026" : "\u21BB Bloquer les tables pour cette date" }),
-          syncStatus && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.syncStatusText, children: syncStatus })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.removeBtn, onClick: onDelete, children: "Supprimer" })
+        isDraft ? /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 8, marginLeft: "auto" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.btnGhostSmall, onClick: onCancel, children: "Annuler" }),
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.validateBtn, onClick: onValidate, children: "\u2713 Valider et ajouter \xE0 la liste" })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_jsx_runtime12.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 4 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: doSync, disabled: syncing, children: syncing ? "Synchronisation\u2026" : "\u21BB Bloquer les tables pour cette date" }),
+            syncStatus && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.syncStatusText, children: syncStatus })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.removeBtn, onClick: onDelete, children: "Supprimer" })
+        ] })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_jsx_runtime12.Fragment, { children: [
+        tournoi.nom && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "p5t-serif", style: { ...styles12.tournoiTitle, width: "100%" }, children: tournoi.nom }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "p5t-serif", style: styles12.tournoiTitle, children: fmtDateLong3(tournoi.date) }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.tournoiTag, children: gameLabel }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.tournoiTag, children: tournoi.categorie }),
@@ -22498,6 +23595,18 @@
         ] })
       ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerGrid, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerBlock, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.volunteerLabel, children: "Comp\xE9titeurs engag\xE9s" }),
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles12.volunteerList, children: joueurs.map((j, i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerRow, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: styles12.volunteerRowLabel, children: [
+              "Joueur ",
+              i + 1
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(VolunteerSelect, { value: j, onChange: (v) => updateJoueur(i, v), adherents: competiteurs, placeholder: "\u2014 \xE0 pourvoir \u2014" }),
+            adminMode && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniRemove, onClick: () => removeJoueur(i), title: "Annuler ce joueur", children: "\xD7" })
+          ] }, i)) }),
+          adminMode && joueurs.length < 5 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: addJoueur, children: "+ Ajouter un joueur" })
+        ] }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerBlock, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.volunteerLabel, children: "Directeur de salle" }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
@@ -22512,13 +23621,15 @@
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerBlock, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.volunteerLabel, children: "Arbitres" }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles12.volunteerList, children: tournoi.arbitres.map((a, i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerRow, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles12.volunteerList, children: arbitres.map((a, i) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerRow, children: [
             /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { style: styles12.volunteerRowLabel, children: [
               "Arbitre ",
               i + 1
             ] }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(VolunteerSelect, { value: a, onChange: (v) => updateArbitre(i, v), adherents, placeholder: "\u2014 \xE0 pourvoir \u2014" })
-          ] }, i)) })
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(VolunteerSelect, { value: a, onChange: (v) => updateArbitre(i, v), adherents, placeholder: "\u2014 \xE0 pourvoir \u2014" }),
+            adminMode && arbitres.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniRemove, onClick: () => removeArbitre(i), children: "\xD7" })
+          ] }, i)) }),
+          adminMode && arbitres.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: addArbitre, children: "+ Ajouter un arbitre" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.volunteerBlock, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.volunteerLabel, children: "Marqueurs" }),
@@ -22530,12 +23641,18 @@
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(VolunteerSelect, { value: m, onChange: (v) => updateMarqueur(i, v), adherents, placeholder: "\u2014 \xE0 pourvoir \u2014" }),
             tournoi.marqueurs.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniRemove, onClick: () => removeMarqueur(i), children: "\xD7" })
           ] }, i)) }),
-          /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: addMarqueur, children: "+ Ajouter un marqueur" })
+          tournoi.marqueurs.length < 6 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: addMarqueur, children: "+ Ajouter un marqueur" })
         ] })
       ] })
     ] });
   }
   function PageTournoisInternes({ onNavigate, onSwitchTab, adminMode: adminModeProp, onAdminModeChange, unlocked: unlockedProp, onUnlockedChange, memberPassword: memberPasswordProp, onMemberPasswordChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react12.useState)(false);
+    (0, import_react12.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react12.useState)(DEFAULT_LOGOS11);
     const [social, setSocial] = (0, import_react12.useState)(DEFAULT_SOCIAL11);
     const [localPassword, setLocalPassword] = (0, import_react12.useState)(DEFAULT_PASSWORD4);
@@ -22549,6 +23666,7 @@
     const [pwdError, setPwdError] = (0, import_react12.useState)("");
     const [tournois, setTournois] = (0, import_react12.useState)([]);
     const [adherents, setAdherents] = (0, import_react12.useState)([]);
+    const [competiteurs, setCompeteurs] = (0, import_react12.useState)([]);
     const [tables, setTables] = (0, import_react12.useState)([]);
     const [localAdminMode, setLocalAdminMode] = (0, import_react12.useState)(false);
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
@@ -22568,6 +23686,9 @@
         setTables(await loadTables3());
         const adherentsList = await loadJSON11("p5:adherents", []);
         setAdherents(adherentsList.map((a) => `${a.prenom} ${a.nom}`.trim()).filter(Boolean));
+        setCompeteurs(
+          adherentsList.filter((a) => !a.desengage && a.sousStatuts && a.sousStatuts.competiteur).map((a) => `${a.prenom} ${a.nom}`.trim()).filter(Boolean)
+        );
       })();
     }, []);
     (0, import_react12.useEffect)(() => {
@@ -22622,12 +23743,35 @@
       saveJSON11("p5:tournois", next);
     };
     const updateTournoi = (id, patch) => persist(tournois.map((t) => t.id === id ? { ...t, ...patch } : t));
-    const addTournoi = () => persist([...tournois, emptyTournoi()]);
+    const [creating, setCreating] = (0, import_react12.useState)(null);
+    const addTournoi = () => setCreating(emptyTournoi());
+    const validateCreating = () => {
+      persist([...tournois, creating]);
+      setCreating(null);
+    };
     const removeTournoi = async (id) => {
       await purgeTournoiBookings(`tournoi-${id}`);
       persist(tournois.filter((t) => t.id !== id));
     };
     const sorted = (0, import_react12.useMemo)(() => [...tournois].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999")), [tournois]);
+    const [viewArchiveSeason, setViewArchiveSeason] = (0, import_react12.useState)(null);
+    const today = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+    const activeTournois = sorted.filter((t) => !t.archived);
+    const nbEndedUnarchived = activeTournois.filter((t) => t.date && t.date < today).length;
+    const archiveSeasons = (0, import_react12.useMemo)(() => {
+      const s = /* @__PURE__ */ new Set();
+      tournois.forEach((t) => {
+        if (t.archived && t.saisonArchive) s.add(t.saisonArchive);
+      });
+      return Array.from(s).sort().reverse();
+    }, [tournois]);
+    const archivedForSeason = viewArchiveSeason ? sorted.filter((t) => t.archived && t.saisonArchive === viewArchiveSeason) : [];
+    const archiveEnded = () => {
+      if (nbEndedUnarchived === 0) return;
+      if (!window.confirm(`Archiver les ${nbEndedUnarchived} tournoi(s) termin\xE9(s) sous la saison ${currentSeasonLabel2()} ? Ils resteront consultables dans les archives.`)) return;
+      const saison = currentSeasonLabel2();
+      persist(tournois.map((t) => !t.archived && t.date && t.date < today ? { ...t, archived: true, saisonArchive: saison } : t));
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.page, children: [
       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("style", { children: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;500;600&display=swap');
@@ -22782,7 +23926,7 @@
                 children: "Calendrier des comp\xE9titions"
               }
             ),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: { ...styles12.subTab, ...styles12.subTabActive }, children: "Les tournois dans notre club" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: { ...styles12.subTab, ...styles12.subTabActive }, children: "Les tournois organis\xE9s dans notre club" }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
               "button",
               {
@@ -22806,17 +23950,41 @@
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.body, children: [
             /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.cardHeadRow, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "p5t-serif", style: styles12.pageTitle, children: "Les tournois dans notre club" }),
-              adminMode && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAdd, onClick: addTournoi, children: "+ Ajouter un tournoi" })
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "p5t-serif", style: styles12.pageTitle, children: "Les tournois organis\xE9s dans notre club" }),
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [
+                adminMode && !viewArchiveSeason && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAddLight, onClick: addTournoi, children: "+ Ajouter un tournoi" }),
+                adminMode && !viewArchiveSeason && nbEndedUnarchived > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("button", { style: styles12.archiveBtn, onClick: archiveEnded, children: [
+                  "\u{1F4E6} Archiver les ",
+                  nbEndedUnarchived,
+                  " tournoi(s) termin\xE9(s)"
+                ] })
+              ] })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.pageIntro, children: "Retrouvez les tournois internes programm\xE9s et inscrivez-vous comme b\xE9n\xE9vole (directeur de salle, arbitre ou marqueur) en choisissant votre nom dans la liste." }),
             adherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun adh\xE9rent enregistr\xE9 pour l'instant \u2014 les inscriptions b\xE9n\xE9voles seront disponibles d\xE8s que la liste des adh\xE9rents sera renseign\xE9e." }),
+            archiveSeasons.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { ...styles12.fieldLabel, color: "#fdf8f0" }, children: "Archives :" }),
+              viewArchiveSeason && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAddLight, onClick: () => setViewArchiveSeason(null), children: "\u2190 Retour aux tournois actuels" }),
+              archiveSeasons.map((s) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+                "button",
+                {
+                  style: { ...styles12.chip, ...viewArchiveSeason === s ? styles12.chipActive : {} },
+                  onClick: () => setViewArchiveSeason(s),
+                  children: [
+                    "Saison ",
+                    s
+                  ]
+                },
+                s
+              ))
+            ] }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.tournoiList, children: [
-              sorted.map((t) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+              (viewArchiveSeason ? archivedForSeason : activeTournois).map((t) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                 TournoiCard,
                 {
                   tournoi: t,
                   adherents,
+                  competiteurs,
                   tables,
                   adminMode,
                   onChange: (patch) => updateTournoi(t.id, patch),
@@ -22824,16 +23992,63 @@
                 },
                 t.id
               )),
-              sorted.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun tournoi interne programm\xE9 pour l'instant." })
+              !viewArchiveSeason && activeTournois.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun tournoi interne programm\xE9 pour l'instant." }),
+              viewArchiveSeason && archivedForSeason.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun tournoi archiv\xE9 pour cette saison." })
             ] })
-          ] })
+          ] }),
+          creating && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles12.modalOverlay, className: "no-print", onClick: () => setCreating(null), children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.createModal, onClick: (e) => e.stopPropagation(), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "p5t-serif", style: styles12.createModalTitle, children: "Nouveau tournoi interne" }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+              TournoiCard,
+              {
+                tournoi: creating,
+                adherents,
+                competiteurs,
+                tables,
+                adminMode,
+                onChange: (patch) => setCreating({ ...creating, ...patch }),
+                isDraft: true,
+                onValidate: validateCreating,
+                onCancel: () => setCreating(null)
+              }
+            )
+          ] }) })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.footer, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.footerLabel, children: "Suivez le club :" }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("a", { href: social.facebook || "#", style: styles12.footerLink, target: "_blank", rel: "noreferrer", children: "Facebook" }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("a", { href: social.whatsapp || "#", style: styles12.footerLink, target: "_blank", rel: "noreferrer", children: "WhatsApp" })
         ] })
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD10 = "#0a1628";
@@ -22869,17 +24084,30 @@
     pageTitle: { margin: 0, fontSize: 20, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     pageIntro: { margin: 0, fontSize: 13, color: "#fdf8f0" },
     miniAdd: { border: "1px dashed rgba(201,162,39,0.7)", background: "transparent", color: GOLD11, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    miniAddLight: { border: "1px dashed rgba(253,248,240,0.7)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12, fontWeight: 600 },
     miniRemove: { border: "none", background: "transparent", color: "#e74c3c", fontSize: 15, fontWeight: 700, lineHeight: 1, padding: "0 4px" },
     emptyNote: { color: "#fdf8f0", fontSize: 12.5, fontStyle: "italic", opacity: 0.85 },
     tournoiList: { display: "flex", flexDirection: "column", gap: 14 },
     tournoiCard: { background: "#fff", borderRadius: 12, borderTop: `4px solid ${GOLD11}`, boxShadow: "0 2px 12px rgba(0,0,0,0.08)", padding: 16, display: "flex", flexDirection: "column", gap: 12 },
+    tournoiCardCollapsed: { background: "#F2F0E8", borderRadius: 8, border: "1px solid #E3DCC5", padding: "8px 14px", display: "flex", alignItems: "center", gap: 12, fontSize: 13 },
+    expandBtn: { border: "1px solid #C9C2AE", background: "#fff", color: WOOD10, borderRadius: 4, width: 24, height: 24, fontSize: 13, cursor: "pointer", flexShrink: 0 },
+    collapseBtn: { alignSelf: "flex-start", border: "none", background: "transparent", color: "#5F5E5A", fontSize: 11.5, cursor: "pointer", textDecoration: "underline", padding: 0 },
+    tournoiTerminBadge: { marginLeft: "auto", fontSize: 10.5, fontWeight: 700, color: "#8A8368", textTransform: "uppercase", letterSpacing: "0.04em" },
     tournoiHead: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" },
     tournoiHeadEdit: { display: "flex", alignItems: "flex-end", gap: 10, flexWrap: "wrap" },
     tournoiTitle: { margin: 0, fontSize: 16, fontWeight: 700, color: WOOD10 },
     tournoiTag: { fontSize: 11, fontWeight: 700, color: "#0a1628", background: "#f3ecd8", borderRadius: 12, padding: "3px 10px" },
     fieldRow: { display: "flex", flexDirection: "column", gap: 3 },
     fieldLabel: { fontSize: 10.5, color: "#5F5E5A", fontWeight: 600 },
+    chip: { border: "1px solid rgba(253,248,240,0.5)", background: "transparent", color: "#fdf8f0", borderRadius: 14, padding: "5px 12px", fontSize: 12 },
+    chipActive: { background: GOLD11, color: WOOD10, borderColor: GOLD11, fontWeight: 700 },
+    archiveBtn: { border: "1px solid rgba(253,248,240,0.7)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12, fontWeight: 600 },
     removeBtn: { border: "1px solid #e74c3c", background: "transparent", color: "#e74c3c", borderRadius: 4, padding: "7px 12px", fontSize: 12 },
+    validateBtn: { border: "1px solid #1E5A48", background: "#1E5A48", color: "#fff", borderRadius: 4, padding: "7px 14px", fontSize: 12.5, fontWeight: 700 },
+    btnGhostSmall: { border: "1px solid #C9C2AE", background: "transparent", color: "#0a1628", borderRadius: 4, padding: "7px 12px", fontSize: 12 },
+    modalOverlay: { position: "fixed", inset: 0, background: "rgba(10,22,40,0.6)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 90, padding: 16, overflowY: "auto" },
+    createModal: { background: "#F2F0E8", borderRadius: 10, padding: 18, width: "min(900px, 96vw)", maxHeight: "90vh", overflowY: "auto", border: `2px solid ${GOLD11}` },
+    createModalTitle: { margin: "0 0 12px", fontSize: 18, fontWeight: 700, color: WOOD10 },
     syncStatusText: { fontSize: 10, color: "#1E5A48", maxWidth: 220 },
     volunteerGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14, borderTop: "1px dashed #f3ecd8", paddingTop: 12 },
     volunteerBlock: { display: "flex", flexDirection: "column", gap: 6 },
@@ -22985,6 +24213,12 @@
     ] }) });
   }
   function PageDocumentsInternes({ onNavigate, onSwitchTab, adminMode: adminModeProp, onAdminModeChange, unlocked: unlockedProp, onUnlockedChange, memberPassword: memberPasswordProp, onMemberPasswordChange } = {}) {
+    const [showBackToTop, setShowBackToTop] = (0, import_react13.useState)(false);
+    (0, import_react13.useEffect)(() => {
+      const onScroll = () => setShowBackToTop(window.scrollY > 400);
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    }, []);
     const [logos, setLogos] = (0, import_react13.useState)(DEFAULT_LOGOS12);
     const [social, setSocial] = (0, import_react13.useState)(DEFAULT_SOCIAL12);
     const [localPassword, setLocalPassword] = (0, import_react13.useState)(DEFAULT_PASSWORD5);
@@ -23267,7 +24501,7 @@
                 style: styles13.subTab,
                 onClick: () => typeof onSwitchTab === "function" ? onSwitchTab("tournois") : null,
                 disabled: typeof onSwitchTab !== "function",
-                children: "Les tournois dans notre club"
+                children: "Les tournois organis\xE9s dans notre club"
               }
             ),
             /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
@@ -23372,7 +24606,36 @@
             onDelete: () => removeDoc(openDoc.id)
           }
         )
-      ] })
+      ] }),
+      adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+        "button",
+        {
+          className: "no-print",
+          onClick: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+          title: "Retour en haut de la page",
+          style: {
+            position: "fixed",
+            bottom: 22,
+            right: 22,
+            zIndex: 300,
+            width: 46,
+            height: 46,
+            borderRadius: "50%",
+            background: "#c9a227",
+            color: "#0a1628",
+            border: "2px solid #fdf8f0",
+            fontSize: 20,
+            fontWeight: 700,
+            cursor: "pointer",
+            boxShadow: "0 3px 12px rgba(0,0,0,0.35)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            lineHeight: 1
+          },
+          children: "\u2191"
+        }
+      )
     ] });
   }
   var WOOD11 = "#0a1628";
