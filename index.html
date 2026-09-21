@@ -12878,6 +12878,22 @@
     { date: "", title: "Communiqu\xE9 de la FFB", text: "Nouvelle r\xE9glementation arbitrale applicable d\xE8s la saison prochaine.", photoUrl: "" },
     { date: "", title: "Portes ouvertes", text: "Le club ouvrira ses portes au public le samedi, initiations gratuites toute la journ\xE9e.", photoUrl: "" }
   ];
+  function normalizePartner(p, idx) {
+    return {
+      id: p.id || `sp${idx}-${Math.random().toString(36).slice(2, 7)}`,
+      name: p.name || "",
+      logoUrl: p.logoUrl || "",
+      logoPos: p.logoPos || { x: 50, y: 50 },
+      adresse: p.adresse || "",
+      codePostal: p.codePostal || "",
+      commune: p.commune || "",
+      tel: p.tel || "",
+      email: p.email || "",
+      website: p.website || "",
+      photos: p.photos || [],
+      videoUrl: p.videoUrl || ""
+    };
+  }
   var DEFAULT_PARTNERS = [
     { name: "Partenaire 1", logoUrl: "" },
     { name: "Partenaire 2", logoUrl: "" },
@@ -13200,6 +13216,7 @@
     const [honneur, setHonneur] = (0, import_react.useState)(DEFAULT_HONNEUR);
     const [news, setNews] = (0, import_react.useState)(DEFAULT_NEWS);
     const [partners, setPartners] = (0, import_react.useState)(DEFAULT_PARTNERS);
+    const [openPartnerId, setOpenPartnerId] = (0, import_react.useState)(null);
     const [social, setSocial] = (0, import_react.useState)(DEFAULT_SOCIAL);
     const [saison, setSaison] = (0, import_react.useState)("26/27");
     const [stats, setStats] = (0, import_react.useState)({ licencies: 0, competiteurs: 0 });
@@ -13218,7 +13235,8 @@
         setConseil(await loadJSON("home:conseil", DEFAULT_CONSEIL));
         setHonneur(await loadJSON("home:honneur", DEFAULT_HONNEUR));
         setNews(await loadJSON("home:news", DEFAULT_NEWS));
-        setPartners(await loadJSON("home:partners", DEFAULT_PARTNERS));
+        const rawPartners = await loadJSON("home:partners", DEFAULT_PARTNERS);
+        setPartners(rawPartners.map((p, i) => normalizePartner(p, i)));
         setSocial(await loadJSON("home:social", DEFAULT_SOCIAL));
         setSaison(await loadJSON("home:saison", "26/27"));
         const adherentsList = (await loadJSON("p5:adherents", [])).filter((a) => !a.desengage);
@@ -13506,10 +13524,19 @@
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.partnersStrip, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.partnersLabel, children: "Partenaires" }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.partnersScroller, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: partners.length > 3 ? "acc-partner-track" : "", style: styles.partnersTrack, children: loopPartners.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.partnerLogo, children: [
-            p.logoUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: p.logoUrl, alt: p.name, style: styles.partnerLogoImg }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 20, color: "#fdf8f0", opacity: 0.5 }, children: "\u{1F3E2}" }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.partnerLogoName, children: p.name })
-          ] }, i)) }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.partnersScroller, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: partners.length > 3 ? "acc-partner-track" : "", style: styles.partnersTrack, children: loopPartners.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+            "button",
+            {
+              style: styles.partnerLogo,
+              onClick: () => setOpenPartnerId(p.id),
+              title: `Voir la fiche de ${p.name || "ce partenaire"}`,
+              children: [
+                p.logoUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: p.logoUrl, alt: p.name, style: styles.partnerLogoImg }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: { fontSize: 20, color: "#fdf8f0", opacity: 0.5 }, children: "\u{1F3E2}" }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.partnerLogoName, children: p.name })
+              ]
+            },
+            i
+          )) }) }),
           adminMode && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.partnersAdmin, children: [
             partners.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.partnerAdminRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", { value: p.name, onChange: (e) => updatePartner(i, { name: e.target.value }), style: { width: 90 } }),
@@ -13730,7 +13757,33 @@
             newsModal.index != null && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.btnDanger, onClick: deleteNewsModal, children: "Supprimer" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.btnGhostSmall, onClick: closeNewsModal, children: "Annuler" })
           ] })
-        ] }) })
+        ] }) }),
+        openPartnerId && (() => {
+          const p = partners.find((x) => x.id === openPartnerId);
+          if (!p) return null;
+          return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.modalOverlay, onClick: () => setOpenPartnerId(null), children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modal, onClick: (e) => e.stopPropagation(), children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.modalHead, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "acc-serif", style: styles.modalTitle, children: p.name || "Partenaire" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.btnGhostSmall, onClick: () => setOpenPartnerId(null), children: "Fermer" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 8 }, children: [
+              p.logoUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: p.logoUrl, alt: p.name, style: { maxWidth: 160, maxHeight: 100, objectFit: "contain", alignSelf: "flex-start" } }),
+              (p.adresse || p.codePostal || p.commune) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: styles.ruleText, children: [p.adresse, [p.codePostal, p.commune].filter(Boolean).join(" ")].filter(Boolean).join(", ") }),
+              p.tel && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: styles.ruleText, children: [
+                "T\xE9l. : ",
+                p.tel
+              ] }),
+              p.email && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", { style: styles.ruleText, children: [
+                "Email : ",
+                p.email
+              ] }),
+              p.website && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: p.website, target: "_blank", rel: "noreferrer", style: styles.partnerModalLink, children: "\u2192 Visiter le site web" }),
+              p.photos && p.photos.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 4 }, children: p.photos.map((ph, i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: ph, alt: "", style: { width: 90, height: 70, objectFit: "cover", borderRadius: 6, border: "1px solid #C9C2AE" } }, i)) }),
+              p.videoUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href: p.videoUrl, target: "_blank", rel: "noreferrer", style: styles.partnerModalLink, children: "\u25B6 Voir la vid\xE9o" }),
+              !p.adresse && !p.tel && !p.email && !p.website && (!p.photos || p.photos.length === 0) && !p.videoUrl && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: styles.emptyNote, children: "Aucune coordonn\xE9e renseign\xE9e pour l'instant." })
+            ] })
+          ] }) });
+        })()
       ] }),
       adminMode && showBackToTop && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
         "button",
@@ -13906,7 +13959,9 @@
       background: "rgba(255,255,255,0.12)",
       borderRadius: 8,
       border: "1px solid rgba(255,255,255,0.18)",
-      padding: "8px 12px"
+      padding: "8px 12px",
+      cursor: "pointer",
+      font: "inherit"
     },
     partnerLogoImg: { maxHeight: 46, maxWidth: 126, width: "auto", height: "auto", objectFit: "contain" },
     partnerLogoName: { fontSize: 10, color: "#fdf8f0", fontWeight: 600, textAlign: "center", lineHeight: 1.2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130 },
@@ -13985,14 +14040,15 @@
     footerLabel: { fontSize: 11.5, color: GOLD, fontWeight: 600 },
     footerLink: { fontSize: 12, color: CREAM, textDecoration: "underline" },
     miniAdd: {
-      border: "1px dashed rgba(201,162,39,0.6)",
+      border: "1px dashed rgba(253,248,240,0.6)",
       background: "transparent",
-      color: GOLD,
+      color: "#fdf8f0",
       borderRadius: 4,
       padding: "3px 8px",
       fontSize: 10.5,
       alignSelf: "flex-start",
-      marginBottom: 4
+      marginBottom: 4,
+      fontWeight: 600
     },
     miniRemove: { border: "none", background: "transparent", color: "#e74c3c", fontSize: 14, fontWeight: 700, lineHeight: 1, padding: "0 2px" },
     modalOverlay: {
@@ -14025,6 +14081,9 @@
     modalActions: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 6 },
     btnPrimary: { border: "1px solid #c9a227", background: "#c9a227", color: "#0a1628", borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" },
     btnGhostSmall: { border: "1px solid #C9C2AE", background: "transparent", color: "#0a1628", borderRadius: 4, padding: "7px 12px", fontSize: 12.5, cursor: "pointer" },
+    ruleText: { whiteSpace: "pre-wrap", lineHeight: 1.6, color: "#241d12", margin: 0, fontSize: 13 },
+    emptyNote: { color: "#8A8368", fontSize: 12, fontStyle: "italic" },
+    partnerModalLink: { fontSize: 12.5, color: "#a07b10", fontWeight: 600, textDecoration: "none" },
     btnDanger: { border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "7px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" }
   };
 
@@ -16314,6 +16373,7 @@
   var DEFAULT_LOGOS5 = { club: "", ffb: "" };
   var DEFAULT_SOCIAL5 = { facebook: "", whatsapp: "" };
   var DEFAULT_LABEL = { logoUrl: "", logoPos: { x: 50, y: 50 }, description: "\xC9cole labellis\xE9e par la F\xE9d\xE9ration Fran\xE7aise de Billard." };
+  var DEFAULT_INFOLIENS = [{ id: "il1", texte: "", url: "" }];
   var DEFAULT_FORMATEURS = [
     { id: "form1", nom: "Nom Pr\xE9nom", photoUrl: "", photoPos: { x: 50, y: 50 }, jeux: [], niveaux: [] }
   ];
@@ -16679,6 +16739,7 @@
     const [logos, setLogos] = (0, import_react5.useState)(DEFAULT_LOGOS5);
     const [social, setSocial] = (0, import_react5.useState)(DEFAULT_SOCIAL5);
     const [label, setLabel] = (0, import_react5.useState)(DEFAULT_LABEL);
+    const [infoliens, setInfoliens] = (0, import_react5.useState)(DEFAULT_INFOLIENS);
     const [formateurs, setFormateurs] = (0, import_react5.useState)(DEFAULT_FORMATEURS);
     const [horaires, setHoraires] = (0, import_react5.useState)(DEFAULT_HORAIRES);
     const [formations, setFormations] = (0, import_react5.useState)(DEFAULT_FORMATIONS);
@@ -16732,6 +16793,8 @@
         setLogos(await loadJSON5("home:logos", DEFAULT_LOGOS5));
         setSocial(await loadJSON5("home:social", DEFAULT_SOCIAL5));
         setLabel(await loadJSON5("p4:label", DEFAULT_LABEL));
+        const loadedInfoliens = await loadJSON5("p4:infoliens", DEFAULT_INFOLIENS);
+        setInfoliens(loadedInfoliens && loadedInfoliens.length ? loadedInfoliens : DEFAULT_INFOLIENS);
         setFormateurs(await loadJSON5("p4:formateurs", DEFAULT_FORMATEURS));
         setHoraires(await loadJSON5("p4:horaires", DEFAULT_HORAIRES));
         const loadedFormations = await loadJSON5("p4:formations", DEFAULT_FORMATIONS);
@@ -16759,6 +16822,22 @@
         return next;
       });
     };
+    const saveInfoliens = (next) => {
+      setInfoliens(next);
+      saveJSON5("p4:infoliens", next);
+    };
+    const updateInfolien = (id, patch) => {
+      setInfoliens((prev) => {
+        const next = prev.map((l) => l.id === id ? { ...l, ...patch } : l);
+        saveJSON5("p4:infoliens", next);
+        return next;
+      });
+    };
+    const addInfolien = () => {
+      if (infoliens.length >= 4) return;
+      saveInfoliens([...infoliens, { id: `il${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, texte: "", url: "" }]);
+    };
+    const removeInfolien = (id) => saveInfoliens(infoliens.filter((l) => l.id !== id));
     const saveFormateurs = (next) => {
       setFormateurs(next);
       saveJSON5("p4:formateurs", next);
@@ -16961,6 +17040,43 @@
               adminMode ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("textarea", { value: label.description, onChange: (e) => updateLabel({ description: e.target.value }), rows: 2, placeholder: "Description du label\u2026" }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.ruleText, children: label.description })
             ] })
           ] }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.card, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.cardHeadRow, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "Informations compl\xE9mentaires" }),
+              adminMode && infoliens.length < 4 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.miniAdd, onClick: addInfolien, children: "+ Ajouter" })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 10 }, children: [
+              infoliens.map((l) => /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: styles5.infolienRow, children: adminMode ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_jsx_runtime5.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  "textarea",
+                  {
+                    value: l.texte,
+                    onChange: (e) => updateInfolien(l.id, { texte: e.target.value }),
+                    rows: 2,
+                    placeholder: "Texte\u2026",
+                    style: { flex: 1 }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  "input",
+                  {
+                    value: l.url,
+                    onChange: (e) => updateInfolien(l.id, { url: e.target.value }),
+                    placeholder: "Lien (https://\u2026) \u2014 facultatif",
+                    style: { flex: 1 }
+                  }
+                ),
+                infoliens.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("button", { style: styles5.miniRemove, onClick: () => removeInfolien(l.id), children: "\xD7" })
+              ] }) : l.texte || l.url ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { children: [
+                l.texte && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.ruleText, children: l.texte }),
+                l.url && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("a", { href: l.url, target: "_blank", rel: "noreferrer", style: styles5.infolienLink, children: [
+                  "\u2192 ",
+                  l.url
+                ] })
+              ] }) : null }, l.id)),
+              !adminMode && infoliens.every((l) => !l.texte && !l.url) && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: styles5.emptyNote, children: "Aucune information pour l'instant." })
+            ] })
+          ] }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.card, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "L'\xE9quipe de formation" }),
@@ -17202,6 +17318,8 @@
     syncStatusText: { fontSize: 10, color: "#3D7A5C", maxWidth: 160 },
     ruleText: { whiteSpace: "pre-wrap", lineHeight: 1.6, color: "#241d12", margin: "4px 0 0", fontSize: 13 },
     emptyNote: { color: "#8A8368", fontSize: 12, fontStyle: "italic" },
+    infolienRow: { display: "flex", gap: 8, alignItems: "flex-start", flexWrap: "wrap" },
+    infolienLink: { fontSize: 12.5, color: "#a07b10", fontWeight: 600, wordBreak: "break-all" },
     fieldRow: { display: "flex", flexDirection: "column", gap: 3 },
     fieldLabel: { fontSize: 11, color: "#5F5E5A", fontWeight: 600 },
     labelRow: { display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" },
@@ -17900,7 +18018,7 @@
     { name: "Partenaire 3", logoUrl: "" },
     { name: "Partenaire 4", logoUrl: "" }
   ];
-  function normalizePartner(p, idx) {
+  function normalizePartner2(p, idx) {
     return {
       id: p.id || `sp${idx}-${Math.random().toString(36).slice(2, 7)}`,
       name: p.name || "",
@@ -18236,7 +18354,7 @@
         setLogos(await loadJSON7("home:logos", DEFAULT_LOGOS7));
         setSocial(await loadJSON7("home:social", DEFAULT_SOCIAL7));
         const raw = await loadJSON7("home:partners", DEFAULT_PARTNERS2);
-        const normalized = raw.map((p, i) => normalizePartner(p, i));
+        const normalized = raw.map((p, i) => normalizePartner2(p, i));
         setPartners(normalized);
         saveJSON7("home:partners", normalized);
         setThanks(await loadJSON7("p7:thanks", { texte: "", photo: [] }));
@@ -18273,7 +18391,7 @@
       });
     };
     const addPartner = () => {
-      const next = [...partners, normalizePartner({ name: "Nouveau partenaire" }, partners.length)];
+      const next = [...partners, normalizePartner2({ name: "Nouveau partenaire" }, partners.length)];
       persist(next);
       setOpenId(next[next.length - 1].id);
     };
@@ -24687,7 +24805,7 @@ Continuer ?`;
     cardHeadRow: { display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 8 },
     pageTitle: { margin: 0, fontSize: 20, fontWeight: 700, color: "#fff", textShadow: "0 2px 6px rgba(0,0,0,0.4)" },
     pageIntro: { margin: 0, fontSize: 13, color: "#fdf8f0" },
-    miniAdd: { border: "1px dashed rgba(201,162,39,0.7)", background: "transparent", color: GOLD12, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
+    miniAdd: { border: "1px dashed rgba(253,248,240,0.7)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "6px 12px", fontSize: 12, fontWeight: 600 },
     emptyNote: { color: "#fdf8f0", fontSize: 12.5, fontStyle: "italic", opacity: 0.85 },
     adminPanel: { background: "#fff", borderRadius: 10, padding: 14, borderTop: `4px solid ${GOLD12}` },
     cardTitleDark: { margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: WOOD11 },
