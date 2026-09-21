@@ -1,12 +1,7 @@
 <!DOCTYPE html>
-<html lang="fr"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Billard Club Prayssacois</title>
-<style>html,body,#root { margin:0; padding:0; height:100%; }</style>
-</head>
-<body>
-<div id="root"></div>
-<script>(() => {
+<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
+<body><div id="root"></div><script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -15818,11 +15813,11 @@
         ] })
       ] }),
       adminMode && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { style: styles4.docPasteHint, className: "no-print", children: "Collez directement le texte du document ci-dessous (bien plus l\xE9ger qu'un fichier PDF joint, ce qui \xE9vite de saturer l'espace de stockage disponible)." }),
-      adminMode ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("textarea", { value: doc.content, onChange: (e) => onChange({ content: e.target.value }), rows: 16, placeholder: "Collez ici le contenu du document (texte)\u2026" }) : doc.content ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { style: styles4.ruleText, children: doc.content }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { style: styles4.emptyNote, children: "Document non renseign\xE9 pour l'instant." }),
-      adminMode ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { style: { ...styles4.fieldRow, marginTop: 8 }, children: [
+      adminMode ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("label", { style: styles4.fieldRow, children: [
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: styles4.fieldLabel, children: "Lien externe (optionnel)" }),
         /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("input", { value: doc.url, onChange: (e) => onChange({ url: e.target.value }), placeholder: "https://\u2026" })
-      ] }) : doc.url && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { style: { marginTop: 8 }, children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: doc.url, target: "_blank", rel: "noreferrer", style: { color: "#a07b10" }, children: "Lien compl\xE9mentaire \u2192" }) }),
+      ] }) : doc.url && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href: doc.url, target: "_blank", rel: "noreferrer", style: { color: "#a07b10" }, children: "Lien compl\xE9mentaire \u2192" }) }),
+      adminMode ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("textarea", { value: doc.content, onChange: (e) => onChange({ content: e.target.value }), rows: 16, placeholder: "Collez ici le contenu du document (texte)\u2026", style: { marginTop: 8 } }) : doc.content ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { style: { ...styles4.ruleText, marginTop: 8 }, children: doc.content }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("p", { style: styles4.emptyNote, children: "Document non renseign\xE9 pour l'instant." }),
       onDelete && adminMode && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("button", { className: "no-print", style: { ...styles4.removePersonBtn, marginTop: 12 }, onClick: onDelete, children: "Supprimer ce document" })
     ] }) });
   }
@@ -24333,6 +24328,7 @@ Continuer ?`;
         /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: styles13.tournoiTag, children: doc.categorie }),
         doc.date && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { children: fmtDateShort2(doc.date) })
       ] }),
+      doc.lien && !adminMode && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { marginBottom: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("a", { href: doc.lien, target: "_blank", rel: "noreferrer", style: { color: "#1E5A48", fontWeight: 600 }, children: "Consulter le document complet (lien externe) \u2192" }) }),
       adminMode ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
         "textarea",
         {
@@ -24343,7 +24339,6 @@ Continuer ?`;
           style: { width: "100%", fontSize: 13.5, lineHeight: 1.5 }
         }
       ) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles13.docText, children: doc.texte ? doc.texte.split("\n").map((line, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { margin: "0 0 8px" }, children: line }, i)) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("em", { children: "Aucun texte pour l'instant." }) }),
-      doc.lien && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { marginTop: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("a", { href: doc.lien, target: "_blank", rel: "noreferrer", style: { color: "#1E5A48", fontWeight: 600 }, children: "Consulter le document complet (lien externe) \u2192" }) }),
       adminMode && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { style: { ...styles13.removeBtn, marginTop: 14 }, onClick: onDelete, children: "Supprimer ce document" })
     ] }) });
   }
@@ -25011,5 +25006,4 @@ react/cjs/react-jsx-runtime.production.js:
    * LICENSE file in the root directory of this source tree.
    *)
 */
-</script>
-</body></html>
+</script></body></html>
