@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google-site-verification" content="oXKPhP80EbKus67qOZJils4Vh0oSYC5KOUSt7hJxIfU" />
+<meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div><script>(() => {
   var __create = Object.create;
@@ -19242,13 +19244,20 @@
       (async () => {
         try {
           const res = await window.storage.get("p5:password", true);
-          if (res && res.value) setMemberPassword(res.value);
+          if (res && res.value) setMemberPassword(JSON.parse(res.value));
         } catch (e) {
         }
       })();
     }, []);
-    const checkPassword = () => {
-      if (inputPwd === memberPassword) {
+    const checkPassword = async () => {
+      let freshPassword = memberPassword;
+      try {
+        const res = await window.storage.get("p5:password", true);
+        if (res && res.value) freshPassword = JSON.parse(res.value);
+      } catch (e) {
+      }
+      setMemberPassword(freshPassword);
+      if (inputPwd === freshPassword) {
         setUnlocked(true);
         setPwdError("");
       } else {
@@ -19329,7 +19338,7 @@
       (async () => {
         try {
           const res = await window.storage.get("site:adminpassword", true);
-          if (res && res.value) setAdminPassword(res.value);
+          if (res && res.value) setAdminPassword(JSON.parse(res.value));
         } catch (e) {
         }
       })();
@@ -19344,7 +19353,14 @@
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
     const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+        } catch (e) {
+        }
+        setAdminPassword(freshAdminPassword);
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -19358,7 +19374,7 @@
         }
         setAdminPassword(val);
         try {
-          await window.storage.set("site:adminpassword", val, true);
+          await window.storage.set("site:adminpassword", JSON.stringify(val), true);
         } catch (e) {
         }
         setAdminGate((g) => ({ ...g, open: false }));
@@ -21556,8 +21572,10 @@
       if (typeof onNavigate === "function") onNavigate(page.id);
       else setStatus(`\xAB ${page.label} \xBB sera reli\xE9e \xE0 sa page lors de l'int\xE9gration finale du site.`);
     };
-    const checkPassword = () => {
-      if (inputPwd === password) {
+    const checkPassword = async () => {
+      const freshPassword = await loadJSON9("p5:password", DEFAULT_PASSWORD2);
+      setPassword(freshPassword);
+      if (inputPwd === freshPassword) {
         setUnlocked(true);
         setPwdError("");
       } else {
@@ -22882,8 +22900,10 @@ Continuer ?`;
       if (typeof onNavigate === "function") onNavigate(page.id);
       else setStatus(`\xAB ${page.label} \xBB sera reli\xE9e \xE0 sa page lors de l'int\xE9gration finale du site.`);
     };
-    const checkPassword = () => {
-      if (inputPwd === password) {
+    const checkPassword = async () => {
+      const freshPassword = await loadJSON10("p5:password", DEFAULT_PASSWORD3);
+      setPassword(freshPassword);
+      if (inputPwd === freshPassword) {
         setUnlocked(true);
         setPwdError("");
       } else {
@@ -23833,8 +23853,10 @@ Continuer ?`;
       if (typeof onNavigate === "function") onNavigate(page.id);
       else setStatus(`\xAB ${page.label} \xBB sera reli\xE9e \xE0 sa page lors de l'int\xE9gration finale du site.`);
     };
-    const checkPassword = () => {
-      if (inputPwd === password) {
+    const checkPassword = async () => {
+      const freshPassword = await loadJSON11("p5:password", DEFAULT_PASSWORD4);
+      setPassword(freshPassword);
+      if (inputPwd === freshPassword) {
         setUnlocked(true);
         setPwdError("");
       } else {
@@ -24400,16 +24422,20 @@ Continuer ?`;
       if (typeof onNavigate === "function") onNavigate(page.id);
       else setStatus(`\xAB ${page.label} \xBB sera reli\xE9e \xE0 sa page lors de l'int\xE9gration finale du site.`);
     };
-    const checkPassword = () => {
-      if (inputPwd === password) {
+    const checkPassword = async () => {
+      const freshPassword = await loadJSON12("p5:password", DEFAULT_PASSWORD5);
+      setPassword(freshPassword);
+      if (inputPwd === freshPassword) {
         setUnlocked(true);
         setPwdError("");
       } else {
         setPwdError("Mot de passe incorrect.");
       }
     };
-    const checkDocsPassword = () => {
-      if (docsInputPwd === docsPassword) {
+    const checkDocsPassword = async () => {
+      const freshDocsPassword = await loadJSON12("p5:docsPassword", "");
+      setDocsPassword(freshDocsPassword);
+      if (docsInputPwd === freshDocsPassword) {
         setDocsUnlocked(true);
         setDocsPwdError("");
       } else {
