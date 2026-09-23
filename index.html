@@ -13177,8 +13177,9 @@
       )
     ] });
   }
-  function LogoBox({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { ...styles.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: url, alt: label, style: styles.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BallsCuesLogo, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.logoPlaceholderText, children: label }) });
+  function LogoBox({ label, url, size = 40 }) {
+    const wrap = { ...styles.logoImgWrap, width: size, height: size };
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { ...wrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: url, alt: label, style: styles.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BallsCuesLogo, { size: Math.round(size * 0.85) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.logoPlaceholderText, children: label }) });
   }
   function Avatar({ name, photoUrl, size = 64 }) {
     return photoUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: photoUrl, alt: name, style: { width: size, height: size, borderRadius: "50%", objectFit: "cover", border: "2px solid #C9C2AE" } }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -13371,7 +13372,7 @@
       saveJSON("home:saison", value);
     };
     const loopPartners = partners.length > 3 ? [...partners, ...partners] : partners;
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.page, children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: adminMode ? { ...styles.page, height: "auto", minHeight: "100vh", overflow: "visible" } : styles.page, children: [
       /* @__PURE__ */ (0, import_jsx_runtime.jsx)("style", { children: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;500;600&display=swap');
         .acc-root, .acc-root * { box-sizing: border-box; font-family: 'Raleway', sans-serif; }
@@ -13398,10 +13399,10 @@
           .acc-news-col { overflow: visible !important; height: auto !important; }
         }
       ` }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "acc-root acc-shell", style: styles.shell, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "acc-root acc-shell", style: adminMode ? { ...styles.shell, height: "auto", overflow: "visible" } : styles.shell, children: [
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.headerLogos, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "LOGO CLUB", url: logos.club }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "LOGO CLUB", url: logos.club, size: 76 }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "LOGO FFB", url: logos.ffb }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "balls", url: "" })
           ] }),
