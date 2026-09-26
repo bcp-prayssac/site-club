@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="25/09/2026";</script>
+<script>window.__SITE_BUILD_DATE__="26/09/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -13241,9 +13241,10 @@
       )
     ] });
   }
-  function LogoBox({ label, url, size = 40 }) {
+  function LogoBox({ label, url, size = 40, href }) {
     const wrap = { ...styles.logoImgWrap, width: size, height: size };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { ...wrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: url, alt: label, style: styles.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BallsCuesLogo, { size: Math.round(size * 0.85) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.logoPlaceholderText, children: label }) });
+    const box = /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: { ...wrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: url, alt: label, style: styles.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BallsCuesLogo, { size: Math.round(size * 0.85) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { style: styles.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function Avatar({ name, photoUrl, size = 64 }) {
     return photoUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", { src: photoUrl, alt: name, style: { width: size, height: size, borderRadius: "50%", objectFit: "cover", border: "2px solid #C9C2AE" } }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
@@ -13469,7 +13470,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { style: styles.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "LOGO CLUB", url: logos.club, size: 76 }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LogoBox, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { className: "acc-serif", style: styles.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -14407,8 +14408,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox2({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { ...styles2.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { src: url, alt: label, style: styles2.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(BallsCuesLogo2, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles2.logoPlaceholderText, children: label }) });
+  function LogoBox2({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { ...styles2.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { src: url, alt: label, style: styles2.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(BallsCuesLogo2, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles2.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function PhotoGallery({ photos, editable, onChange, max }) {
     const inputRef = (0, import_react2.useRef)(null);
@@ -14924,7 +14926,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles2.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles2.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LogoBox2, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LogoBox2, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LogoBox2, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LogoBox2, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("h1", { className: "p1-serif", style: styles2.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -15341,8 +15343,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox3({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { ...styles3.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("img", { src: url, alt: label, style: styles3.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BallsCuesLogo3, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: styles3.logoPlaceholderText, children: label }) });
+  function LogoBox3({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { ...styles3.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("img", { src: url, alt: label, style: styles3.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(BallsCuesLogo3, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: styles3.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function GameIcon({ type }) {
     if (type.icon === "pin") {
@@ -15662,7 +15665,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: styles3.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: styles3.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(LogoBox3, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(LogoBox3, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(LogoBox3, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(LogoBox3, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h1", { className: "p2-serif", style: styles3.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -15985,8 +15988,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox4({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { ...styles4.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("img", { src: url, alt: label, style: styles4.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(BallsCuesLogo4, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: styles4.logoPlaceholderText, children: label }) });
+  function LogoBox4({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { style: { ...styles4.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("img", { src: url, alt: label, style: styles4.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(BallsCuesLogo4, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("span", { style: styles4.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function PhotoGallery3({ photos, editable, onChange }) {
     const inputRef = (0, import_react4.useRef)(null);
@@ -16236,7 +16240,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: styles4.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { style: styles4.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(LogoBox4, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(LogoBox4, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(LogoBox4, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(LogoBox4, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("h1", { className: "p3-serif", style: styles4.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -16950,8 +16954,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox5({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { ...styles5.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("img", { src: url, alt: label, style: styles5.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(BallsCuesLogo5, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.logoPlaceholderText, children: label }) });
+  function LogoBox5({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { ...styles5.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("img", { src: url, alt: label, style: styles5.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(BallsCuesLogo5, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function ChipToggle({ options, selected, editable, onToggle, getLabel }) {
     return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.chipRow, children: [
@@ -17173,7 +17178,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(LogoBox5, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(LogoBox5, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(LogoBox5, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(LogoBox5, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("h1", { className: "p4-serif", style: styles5.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -17721,8 +17726,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox6({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { ...styles6.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("img", { src: url, alt: label, style: styles6.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BallsCuesLogo6, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.logoPlaceholderText, children: label }) });
+  function LogoBox6({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { ...styles6.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("img", { src: url, alt: label, style: styles6.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(BallsCuesLogo6, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles6.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function PhotoGallery4({ photos, editable, onChange }) {
     const inputRef = (0, import_react6.useRef)(null);
@@ -18079,7 +18085,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles6.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(LogoBox6, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(LogoBox6, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(LogoBox6, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(LogoBox6, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("h1", { className: "p6-serif", style: styles6.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -18413,8 +18419,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox7({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { ...styles7.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("img", { src: url, alt: label, style: styles7.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(BallsCuesLogo7, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: styles7.logoPlaceholderText, children: label }) });
+  function LogoBox7({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { ...styles7.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("img", { src: url, alt: label, style: styles7.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(BallsCuesLogo7, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("span", { style: styles7.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function PhotoGallery5({ photos, editable, onChange, max }) {
     const inputRef = (0, import_react7.useRef)(null);
@@ -18759,7 +18766,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: styles7.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: styles7.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoBox7, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoBox7, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoBox7, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoBox7, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("h1", { className: "p7-serif", style: styles7.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -19088,7 +19095,8 @@
     ] });
   }
   function LogoBox8(props) {
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: Object.assign({}, styles8.logoImgWrap, props.url ? { width: "auto", padding: "0 6px" } : {}), children: props.url ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("img", { src: props.url, alt: props.label, style: styles8.logoImg }) : props.label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(BallsCuesLogo8, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles8.logoPlaceholderText, children: props.label }) });
+    const box = /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: Object.assign({}, styles8.logoImgWrap, props.url ? { width: "auto", padding: "0 6px" } : {}), children: props.url ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("img", { src: props.url, alt: props.label, style: styles8.logoImg }) : props.label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(BallsCuesLogo8, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles8.logoPlaceholderText, children: props.label }) });
+    return props.href ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("a", { href: props.href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function PhotoGallery6(props) {
     const photos = props.photos;
@@ -19227,7 +19235,7 @@
         /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: styles8.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: styles8.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LogoBox8, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LogoBox8, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LogoBox8, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LogoBox8, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("h1", { className: "p8-serif", style: styles8.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -19580,6 +19588,41 @@
     const [bookings, setBookings] = (0, import_react9.useState)([]);
     const [myName, setMyName] = (0, import_react9.useState)("");
     const [pendingNew, setPendingNew] = (0, import_react9.useState)(null);
+    const [selection, setSelection] = (0, import_react9.useState)(null);
+    const [dragState, setDragState] = (0, import_react9.useState)(null);
+    const dragMovedRef = (0, import_react9.useRef)(false);
+    (0, import_react9.useEffect)(() => {
+      const onUp = () => setDragState(null);
+      window.addEventListener("mouseup", onUp);
+      return () => window.removeEventListener("mouseup", onUp);
+    }, []);
+    const isSelected = (tableId, day, hour) => selection && selection.tableId === tableId && selection.day === day && selection.hours.includes(hour);
+    const handleCellMouseDown = (tableId, day, hour) => {
+      dragMovedRef.current = false;
+      setDragState({ tableId, day, anchor: hour });
+    };
+    const handleCellMouseEnter = (tableId, day, hour) => {
+      if (!dragState || dragState.tableId !== tableId || dragState.day !== day) return;
+      dragMovedRef.current = true;
+      const lo = Math.min(dragState.anchor, hour);
+      const hi = Math.max(dragState.anchor, hour);
+      const hours = [];
+      for (let h = lo; h <= hi; h++) hours.push(h);
+      setSelection({ tableId, day, hours });
+    };
+    const handleCellClick = (tableId, day, hour) => {
+      if (dragMovedRef.current) {
+        dragMovedRef.current = false;
+        return;
+      }
+      setSelection((prev) => {
+        if (!prev || prev.tableId !== tableId || prev.day !== day) return { tableId, day, hours: [hour] };
+        const has = prev.hours.includes(hour);
+        const hours = has ? prev.hours.filter((h) => h !== hour) : [...prev.hours, hour].sort((a, b) => a - b);
+        return hours.length ? { tableId, day, hours } : null;
+      });
+    };
+    const clearSelection = () => setSelection(null);
     const [pendingPrincipal, setPendingPrincipal] = (0, import_react9.useState)("");
     const [pendingGuests, setPendingGuests] = (0, import_react9.useState)(["", "", ""]);
     const [pendingRecurring, setPendingRecurring] = (0, import_react9.useState)(false);
@@ -19850,9 +19893,9 @@
       setEditTarget(null);
       setStatus("R\xE9servation r\xE9currente annul\xE9e \xE0 partir de cette semaine.");
     };
-    const openNewBooking = (tableId, day, hour) => {
+    const openNewBooking = (tableId, day, hours) => {
       if (adherents.length === 0) return;
-      setPendingNew({ tableId, day, hour });
+      setPendingNew({ tableId, day, hours: Array.isArray(hours) ? hours : [hours] });
       setPendingPrincipal(myName && adherents.includes(myName) ? myName : "");
       setPendingGuests(["", "", ""]);
       setPendingRecurring(false);
@@ -19865,9 +19908,12 @@
     };
     const confirmPendingNew = async () => {
       if (!pendingNew || !pendingPrincipal) return;
-      const { tableId, day, hour } = pendingNew;
-      await createBooking(tableId, day, hour, pendingPrincipal, pendingGuests, pendingRecurring, pendingWeeks);
+      const { tableId, day, hours } = pendingNew;
+      for (const hour of hours) {
+        await createBooking(tableId, day, hour, pendingPrincipal, pendingGuests, pendingRecurring, pendingWeeks);
+      }
       setPendingNew(null);
+      setSelection(null);
     };
     const cancelPendingNew = () => setPendingNew(null);
     const computeSpans = (tableId) => {
@@ -19917,8 +19963,10 @@
         .resa-grid th, .resa-grid td { border: 1px solid #C9C2AE; padding: 3px 4px; text-align: center; }
         .resa-grid thead th { background: #f3ecd8; color: #0a1628; font-weight: 600; font-size: 11px; text-transform: capitalize; }
         .resa-hour { background: #f3ecd8; color: #0a1628; font-weight: 500; white-space: nowrap; font-size: 10.5px; }
-        .resa-cell { padding: 0 !important; height: 26px; background: #fdf8f0; }
+        .resa-cell { padding: 0 !important; height: 26px; background: #fdf8f0; user-select: none; }
         .resa-cell.locked { background: #F2F0E8; }
+        .resa-cell.selected { background: #cdeee0 !important; }
+        .resa-cell-empty-btn.selected { color: #1E5A48; font-weight: 700; }
         .resa-cell-btn {
           width: 100%; height: 100%; min-height: 26px; border: none; border-radius: 0; background: transparent;
           text-align: center; padding: 2px 3px; font-size: 10.5px; font-family: 'Raleway', sans-serif;
@@ -20075,7 +20123,13 @@
                   saveMyName(e.target.value);
                 },
                 disabled: adherents.length === 0,
-                style: { minWidth: 220 },
+                style: {
+                  minWidth: 220,
+                  background: myName ? "#fff" : "#B1432F",
+                  color: myName ? "#0a1628" : "#fff",
+                  fontWeight: myName ? 400 : 700,
+                  borderColor: myName ? "#C9C2AE" : "#8a2f1f"
+                },
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("option", { value: "", children: "Choisir un adh\xE9rent\u2026" }),
                   adherents.map((a) => /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("option", { value: a, children: a }, a))
@@ -20207,12 +20261,15 @@
                     const isTournoi = booking && booking.recurringGroup && booking.recurringGroup.startsWith("tournoi-");
                     const isBlocked = isCourse || isCompet || isTournoi;
                     const title = isCourse ? "Cr\xE9neau de cours \u2014 g\xE9r\xE9 depuis la page \xC9cole du billard" : isCompet ? "Comp\xE9tition \xE0 domicile \u2014 g\xE9r\xE9e depuis le calendrier des comp\xE9titions" : isTournoi ? "Tournoi interne \u2014 g\xE9r\xE9 depuis l'onglet Tournois de l'espace membres" : booking ? fullBookingLabel(booking) + (booking.recurringGroup ? " (r\xE9current)" : "") : void 0;
+                    const selected = !booking && isSelected(t.id, dIdx, h);
                     return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
                       "td",
                       {
                         rowSpan: span,
-                        className: `resa-cell ${isLocked ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isCompet || isTournoi ? "compet" : ""}`,
+                        className: `resa-cell ${isLocked ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isCompet || isTournoi ? "compet" : ""} ${selected ? "selected" : ""}`,
                         title,
+                        onMouseDown: () => !booking && !isLocked && handleCellMouseDown(t.id, dIdx, h),
+                        onMouseEnter: () => !booking && !isLocked && handleCellMouseEnter(t.id, dIdx, h),
                         children: booking ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
                           "button",
                           {
@@ -20224,10 +20281,10 @@
                         ) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
                           "button",
                           {
-                            className: "resa-cell-btn resa-cell-empty-btn",
+                            className: `resa-cell-btn resa-cell-empty-btn ${selected ? "selected" : ""}`,
                             disabled: isLocked || adherents.length === 0,
-                            onClick: () => openNewBooking(t.id, dIdx, h),
-                            children: "+"
+                            onClick: () => handleCellClick(t.id, dIdx, h),
+                            children: selected ? "\u2713" : "+"
                           }
                         )
                       },
@@ -20243,6 +20300,29 @@
             loading ? "Chargement\u2026" : "Cliquez sur une case libre pour r\xE9server (avec possibilit\xE9 d'ajouter jusqu'\xE0 3 invit\xE9s), ou sur une case occup\xE9e pour la modifier ou l'annuler."
           ] })
         ] }),
+        selection && selection.hours.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.selectionBar, className: "no-print", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("span", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("strong", { children: selection.hours.length }),
+            " cr\xE9neau",
+            selection.hours.length > 1 ? "x" : "",
+            " s\xE9lectionn\xE9",
+            selection.hours.length > 1 ? "s" : "",
+            " \u2014",
+            " ",
+            tables.find((t) => t.id === selection.tableId)?.name,
+            ", ",
+            DAYS2[selection.day],
+            " ",
+            selection.hours[0],
+            ":00 \xE0 ",
+            selection.hours[selection.hours.length - 1] + 1,
+            ":00"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: { display: "flex", gap: 8 }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.btnGhostSmall, onClick: clearSelection, children: "Annuler" }),
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("button", { style: styles9.btnPrimary, onClick: () => openNewBooking(selection.tableId, selection.day, selection.hours), children: "R\xE9server \u2192" })
+          ] })
+        ] }),
         pendingNew && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("div", { style: styles9.modalOverlay, className: "no-print", onClick: cancelPendingNew, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.modal, onClick: (e) => e.stopPropagation(), children: [
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { style: styles9.modalHead, children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("p", { className: "resa-serif", style: styles9.modalTitle, children: "Confirmer la r\xE9servation" }),
@@ -20253,7 +20333,7 @@
             " \u2014 ",
             DAYS2[pendingNew.day],
             " ",
-            hourLabel2(pendingNew.hour)
+            pendingNew.hours.length > 1 ? `${pendingNew.hours[0]}:00 \xE0 ${pendingNew.hours[pendingNew.hours.length - 1] + 1}:00` : hourLabel2(pendingNew.hours[0])
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("label", { style: styles9.fieldRow, children: [
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)("span", { style: styles9.fieldLabel, children: "R\xE9servataire principal" }),
@@ -20468,6 +20548,24 @@
     gateText: { margin: "0 0 14px", fontSize: 12.5, color: "#5F5E5A", lineHeight: 1.5 },
     gateHint: { fontSize: 10.5, color: "#8A8368", marginTop: 10 },
     modalOverlay: { position: "fixed", inset: 0, background: "rgba(18,58,48,0.55)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50, padding: 16 },
+    selectionBar: {
+      position: "fixed",
+      bottom: 20,
+      left: "50%",
+      transform: "translateX(-50%)",
+      zIndex: 60,
+      background: "#1E5A48",
+      color: "#fdf8f0",
+      borderRadius: 8,
+      padding: "12px 18px",
+      display: "flex",
+      alignItems: "center",
+      gap: 16,
+      boxShadow: "0 4px 20px rgba(0,0,0,0.35)",
+      fontSize: 13,
+      flexWrap: "wrap",
+      maxWidth: "92vw"
+    },
     modal: { background: "#fdf8f0", borderRadius: 8, padding: 20, width: "min(420px, 100%)", border: "1px solid #C9C2AE" },
     modalHead: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 },
     modalTitle: { margin: 0, fontSize: 16, fontWeight: 600, color: "#0a1628" },
@@ -21099,8 +21197,9 @@
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox9({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { ...styles10.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("img", { src: url, alt: label, style: styles10.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(BallsCuesLogo9, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.logoPlaceholderText, children: label }) });
+  function LogoBox9({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { ...styles10.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("img", { src: url, alt: label, style: styles10.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(BallsCuesLogo9, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function PhotoUpload2({ photoUrl, onChange, editable, name }) {
     const inputRef = (0, import_react10.useRef)(null);
@@ -22328,7 +22427,7 @@ Continuer ?`;
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LogoBox9, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LogoBox9, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LogoBox9, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LogoBox9, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("h1", { className: "p5-serif", style: styles10.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -23190,8 +23289,9 @@ Continuer ?`;
       /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox10({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { ...styles11.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("img", { src: url, alt: label, style: styles11.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(BallsCuesLogo10, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.logoPlaceholderText, children: label }) });
+  function LogoBox10({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { ...styles11.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("img", { src: url, alt: label, style: styles11.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(BallsCuesLogo10, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: styles11.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function emptyLieu() {
     return { id: `l${Date.now()}-${Math.random().toString(36).slice(2, 7)}`, nom: "", joueurs: [""] };
@@ -23617,7 +23717,7 @@ Continuer ?`;
         /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LogoBox10, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LogoBox10, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LogoBox10, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(LogoBox10, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("h1", { className: "p5c-serif", style: styles11.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -24274,8 +24374,9 @@ Continuer ?`;
       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("circle", { cx: "40", cy: "66", r: "14", fill: "#B1432F", stroke: "#7E2C1C", strokeWidth: "2" })
     ] });
   }
-  function LogoBox11({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { ...styles12.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("img", { src: url, alt: label, style: styles12.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(BallsCuesLogo11, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.logoPlaceholderText, children: label }) });
+  function LogoBox11({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: { ...styles12.logoImgWrap, ...url ? { width: "auto", padding: "0 6px" } : {} }, children: url ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("img", { src: url, alt: label, style: styles12.logoImg }) : label === "balls" ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(BallsCuesLogo11, { size: 34 }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles12.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function emptyTournoi() {
     return {
@@ -24592,7 +24693,7 @@ Continuer ?`;
         /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(LogoBox11, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(LogoBox11, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(LogoBox11, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(LogoBox11, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("h1", { className: "p5t-serif", style: styles12.title, children: "BILLARD CLUB PRAYSSACOIS" }),
@@ -25043,8 +25144,9 @@ Continuer ?`;
       lien: ""
     };
   }
-  function LogoBox12({ label, url }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles13.logoImgWrap, children: url ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("img", { src: url, alt: label, style: styles13.logoImg }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: styles13.logoPlaceholderText, children: label }) });
+  function LogoBox12({ label, url, href }) {
+    const box = /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles13.logoImgWrap, children: url ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("img", { src: url, alt: label, style: styles13.logoImg }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: styles13.logoPlaceholderText, children: label }) });
+    return href ? /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
   function DocModal2({ doc, adminMode, onChange, onClose, onDelete }) {
     return /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles13.modalOverlay, className: "no-print", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.modal, onClick: (e) => e.stopPropagation(), children: [
@@ -25233,7 +25335,7 @@ Continuer ?`;
         /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.headerBar, children: [
           /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.headerLogos, children: [
             /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LogoBox12, { label: "LOGO CLUB", url: logos.club }),
-            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LogoBox12, { label: "LOGO FFB", url: logos.ffb }),
+            /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LogoBox12, { label: "LOGO FFB", url: logos.ffb, href: "https://www.ffbillard.com" }),
             /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(LogoBox12, { label: "balls", url: "" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("h1", { className: "p5d-serif", style: styles13.title, children: "BILLARD CLUB PRAYSSACOIS" }),
