@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="26/09/2026";</script>
+<script>window.__SITE_BUILD_DATE__="30/09/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -16991,6 +16991,8 @@
     const [infoliens, setInfoliens] = (0, import_react5.useState)(DEFAULT_INFOLIENS);
     const [formateurs, setFormateurs] = (0, import_react5.useState)(DEFAULT_FORMATEURS);
     const [horaires, setHoraires] = (0, import_react5.useState)(DEFAULT_HORAIRES);
+    const [horairesNote, setHorairesNote] = (0, import_react5.useState)("");
+    const [horairesPhoto, setHorairesPhoto] = (0, import_react5.useState)({ url: "", pos: { x: 50, y: 50 } });
     const [formations, setFormations] = (0, import_react5.useState)(DEFAULT_FORMATIONS);
     const [videos, setVideos] = (0, import_react5.useState)(DEFAULT_VIDEOS);
     const [videoFilter, setVideoFilter] = (0, import_react5.useState)("tous");
@@ -17046,6 +17048,8 @@
         setInfoliens(loadedInfoliens && loadedInfoliens.length ? loadedInfoliens : DEFAULT_INFOLIENS);
         setFormateurs(await loadJSON5("p4:formateurs", DEFAULT_FORMATEURS));
         setHoraires(await loadJSON5("p4:horaires", DEFAULT_HORAIRES));
+        setHorairesNote(await loadJSON5("p4:horairesnote", ""));
+        setHorairesPhoto(await loadJSON5("p4:horairesphoto", { url: "", pos: { x: 50, y: 50 } }));
         const loadedFormations = await loadJSON5("p4:formations", DEFAULT_FORMATIONS);
         setFormations(loadedFormations.map((f) => ({ liens: [], ...f })));
         setVideos(await loadJSON5("p4:videos", DEFAULT_VIDEOS));
@@ -17103,6 +17107,17 @@
     const updateHoraires = (next) => {
       setHoraires(next);
       saveJSON5("p4:horaires", next);
+    };
+    const saveHorairesNote = (val) => {
+      setHorairesNote(val);
+      saveJSON5("p4:horairesnote", val);
+    };
+    const saveHorairesPhoto = (patch) => {
+      setHorairesPhoto((prev) => {
+        const next = { ...prev, ...patch };
+        saveJSON5("p4:horairesphoto", next);
+        return next;
+      });
     };
     const updateHoraireRow = (id, patch) => updateHoraires(horaires.map((h) => h.id === id ? { ...h, ...patch } : h));
     const toggleHoraireTypeJeu = (id, gameId) => {
@@ -17406,7 +17421,34 @@
                 ] }, h.id)),
                 horaires.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("td", { colSpan: 6, style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucun cr\xE9neau renseign\xE9 pour l'instant." }) })
               ] })
-            ] }) })
+            ] }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { display: "flex", gap: 16, marginTop: 14, flexWrap: "wrap" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { flex: "1 1 320px", minWidth: 260 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.fieldLabel, children: "Note" }),
+                adminMode ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  "textarea",
+                  {
+                    value: horairesNote,
+                    onChange: (e) => saveHorairesNote(e.target.value),
+                    rows: 3,
+                    placeholder: "Ex. Pas de cours pendant les vacances scolaires\u2026",
+                    style: { width: "100%", marginTop: 4 }
+                  }
+                ) : horairesNote ? /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: { ...styles5.ruleText, marginTop: 4 }, children: horairesNote }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("p", { style: { ...styles5.emptyNote, marginTop: 4 }, children: "Non renseign\xE9." })
+              ] }),
+              (adminMode || horairesPhoto.url) && /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: { flex: "0 0 220px" }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("span", { style: styles5.fieldLabel, children: "Photo" }),
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("div", { style: { marginTop: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+                  LogoDropRepositionable,
+                  {
+                    logoUrl: horairesPhoto.url,
+                    pos: horairesPhoto.pos,
+                    onChange: (v) => saveHorairesPhoto({ url: v }),
+                    onPosChange: (p) => saveHorairesPhoto({ pos: p })
+                  }
+                ) })
+              ] })
+            ] })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.card, children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", { style: styles5.cardHeadRow, children: [
