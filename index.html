@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="01/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="02/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -22371,19 +22371,31 @@
           return;
         }
         const byLicence = /* @__PURE__ */ new Map();
+        const byName = /* @__PURE__ */ new Map();
+        const normName = (a) => `${(a.nom || "").trim().toLowerCase()}|${(a.prenom || "").trim().toLowerCase()}`;
         adherents.forEach((a) => {
           if (a.numeroLicence) byLicence.set(a.numeroLicence, a);
+          const key = normName(a);
+          if (key !== "|") byName.set(key, a);
         });
         const toCreate = [];
         let nbUpdated = 0;
         let nbReactivated = 0;
+        let nbRapprochesParNom = 0;
         const matchedIds = /* @__PURE__ */ new Set();
-        const importedLicences = /* @__PURE__ */ new Set();
+        const matchedRowByExistingId = /* @__PURE__ */ new Map();
         imported.forEach((row) => {
-          if (row.numeroLicence) importedLicences.add(row.numeroLicence);
-          const existing = row.numeroLicence ? byLicence.get(row.numeroLicence) : null;
+          let existing = row.numeroLicence ? byLicence.get(row.numeroLicence) : null;
+          if (!existing) {
+            const nameMatch = byName.get(normName(row));
+            if (nameMatch && !matchedIds.has(nameMatch.id)) {
+              existing = nameMatch;
+              nbRapprochesParNom++;
+            }
+          }
           if (existing) {
             matchedIds.add(existing.id);
+            matchedRowByExistingId.set(existing.id, row);
             if (existing.desengage) nbReactivated++;
             else nbUpdated++;
           } else {
@@ -22396,12 +22408,14 @@
           }
         });
         const toDesengageIds = new Set(
-          adherents.filter((a) => !a.desengage && a.numeroLicence && !importedLicences.has(a.numeroLicence)).map((a) => a.id)
+          adherents.filter((a) => !a.desengage && !matchedIds.has(a.id)).map((a) => a.id)
         );
         const nbSansLicence = imported.filter((row) => !row.numeroLicence).length;
-        const confirmMsg = `Cet import va : cr\xE9er ${toCreate.length} nouvelle(s) fiche(s), mettre \xE0 jour ${nbUpdated} fiche(s) existante(s)` + (nbReactivated > 0 ? `, r\xE9activer ${nbReactivated} adh\xE9rent(s) d\xE9sengag\xE9(s)` : "") + (toDesengageIds.size > 0 ? `, et marquer d\xE9sengag\xE9(s) ${toDesengageIds.size} adh\xE9rent(s) absent(s) de cette liste (non-renouvellement)` : "") + `.` + (nbSansLicence > 0 ? `
+        const confirmMsg = `Cet import va : cr\xE9er ${toCreate.length} nouvelle(s) fiche(s), mettre \xE0 jour ${nbUpdated} fiche(s) existante(s)` + (nbReactivated > 0 ? `, r\xE9activer ${nbReactivated} adh\xE9rent(s) d\xE9sengag\xE9(s)` : "") + (toDesengageIds.size > 0 ? `, et marquer d\xE9sengag\xE9(s) ${toDesengageIds.size} adh\xE9rent(s) absent(s) de cette liste (non-renouvellement)` : "") + `.` + (nbRapprochesParNom > 0 ? `
 
-\u26A0\uFE0F ${nbSansLicence} ligne(s) du fichier n'ont pas de num\xE9ro de licence : elles seront cr\xE9\xE9es comme nouvelles fiches, sans pouvoir \xEAtre rapproch\xE9es d'une fiche existante.` : "") + `
+\u2139\uFE0F ${nbRapprochesParNom} ligne(s) sans correspondance de licence ont \xE9t\xE9 rapproch\xE9es d'une fiche existante par nom + pr\xE9nom, pour \xE9viter un doublon.` : "") + (nbSansLicence > 0 ? `
+
+\u26A0\uFE0F ${nbSansLicence} ligne(s) du fichier n'ont pas de num\xE9ro de licence : seules celles ne correspondant \xE0 aucun nom + pr\xE9nom d\xE9j\xE0 connu seront cr\xE9\xE9es comme nouvelles fiches.` : "") + `
 
 Continuer ?`;
         if (!window.confirm(confirmMsg)) {
@@ -22412,12 +22426,12 @@ Continuer ?`;
           if (!matchedIds.has(a.id)) {
             return toDesengageIds.has(a.id) ? { ...a, desengage: true } : a;
           }
-          const row = imported.find((r) => r.numeroLicence && r.numeroLicence === a.numeroLicence);
+          const row = matchedRowByExistingId.get(a.id);
           return { ...a, ...row, desengage: false };
         });
         persistAdherents([...updated, ...toCreate]);
         setImportStatus(
-          `Import termin\xE9 : ${toCreate.length} cr\xE9\xE9(s), ${nbUpdated} mis \xE0 jour, ${nbReactivated} r\xE9activ\xE9(s), ${toDesengageIds.size} d\xE9sengag\xE9(s).`
+          `Import termin\xE9 : ${toCreate.length} cr\xE9\xE9(s), ${nbUpdated} mis \xE0 jour, ${nbReactivated} r\xE9activ\xE9(s), ${toDesengageIds.size} d\xE9sengag\xE9(s)` + (nbRapprochesParNom > 0 ? `, dont ${nbRapprochesParNom} rapproch\xE9(s) par nom + pr\xE9nom` : "") + `.`
         );
       } catch (e) {
         setImportStatus("\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
@@ -22805,7 +22819,7 @@ Continuer ?`;
               "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur, Adh\xE9rent depuis (ann\xE9e, ex. 2018 ou 18), Num\xE9ro de licence.",
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: "Import intelligent" }),
-              " : les fiches sont rapproch\xE9es par num\xE9ro de licence \u2014 une licence d\xE9j\xE0 connue met \xE0 jour la fiche existante (et la r\xE9active si elle \xE9tait d\xE9sengag\xE9e) au lieu d'en cr\xE9er une nouvelle ; une licence absente de la nouvelle liste marque automatiquement l'adh\xE9rent comme d\xE9sengag\xE9. Pour les 3 derni\xE8res, indiquez \xAB oui \xBB ou \xAB 1 \xBB pour cocher. Exportez votre tableur existant au format CSV (dans Excel ou LibreOffice : Fichier \u2192 Enregistrer sous \u2192 CSV) puis importez-le ici.",
+              " : les fiches sont rapproch\xE9es par num\xE9ro de licence \u2014 une licence d\xE9j\xE0 connue met \xE0 jour la fiche existante (et la r\xE9active si elle \xE9tait d\xE9sengag\xE9e) au lieu d'en cr\xE9er une nouvelle. \xC0 d\xE9faut de licence (ligne du fichier ou fiche existante sans num\xE9ro), le rapprochement se fait par nom + pr\xE9nom, pour \xE9viter tout doublon. Un adh\xE9rent absent de la nouvelle liste (ni licence ni nom + pr\xE9nom retrouv\xE9s) est automatiquement marqu\xE9 comme d\xE9sengag\xE9 \u2014 jamais supprim\xE9. Pour les 3 derni\xE8res, indiquez \xAB oui \xBB ou \xAB 1 \xBB pour cocher. Exportez votre tableur existant au format CSV (dans Excel ou LibreOffice : Fichier \u2192 Enregistrer sous \u2192 CSV) puis importez-le ici.",
               importStatus && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { display: "block", marginTop: 4, fontWeight: 600 }, children: importStatus })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "p5-table-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { className: "p5-table", children: [
