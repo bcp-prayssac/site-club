@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="30/09/2026";</script>
+<script>window.__SITE_BUILD_DATE__="01/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -13028,8 +13028,13 @@
     if (isNaN(d.getTime())) return "Sans date";
     return `${MOIS[d.getMonth()]} ${d.getFullYear()}`;
   }
+  function cutoffDate6Months() {
+    const d = /* @__PURE__ */ new Date();
+    d.setMonth(d.getMonth() - 6);
+    return d.toISOString().slice(0, 10);
+  }
   function groupNewsByMonth(news) {
-    const withIdx = news.map((n, i) => ({ ...n, __idx: i }));
+    const withIdx = news.map((n, i) => ({ ...n, __idx: n.__idx !== void 0 ? n.__idx : i }));
     const sorted = withIdx.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
     const groups = [];
     let currentKey = null;
@@ -13309,6 +13314,24 @@
         });
       })();
     }, []);
+    (0, import_react.useEffect)(() => {
+      if (!adminMode || news.length === 0) return;
+      const cutoff = cutoffDate6Months();
+      const toArchive = news.filter((n) => n.date && n.date < cutoff);
+      if (toArchive.length === 0) return;
+      (async () => {
+        const kept = news.filter((n) => !(n.date && n.date < cutoff));
+        const existingArchive = await loadJSON("home:news:archive", []);
+        const nextArchive = [...existingArchive, ...toArchive];
+        await saveJSON("home:news:archive", nextArchive);
+        await saveJSON("home:news", kept);
+        setNews(kept);
+      })();
+    }, [news, adminMode]);
+    const visibleNews = (0, import_react.useMemo)(() => {
+      const cutoff = cutoffDate6Months();
+      return news.map((n, i) => ({ ...n, __idx: i })).filter((n) => !n.date || n.date >= cutoff);
+    }, [news]);
     (0, import_react.useEffect)(() => {
       function onClickOutside(e) {
         if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
@@ -13635,7 +13658,7 @@
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: styles.cardTitle, children: "Actualit\xE9s du club & de la F\xE9d\xE9ration" }),
             adminMode && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", { style: styles.miniAdd, onClick: openNewNews, children: "+ Ajouter une actualit\xE9" }),
             /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.newsViewport, children: (() => {
-              const groups = groupNewsByMonth(news);
+              const groups = groupNewsByMonth(visibleNews);
               const renderGroups = (withHandlers) => groups.map((g) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { children: [
                 /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { style: styles.newsMonthHeader, children: g.key }),
                 g.items.map((n) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
@@ -13682,9 +13705,9 @@
                   n.__idx
                 ))
               ] }, g.key));
-              return adminMode ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.newsTrack, children: renderGroups(true) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: news.length > 2 ? "acc-news-track" : "", style: styles.newsTrack, children: [
+              return adminMode ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { style: styles.newsTrack, children: renderGroups(true) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: visibleNews.length > 2 ? "acc-news-track" : "", style: styles.newsTrack, children: [
                 renderGroups(false),
-                news.length > 2 && renderGroups(false)
+                visibleNews.length > 2 && renderGroups(false)
               ] });
             })() })
           ] }),
@@ -14864,6 +14887,16 @@
         return next;
       });
     };
+    const startNewEdito = async () => {
+      if (edito.texte && edito.texte.trim()) {
+        const existingArchive = await loadJSON2("p1:edito:archive", []);
+        const nextArchive = [...existingArchive, edito];
+        await saveJSON2("p1:edito:archive", nextArchive);
+      }
+      const fresh = { texte: "", date: "" };
+      setEdito(fresh);
+      saveJSON2("p1:edito", fresh);
+    };
     const updateConseilMember = (idx, patch) => {
       setConseil((prev) => {
         const next = prev.map((m, i) => i === idx ? { ...m, ...patch } : m);
@@ -15023,7 +15056,10 @@
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles2.body, children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "p1-serif", style: styles2.pageTitle, children: "Pr\xE9sentation du Club" }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles2.card, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "p1-serif", style: styles2.cardTitle, children: "L'\xE9dito du pr\xE9sident" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles2.cardHeadRow, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { className: "p1-serif", style: styles2.cardTitle, children: "L'\xE9dito du pr\xE9sident" }),
+              adminMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { style: styles2.miniAdd, onClick: startNewEdito, children: "+ Nouvel \xE9dito (archive l'actuel)" })
+            ] }),
             adminMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("label", { style: { ...styles2.fieldRow, maxWidth: 200, marginBottom: 8 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles2.fieldLabel, children: "Date" }),
@@ -20789,7 +20825,7 @@
   function currentSeasonLabel() {
     const now = /* @__PURE__ */ new Date();
     const y = now.getFullYear();
-    const startYear = now.getMonth() + 1 >= 9 ? y : y - 1;
+    const startYear = now.getMonth() + 1 >= 8 ? y : y - 1;
     return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
   }
   function shortDate(v) {
@@ -21350,19 +21386,37 @@
     (0, import_react10.useEffect)(() => {
       (async () => {
         const data = await loadJSON9(storageKey, null);
+        let order = [currentSeasonLabel()];
+        let seas = { [currentSeasonLabel()]: emptySeason() };
         if (data && data.order && data.seasons) {
-          setSeasonOrder(data.order);
-          const normalized = {};
+          order = data.order;
+          seas = {};
           Object.keys(data.seasons).forEach((k) => {
-            normalized[k] = normalizeSeason(data.seasons[k]);
+            seas[k] = normalizeSeason(data.seasons[k]);
           });
-          setSeasons(normalized);
-          const cur = currentSeasonLabel();
-          setActiveSeason(data.order.includes(cur) ? cur : data.order[data.order.length - 1]);
         }
+        const cur = currentSeasonLabel();
+        if (adminMode && !order.includes(cur)) {
+          const last = order[order.length - 1];
+          const prevSeason = seas[last];
+          const carried = emptySeason();
+          if (prevSeason) {
+            GAME_TYPES2.forEach(({ key }) => {
+              const t = totals(prevSeason[key]);
+              carried[key].moyenneDebut = isFinite(t.moyenneFin) ? t.moyenneFin.toFixed(3) : "";
+              carried[key].categorie = prevSeason[key].categorie;
+            });
+          }
+          seas = { ...seas, [cur]: carried };
+          order = [...order, cur];
+          saveJSON9(storageKey, { order, seasons: seas });
+        }
+        setSeasonOrder(order);
+        setSeasons(seas);
+        setActiveSeason(order.includes(cur) ? cur : order[order.length - 1]);
         setLoaded(true);
       })();
-    }, []);
+    }, [adminMode]);
     const persist = (order, seas) => saveJSON9(storageKey, { order, seasons: seas });
     const addSeason = () => {
       const last = seasonOrder[seasonOrder.length - 1];
@@ -21525,7 +21579,7 @@
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.seasonBar, className: "no-print", children: [
-          seasonOrder.map((s) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("button", { onClick: () => setActiveSeason(s), style: { ...styles10.seasonTab, ...s === activeSeason ? styles10.seasonTabActive : {} }, children: [
+          [...seasonOrder].reverse().map((s) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("button", { onClick: () => setActiveSeason(s), style: { ...styles10.seasonTab, ...s === activeSeason ? styles10.seasonTabActive : {} }, children: [
             "Saison ",
             s
           ] }, s)),
@@ -23018,6 +23072,20 @@ Continuer ?`;
   var DEFAULT_LOGOS10 = { club: "", ffb: "" };
   var DEFAULT_SOCIAL10 = { facebook: "", whatsapp: "" };
   var DEFAULT_PASSWORD3 = "bcp2025";
+  function currentSeasonLabel2() {
+    const now = /* @__PURE__ */ new Date();
+    const y = now.getFullYear();
+    const startYear = now.getMonth() + 1 >= 8 ? y : y - 1;
+    return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
+  }
+  function seasonOfDate(dateStr) {
+    if (!dateStr) return null;
+    const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+    if (isNaN(d.getTime())) return null;
+    const y = d.getFullYear();
+    const startYear = d.getMonth() + 1 >= 8 ? y : y - 1;
+    return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
+  }
   var TYPE_META = [
     { id: "officielle", label: "Officielle", color: "#2A5CAA" },
     { id: "interclub", label: "Amicale inter-club", color: "#c9a227" },
@@ -23722,10 +23790,17 @@ Continuer ?`;
       persist(competitions.filter((c) => c.id !== id));
       setOpenId(null);
     };
+    const allSeasons = (0, import_react11.useMemo)(() => {
+      const s = /* @__PURE__ */ new Set([currentSeasonLabel2()]);
+      competitions.forEach((c) => s.add(seasonOfDate(c.date) || currentSeasonLabel2()));
+      return Array.from(s).sort().reverse();
+    }, [competitions]);
+    const [activeSeason, setActiveSeason] = (0, import_react11.useState)(currentSeasonLabel2());
     const filtered = (0, import_react11.useMemo)(() => {
-      const arr = filterType === "tous" ? competitions : competitions.filter((c) => c.type === filterType);
+      let arr = filterType === "tous" ? competitions : competitions.filter((c) => c.type === filterType);
+      arr = arr.filter((c) => (seasonOfDate(c.date) || currentSeasonLabel2()) === activeSeason);
       return [...arr].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
-    }, [competitions, filterType]);
+    }, [competitions, filterType, activeSeason]);
     const grouped = (0, import_react11.useMemo)(() => {
       const groups = {};
       filtered.forEach((c) => {
@@ -23955,6 +24030,21 @@ Continuer ?`;
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("strong", { children: "Import intelligent" }),
               " : les comp\xE9titions sont rapproch\xE9es par date + nom \u2014 une comp\xE9tition d\xE9j\xE0 connue est mise \xE0 jour (lieux, joueurs assign\xE9s et photos conserv\xE9s) au lieu d'\xEAtre dupliqu\xE9e.",
               importStatus && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { display: "block", marginTop: 4, fontWeight: 600 }, children: importStatus })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }, className: "no-print", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { ...styles11.fieldLabel, color: "#fdf8f0" }, children: "Saison :" }),
+              allSeasons.map((s) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
+                "button",
+                {
+                  onClick: () => setActiveSeason(s),
+                  style: { ...styles11.legendChip, ...activeSeason === s ? styles11.legendChipActive : {} },
+                  children: [
+                    s === currentSeasonLabel2() ? "Saison en cours " : "Saison ",
+                    s
+                  ]
+                },
+                s
+              ))
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: styles11.legendRow, className: "no-print", children: [
               TYPE_META.map((t) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(
@@ -24298,10 +24388,10 @@ Continuer ?`;
     } catch (e) {
     }
   }
-  function currentSeasonLabel2() {
+  function currentSeasonLabel3() {
     const now = /* @__PURE__ */ new Date();
     const y = now.getFullYear();
-    const startYear = now.getMonth() + 1 >= 9 ? y : y - 1;
+    const startYear = now.getMonth() + 1 >= 8 ? y : y - 1;
     return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
   }
   function fmtDateLong3(dateStr) {
@@ -24705,24 +24795,29 @@ Continuer ?`;
       persist(tournois.filter((t) => t.id !== id));
     };
     const sorted = (0, import_react12.useMemo)(() => [...tournois].sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999")), [tournois]);
-    const [viewArchiveSeason, setViewArchiveSeason] = (0, import_react12.useState)(null);
     const today = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-    const activeTournois = sorted.filter((t) => !t.archived);
-    const nbEndedUnarchived = activeTournois.filter((t) => t.date && t.date < today).length;
-    const archiveSeasons = (0, import_react12.useMemo)(() => {
-      const s = /* @__PURE__ */ new Set();
-      tournois.forEach((t) => {
-        if (t.archived && t.saisonArchive) s.add(t.saisonArchive);
-      });
+    function seasonOfDate2(dateStr) {
+      if (!dateStr) return null;
+      const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
+      if (isNaN(d.getTime())) return null;
+      const y = d.getFullYear();
+      const startYear = d.getMonth() + 1 >= 8 ? y : y - 1;
+      return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
+    }
+    function tournoiSeason(t) {
+      if (t.archived && t.saisonArchive) return t.saisonArchive;
+      return seasonOfDate2(t.date) || currentSeasonLabel3();
+    }
+    const allSeasons = (0, import_react12.useMemo)(() => {
+      const s = /* @__PURE__ */ new Set([currentSeasonLabel3()]);
+      tournois.forEach((t) => s.add(tournoiSeason(t)));
       return Array.from(s).sort().reverse();
     }, [tournois]);
-    const archivedForSeason = viewArchiveSeason ? sorted.filter((t) => t.archived && t.saisonArchive === viewArchiveSeason) : [];
-    const archiveEnded = () => {
-      if (nbEndedUnarchived === 0) return;
-      if (!window.confirm(`Archiver les ${nbEndedUnarchived} tournoi(s) termin\xE9(s) sous la saison ${currentSeasonLabel2()} ? Ils resteront consultables dans les archives.`)) return;
-      const saison = currentSeasonLabel2();
-      persist(tournois.map((t) => !t.archived && t.date && t.date < today ? { ...t, archived: true, saisonArchive: saison } : t));
-    };
+    const [activeSeason, setActiveSeason] = (0, import_react12.useState)(currentSeasonLabel3());
+    const seasonTournois = (0, import_react12.useMemo)(
+      () => sorted.filter((t) => tournoiSeason(t) === activeSeason),
+      [sorted, activeSeason]
+    );
     return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.page, children: [
       /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("style", { children: `
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Raleway:wght@300;400;500;600&display=swap');
@@ -24902,27 +24997,19 @@ Continuer ?`;
           /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.body, children: [
             /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { className: "p5t-serif", style: styles12.pageTitle, children: "Les tournois organis\xE9s dans notre club" }),
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [
-                adminMode && !viewArchiveSeason && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAddLight, onClick: addTournoi, children: "+ Ajouter un tournoi" }),
-                adminMode && !viewArchiveSeason && nbEndedUnarchived > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("button", { style: styles12.archiveBtn, onClick: archiveEnded, children: [
-                  "\u{1F4E6} Archiver les ",
-                  nbEndedUnarchived,
-                  " tournoi(s) termin\xE9(s)"
-                ] })
-              ] })
+              adminMode && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAddLight, onClick: addTournoi, children: "+ Ajouter un tournoi" })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.pageIntro, children: "Retrouvez les tournois internes programm\xE9s et inscrivez-vous comme b\xE9n\xE9vole (directeur de salle, arbitre ou marqueur) en choisissant votre nom dans la liste." }),
             adherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun adh\xE9rent enregistr\xE9 pour l'instant \u2014 les inscriptions b\xE9n\xE9voles seront disponibles d\xE8s que la liste des adh\xE9rents sera renseign\xE9e." }),
-            archiveSeasons.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { ...styles12.fieldLabel, color: "#fdf8f0" }, children: "Archives :" }),
-              viewArchiveSeason && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("button", { style: styles12.miniAddLight, onClick: () => setViewArchiveSeason(null), children: "\u2190 Retour aux tournois actuels" }),
-              archiveSeasons.map((s) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
+            /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: { display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { ...styles12.fieldLabel, color: "#fdf8f0" }, children: "Saison :" }),
+              allSeasons.map((s) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(
                 "button",
                 {
-                  style: { ...styles12.chip, ...viewArchiveSeason === s ? styles12.chipActive : {} },
-                  onClick: () => setViewArchiveSeason(s),
+                  style: { ...styles12.chip, ...activeSeason === s ? styles12.chipActive : {} },
+                  onClick: () => setActiveSeason(s),
                   children: [
-                    "Saison ",
+                    s === currentSeasonLabel3() ? "Saison en cours " : "Saison ",
                     s
                   ]
                 },
@@ -24930,7 +25017,7 @@ Continuer ?`;
               ))
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.tournoiList, children: [
-              (viewArchiveSeason ? archivedForSeason : activeTournois).map((t) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
+              seasonTournois.map((t) => /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                 TournoiCard,
                 {
                   tournoi: t,
@@ -24943,8 +25030,7 @@ Continuer ?`;
                 },
                 t.id
               )),
-              !viewArchiveSeason && activeTournois.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun tournoi interne programm\xE9 pour l'instant." }),
-              viewArchiveSeason && archivedForSeason.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun tournoi archiv\xE9 pour cette saison." })
+              seasonTournois.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("p", { style: styles12.emptyNote, children: "Aucun tournoi pour cette saison." })
             ] })
           ] }),
           creating && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("div", { style: styles12.modalOverlay, className: "no-print", onClick: () => setCreating(null), children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles12.createModal, onClick: (e) => e.stopPropagation(), children: [
@@ -25257,6 +25343,8 @@ Continuer ?`;
     const [status, setStatus] = (0, import_react13.useState)("");
     const menuRef = (0, import_react13.useRef)(null);
     const [docs, setDocs] = (0, import_react13.useState)([]);
+    const [newsArchive, setNewsArchive] = (0, import_react13.useState)([]);
+    const [editoArchive, setEditoArchive] = (0, import_react13.useState)([]);
     const [docsPassword, setDocsPassword] = (0, import_react13.useState)("");
     const [docsUnlocked, setDocsUnlocked] = (0, import_react13.useState)(false);
     const [docsInputPwd, setDocsInputPwd] = (0, import_react13.useState)("");
@@ -25271,6 +25359,8 @@ Continuer ?`;
         setPassword(await loadJSON12("p5:password", DEFAULT_PASSWORD5));
         setAdminPassword(await loadJSON12("site:adminpassword", "admin2025"));
         setDocs(await loadJSON12("p5:documents", []));
+        setNewsArchive(await loadJSON12("home:news:archive", []));
+        setEditoArchive(await loadJSON12("p1:edito:archive", []));
         const dp = await loadJSON12("p5:docsPassword", "");
         setDocsPassword(dp);
         if (!dp) setDocsUnlocked(true);
@@ -25592,16 +25682,62 @@ Continuer ?`;
                 adminMode && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("button", { style: styles13.miniAdd, onClick: addDoc, children: "+ Ajouter un document" })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: styles13.pageIntro, children: "Statuts, comptes-rendus d'assembl\xE9es g\xE9n\xE9rales et de r\xE9unions de bureau, r\xE8glement int\xE9rieur \u2014 retrouvez ici les documents officiels du club." }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: styles13.chipRow, className: "no-print", children: ["toutes", ...DOC_CATEGORIES].map((c) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
-                "button",
-                {
-                  onClick: () => setFilterCat(c),
-                  style: { ...styles13.chip, ...filterCat === c ? styles13.chipActive : {} },
-                  children: c === "toutes" ? "Toutes" : c
-                },
-                c
-              )) }),
-              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.docList, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.chipRow, className: "no-print", children: [
+                ["toutes", ...DOC_CATEGORIES].map((c) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)(
+                  "button",
+                  {
+                    onClick: () => setFilterCat(c),
+                    style: { ...styles13.chip, ...filterCat === c ? styles13.chipActive : {} },
+                    children: c === "toutes" ? "Toutes" : c
+                  },
+                  c
+                )),
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+                  "button",
+                  {
+                    onClick: () => setFilterCat("archive"),
+                    style: { ...styles13.chip, ...filterCat === "archive" ? styles13.chipActive : {} },
+                    children: [
+                      "Actualit\xE9s archiv\xE9es (",
+                      newsArchive.length,
+                      ")"
+                    ]
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)(
+                  "button",
+                  {
+                    onClick: () => setFilterCat("editos"),
+                    style: { ...styles13.chip, ...filterCat === "editos" ? styles13.chipActive : {} },
+                    children: [
+                      "\xC9ditos archiv\xE9s (",
+                      editoArchive.length,
+                      ")"
+                    ]
+                  }
+                )
+              ] }),
+              filterCat === "editos" ? /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.docList, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: styles13.pageIntro, children: "Chaque fois qu'un nouvel \xE9dito est publi\xE9 sur la page \xAB Pr\xE9sentation du club \xBB, le pr\xE9c\xE9dent est conserv\xE9 ici." }),
+                [...editoArchive].reverse().map((ed, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { ...styles13.docRow, cursor: "default", flexDirection: "column", alignItems: "flex-start", gap: 4 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { style: { display: "flex", gap: 8, alignItems: "center", width: "100%" }, children: /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("span", { style: { fontWeight: 600, color: WOOD11, flex: 1, textAlign: "left" }, children: [
+                    "\xC9dito ",
+                    ed.date ? `du ${fmtDateShort2(ed.date)}` : `archiv\xE9`
+                  ] }) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { margin: 0, fontSize: 13, color: "#241d12", whiteSpace: "pre-wrap" }, children: ed.texte })
+                ] }, i)),
+                editoArchive.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: styles13.emptyNote, children: "Aucun \xE9dito archiv\xE9 pour l'instant." })
+              ] }) : filterCat === "archive" ? /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.docList, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: styles13.pageIntro, children: "Les actualit\xE9s de la page d'accueil sont archiv\xE9es ici automatiquement au bout de 6 mois, pour all\xE9ger le fil tout en gardant une trace." }),
+                [...newsArchive].sort((a, b) => (b.date || "").localeCompare(a.date || "")).map((n, i) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { ...styles13.docRow, cursor: "default", flexDirection: "column", alignItems: "flex-start", gap: 4 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: { display: "flex", gap: 8, alignItems: "center", width: "100%" }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontWeight: 600, color: WOOD11, flex: 1, textAlign: "left" }, children: n.title }),
+                    n.date && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontSize: 11.5, color: "#5F5E5A" }, children: fmtDateShort2(n.date) })
+                  ] }),
+                  n.text && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: { margin: 0, fontSize: 13, color: "#241d12" }, children: n.text })
+                ] }, i)),
+                newsArchive.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("p", { style: styles13.emptyNote, children: "Aucune actualit\xE9 archiv\xE9e pour l'instant." })
+              ] }) : /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("div", { style: styles13.docList, children: [
                 sorted.map((d) => /* @__PURE__ */ (0, import_jsx_runtime13.jsxs)("button", { style: styles13.docRow, onClick: () => setOpenId(d.id), children: [
                   /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: styles13.tournoiTag, children: d.categorie }),
                   /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("span", { style: { fontWeight: 600, color: WOOD11, flex: 1, textAlign: "left" }, children: d.titre }),
