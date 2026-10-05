@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="02/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="05/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -20774,11 +20774,11 @@
   ];
   function emptyGame(key) {
     const tq = [];
-    if (key === "libre") tq.push({ label: "TQ0", points: "", reprises: "", ms: "", date: "", excluded: true, fixed: true, type: "amical" });
+    if (key === "libre") tq.push({ label: "TQ0", points: "", reprises: "", ms: "", date: "", excluded: true, fixed: true, tq0: true, type: "amical" });
     tq.push({ label: "TQ1", points: "", reprises: "", ms: "", date: "", fixed: true, type: "officiel" });
     tq.push({ label: "TQ2", points: "", reprises: "", ms: "", date: "", fixed: true, type: "officiel" });
     tq.push({ label: "TQ3", points: "", reprises: "", ms: "", date: "", fixed: true, type: "officiel" });
-    return { categorie: CATEGORIES2[2], moyenneDebut: "", tq };
+    return { categorie: CATEGORIES2[2], categorieApresTQ1: "", moyenneDebut: "", tq };
   }
   function emptySeason() {
     return {
@@ -20798,14 +20798,18 @@
       date: t.date || "",
       excluded: !!t.excluded,
       fixed: t.fixed !== void 0 ? t.fixed : true,
+      // TQ0 = tournoi amical de référence (jeu libre), jamais modifiable ni compté. Repéré par un drapeau
+      // explicite car les noms de TQ1-TQ3 sont désormais modifiables ; les anciennes données le reconnaissent par son nom.
+      tq0: t.tq0 !== void 0 ? !!t.tq0 : key === "libre" && t.fixed !== false && !!t.excluded && t.label === "TQ0",
       type: t.type || (t.excluded ? "amical" : "officiel")
     }));
-    if (key === "libre" && !tq.some((t) => t.excluded)) {
-      tq = [{ label: "TQ0", points: "", reprises: "", date: "", excluded: true, fixed: true, type: "amical" }, ...tq];
+    if (key === "libre" && !tq.some((t) => t.tq0)) {
+      tq = [{ label: "TQ0", points: "", reprises: "", ms: "", date: "", excluded: true, fixed: true, tq0: true, type: "amical" }, ...tq];
     }
     const validCats = CATEGORIES_BY_KEY[key] || CATEGORIES2;
     const categorie = validCats.includes(game.categorie) ? game.categorie : "R2";
-    return { ...game, categorie, tq };
+    const categorieApresTQ1 = validCats.includes(game.categorieApresTQ1) ? game.categorieApresTQ1 : "";
+    return { ...game, categorie, categorieApresTQ1, tq };
   }
   function normalizeSeason(season) {
     const s = season || {};
@@ -20840,6 +20844,21 @@
   function fmt(n) {
     if (!isFinite(n) || isNaN(n)) return "\u2014";
     return n.toFixed(3).replace(/0+$/, "").replace(/\.$/, "");
+  }
+  var TQ_TYPES = [
+    { value: "officiel", label: "Off avec M", rowBg: "#EAF3EE", textColor: "#3D7A5C" },
+    { value: "officiel_sans_m", label: "Off sans M", rowBg: "#FFFFFF", textColor: "#5F5E5A" },
+    { value: "amical", label: "Ami", rowBg: "#F2F0E8", textColor: "#8A8368" }
+  ];
+  function tqTypeOf(row) {
+    return row.type || (row.excluded ? "amical" : "officiel");
+  }
+  function tqTypeMeta(row) {
+    return TQ_TYPES.find((t) => t.value === tqTypeOf(row)) || TQ_TYPES[0];
+  }
+  function tqTooltipKind(p) {
+    if (!p.excluded) return "Tournoi officiel";
+    return p.tqType === "officiel_sans_m" ? "Officiel sans M \u2014 hors moyenne de saison" : "Amical / interne \u2014 hors moyenne officielle";
   }
   function totals(game) {
     const counted = game.tq.filter((t) => !t.excluded);
@@ -21106,7 +21125,7 @@
                 `${g.label} \u2014 ${p.label}`,
                 p.date ? `Le ${p.date} \u2014 saison ${p.seasonLabel}` : `Saison ${p.seasonLabel}`,
                 `Moyenne : ${p.value} (${p.rawPoints || 0} pts / ${p.rawReprises || 0} rep.)`,
-                p.excluded ? "Amical / interne \u2014 hors moyenne officielle" : "Tournoi officiel"
+                tqTooltipKind(p)
               ]
             }
           );
@@ -21255,7 +21274,7 @@
               points[hover].label,
               points[hover].date ? `Le ${points[hover].date} \u2014 saison ${points[hover].seasonLabel}` : `Saison ${points[hover].seasonLabel}`,
               `Moyenne : ${points[hover].value} (${points[hover].rawPoints || 0} pts / ${points[hover].rawReprises || 0} rep.)`,
-              points[hover].excluded ? "Amical / interne \u2014 hors moyenne officielle" : "Tournoi officiel"
+              tqTooltipKind(points[hover])
             ]
           }
         )
@@ -21332,6 +21351,7 @@
             label: row.label,
             seasonLabel,
             excluded: !!row.excluded,
+            tqType: tqTypeOf(row),
             value: Number(moyenne.toFixed(3)),
             sortKey: tqSortKey(row, seasonLabel, idx),
             date: row.date || "",
@@ -21486,6 +21506,7 @@
               label: row.label,
               seasonLabel,
               excluded: !!row.excluded,
+              tqType: tqTypeOf(row),
               value: Number(moyenne.toFixed(3)),
               sortKey: tqSortKey(row, seasonLabel, idx),
               date: row.date || "",
@@ -21623,23 +21644,37 @@
             return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.competCard, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.competCardHead, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { ...styles10.ball, background: ball, border: `2px solid ${ballBorder}` } }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "p5-serif", style: styles10.competCardTitle, children: label }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                  "select",
-                  {
-                    value: game.categorie,
-                    onChange: (e) => updateGame(key, { categorie: e.target.value }),
-                    disabled: !adminMode,
-                    style: { marginLeft: "auto" },
-                    children: (CATEGORIES_BY_KEY[key] || CATEGORIES2).map((c) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: c, children: c }, c))
-                  }
-                )
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "p5-serif", style: styles10.competCardTitle, children: label })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { padding: 10 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: 14, alignItems: "flex-end", flexWrap: "wrap", marginBottom: 8 }, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: { display: "flex", flexDirection: "column", gap: 3 }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "Cat\xE9gorie d\xE9but de saison" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      "select",
+                      {
+                        value: game.categorie,
+                        onChange: (e) => updateGame(key, { categorie: e.target.value }),
+                        disabled: !adminMode,
+                        children: (CATEGORIES_BY_KEY[key] || CATEGORIES2).map((c) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: c, children: c }, c))
+                      }
+                    )
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: { display: "flex", flexDirection: "column", gap: 3 }, children: [
                     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "Moyenne d\xE9but de saison" }),
                     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { value: game.moyenneDebut, onChange: (e) => updateGame(key, { moyenneDebut: e.target.value }), disabled: !adminMode, placeholder: "0.000", style: { maxWidth: 110 } })
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: { display: "flex", flexDirection: "column", gap: 3 }, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "Cat\xE9gorie apr\xE8s TQ1" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      "select",
+                      {
+                        value: game.categorieApresTQ1 || game.categorie,
+                        onChange: (e) => updateGame(key, { categorieApresTQ1: e.target.value }),
+                        disabled: !adminMode,
+                        children: (CATEGORIES_BY_KEY[key] || CATEGORIES2).map((c) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: c, children: c }, c))
+                      }
+                    )
                   ] }),
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", flexDirection: "column", gap: 3 }, children: [
                     /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "Moyenne fin de saison" }),
@@ -21661,10 +21696,13 @@
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tbody", { children: [
                     game.tq.map((row, i) => {
                       const m = num(row.reprises) > 0 ? num(row.points) / num(row.reprises) : NaN;
-                      const rowBg = row.excluded ? "#F2F0E8" : "#EAF3EE";
+                      const typeMeta = tqTypeMeta(row);
+                      const isAmical = typeMeta.value === "amical";
+                      const rowBg = typeMeta.rowBg;
                       const isLast = i === game.tq.length - 1;
+                      const paramsEditable = adminMode;
                       return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { style: { background: rowBg }, children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { fontWeight: 500, color: row.excluded ? "#8A8368" : "#0a1628", fontStyle: row.excluded ? "italic" : "normal" }, children: row.fixed ? row.label : adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { fontWeight: 500, color: isAmical ? "#8A8368" : "#0a1628", fontStyle: isAmical ? "italic" : "normal" }, children: paramsEditable ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           "textarea",
                           {
                             value: row.label,
@@ -21678,18 +21716,15 @@
                             style: { width: 70, fontSize: 10.5, padding: "3px 4px", resize: "none" }
                           }
                         ) : row.label }),
-                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: !row.fixed && adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: paramsEditable ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           "select",
                           {
-                            value: row.type || (row.excluded ? "amical" : "officiel"),
+                            value: tqTypeOf(row),
                             onChange: (e) => updateTQ(key, i, "type", e.target.value),
-                            style: { fontSize: 10.5, padding: "3px 2px", width: 54 },
-                            children: [
-                              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "officiel", children: "Off" }),
-                              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "amical", children: "Ami" })
-                            ]
+                            style: { fontSize: 10.5, padding: "3px 2px", width: 86 },
+                            children: TQ_TYPES.map((t2) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: t2.value, children: t2.label }, t2.value))
                           }
-                        ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, color: row.excluded ? "#8A8368" : "#3D7A5C", fontWeight: 600 }, children: row.excluded ? "Ami" : "Off" }) }),
+                        ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, color: typeMeta.textColor, fontWeight: 600 }, children: typeMeta.label }) }),
                         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           SmartDateInput3,
                           {
@@ -21736,8 +21771,8 @@
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "Interclub" }),
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "Tournoi interne" })
                 ] }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic", margin: "4px 0 0" }, children: "Les tournois \xAB Amical / interclub / interne \xBB sont affich\xE9s pour le suivi mais n'entrent pas dans le calcul du total." }),
-                key === "libre" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic", margin: "4px 0 0" }, children: "TQ0 est affich\xE9 mais n'entre pas dans le calcul du total." }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic", margin: "4px 0 0" }, children: "\xAB Off avec M \xBB (ligne verte) compte dans la moyenne de saison. \xAB Off sans M \xBB (ligne blanche) et \xAB Ami \xBB (ligne grise : amical / interclub / interne) sont affich\xE9s pour le suivi mais n'entrent pas dans le calcul du total." }),
+                key === "libre" && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic", margin: "4px 0 0" }, children: "TQ0 est \xAB Ami \xBB par d\xE9faut : il n'entre pas dans le calcul du total tant que son type n'est pas modifi\xE9." }),
                 adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "no-print", style: styles10.tqAddBtn, onClick: () => addTQ(key), children: "+ Tournoi suppl\xE9mentaire" })
               ] })
             ] }, key);
