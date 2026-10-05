@@ -20660,7 +20660,7 @@
     const digits = raw.replace(/\D/g, "").slice(0, 10);
     return digits.replace(/(\d{2})(?=\d)/g, "$1 ");
   }
-  function SmartDateInput3({ value, onChange, style, format = "iso", compact = false }) {
+  function SmartDateInput3({ value, onChange, style, format = "iso", compact = false, fullYear = false }) {
     const [d, setD] = (0, import_react10.useState)("");
     const [m, setM] = (0, import_react10.useState)("");
     const [y, setY] = (0, import_react10.useState)("");
@@ -20685,21 +20685,22 @@
         const [yy, mm, dd] = value.split("-");
         setD(dd);
         setM(mm);
-        setY(yy.slice(2));
+        setY(fullYear ? yy : yy.slice(2));
       } else if (!value) {
         setD("");
         setM("");
         setY("");
       }
-    }, [value, format]);
+    }, [value, format, fullYear]);
     const clamp4 = (v, max) => {
       const n = parseInt(v, 10);
       if (isNaN(n) || v.length < 2) return v;
       return n > max ? String(max) : v;
     };
+    const yLen = fullYear ? 4 : 2;
     const emit = (dd, mm, yy) => {
-      if (dd.length === 2 && mm.length === 2 && yy.length === 2) {
-        onChange(format === "text" ? `${dd}/${mm}/${yy}` : `20${yy}-${mm}-${dd}`);
+      if (dd.length === 2 && mm.length === 2 && yy.length === yLen && (!fullYear || parseInt(yy, 10) >= 1900)) {
+        onChange(format === "text" ? `${dd}/${mm}/${yy}` : `${fullYear ? yy : "20" + yy}-${mm}-${dd}`);
       } else if (!dd && !mm && !yy) {
         onChange("");
       }
@@ -20717,7 +20718,7 @@
       emit(d, v, y);
     };
     const onY = (e) => {
-      const v = e.target.value.replace(/\D/g, "").slice(0, 2);
+      const v = e.target.value.replace(/\D/g, "").slice(0, yLen);
       setY(v);
       emit(d, m, v);
     };
@@ -20731,11 +20732,11 @@
     };
     const segStyle = { width: compact ? 18 : 26, textAlign: "center", padding: compact ? "3px 1px" : "4px 2px", fontSize: compact ? 10.5 : void 0, fontVariantNumeric: "tabular-nums" };
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "inline-flex", alignItems: "center", gap: 2, ...style }, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ref: dRef, value: d, onChange: onD, onKeyDown: onKeyD, placeholder: "jj", maxLength: 2, inputMode: "numeric", style: segStyle }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ref: dRef, value: d, onChange: onD, onKeyDown: onKeyD, onFocus: (e) => e.target.select(), placeholder: "jj", maxLength: 2, inputMode: "numeric", style: segStyle }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "#8A8368" }, children: "/" }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ref: mRef, value: m, onChange: onM, onKeyDown: onKeyM, placeholder: "mm", maxLength: 2, inputMode: "numeric", style: segStyle }),
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ref: mRef, value: m, onChange: onM, onKeyDown: onKeyM, onFocus: (e) => e.target.select(), placeholder: "mm", maxLength: 2, inputMode: "numeric", style: segStyle }),
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { color: "#8A8368" }, children: "/" }),
-      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ref: yRef, value: y, onChange: onY, onKeyDown: onKeyY, placeholder: "aa", maxLength: 2, inputMode: "numeric", style: segStyle })
+      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ref: yRef, value: y, onChange: onY, onKeyDown: onKeyY, onFocus: (e) => e.target.select(), placeholder: fullYear ? "aaaa" : "aa", maxLength: yLen, inputMode: "numeric", style: fullYear ? { ...segStyle, width: compact ? 32 : 42 } : segStyle })
     ] });
   }
   var PAGES10 = [
@@ -20825,6 +20826,16 @@
     if (!m) return "26/27";
     const a = parseInt(m[1], 10), b = parseInt(m[2], 10);
     return `${String((a + 1) % 100).padStart(2, "0")}/${String((b + 1) % 100).padStart(2, "0")}`;
+  }
+  function currentSeasonStartYear() {
+    const now = /* @__PURE__ */ new Date();
+    return now.getMonth() + 1 >= 8 ? now.getFullYear() : now.getFullYear() - 1;
+  }
+  function seasonLabelOfStartYear(y) {
+    return `${String(y % 100).padStart(2, "0")}/${String((y + 1) % 100).padStart(2, "0")}`;
+  }
+  function pyramidPhotoKey(startYear) {
+    return "p5:pyramide:" + seasonLabelOfStartYear(startYear).replace("/", "-");
   }
   function currentSeasonLabel() {
     const now = /* @__PURE__ */ new Date();
@@ -21941,6 +21952,11 @@
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles10.fieldRow, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "N\xB0 de licence" }),
             adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { value: adherent.numeroLicence || "", onChange: (e) => onChange({ numeroLicence: e.target.value }), placeholder: "ex. 12345678", style: { maxWidth: 140 } }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: adherent.numeroLicence || "\u2014" })
+          ] }),
+          adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.fieldRow, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "Date de naissance" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(SmartDateInput3, { fullYear: true, value: adherent.dateNaissance || "", onChange: (v) => onChange({ dateNaissance: v }) }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic" }, children: "Visible des seuls administrateurs \u2014 sert \xE0 la pyramide des \xE2ges." })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 12, padding: 10, borderRadius: 6, background: adherent.desengage ? "#F2E4E0" : "#F6F1E4", border: `1px solid ${adherent.desengage ? "#B1432F" : "#E3DCC5"}` }, children: [
@@ -22149,6 +22165,7 @@
       statut: STATUTS[0],
       depuis: currentSeasonLabel().slice(0, 2),
       numeroLicence: "",
+      dateNaissance: "",
       desengage: false,
       sousStatuts: { competiteur: false, arbitre: false, formateur: false },
       engagements: { libre: false, cadre: false, unebande: false, troisbandes: false },
@@ -22165,6 +22182,71 @@
     const n = parseInt(aa, 10);
     if (isNaN(n)) return null;
     return (n >= 50 ? 1900 : 2e3) + n;
+  }
+  function parseBirthDate(raw) {
+    const str = String(raw || "").trim();
+    if (!str || str === "-") return "";
+    let y, m, d;
+    let mt = str.match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);
+    if (mt) {
+      y = +mt[1];
+      m = +mt[2];
+      d = +mt[3];
+    } else {
+      mt = str.match(/^(\d{1,2})[-/. ](\d{1,2})[-/. ](\d{4}|\d{2})(?!\d)/);
+      if (!mt) return "";
+      d = +mt[1];
+      m = +mt[2];
+      y = +mt[3];
+      if (mt[3].length === 2) y = (y > (/* @__PURE__ */ new Date()).getFullYear() % 100 ? 1900 : 2e3) + y;
+    }
+    if (m < 1 || m > 12 || d < 1 || d > 31 || y < 1900 || y > (/* @__PURE__ */ new Date()).getFullYear()) return "";
+    if (new Date(y, m - 1, d).getMonth() !== m - 1) return "";
+    return `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+  }
+  function birthYearOf(iso) {
+    const m = /^(\d{4})-\d{2}-\d{2}$/.exec(iso || "");
+    return m ? parseInt(m[1], 10) : null;
+  }
+  function fmtBirthFR(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : "";
+  }
+  var AGE_BANDS = [
+    { label: "0-9", min: 0, max: 9 },
+    { label: "10-19", min: 10, max: 19 },
+    { label: "20-29", min: 20, max: 29 },
+    { label: "30-39", min: 30, max: 39 },
+    { label: "40-49", min: 40, max: 49 },
+    { label: "50-59", min: 50, max: 59 },
+    { label: "60-69", min: 60, max: 69 },
+    { label: "70-79", min: 70, max: 79 },
+    { label: "80 et +", min: 80, max: 200 }
+  ];
+  function agesForYear(activeList, year) {
+    const ages = [];
+    let sansDate = 0;
+    activeList.forEach((a) => {
+      const start = fullYearFromAA(a.depuis);
+      if (start === null || start > year) return;
+      const by = birthYearOf(a.dateNaissance);
+      const age = by === null ? -1 : year - by;
+      if (age < 0 || age > 110) {
+        sansDate++;
+        return;
+      }
+      ages.push(age);
+    });
+    const sum = ages.reduce((t, v) => t + v, 0);
+    return {
+      ages,
+      sansDate,
+      total: ages.length,
+      sumAges: sum,
+      avg: ages.length ? sum / ages.length : null,
+      moins20: ages.filter((v) => v < 20).length,
+      bands: AGE_BANDS.map((b) => ages.filter((v) => v >= b.min && v <= b.max).length)
+    };
   }
   var DIPLOME_SUGGESTIONS = [
     "DFA 1 \u2014 Billard de Bronze",
@@ -22239,6 +22321,10 @@
     const [menuOpen, setMenuOpen] = (0, import_react10.useState)(false);
     const [status, setStatus] = (0, import_react10.useState)("");
     const [importStatus, setImportStatus] = (0, import_react10.useState)("");
+    const [pyramidYear, setPyramidYear] = (0, import_react10.useState)(currentSeasonStartYear());
+    const [adherentsLoaded, setAdherentsLoaded] = (0, import_react10.useState)(false);
+    const [photos, setPhotos] = (0, import_react10.useState)({});
+    const photoRequested = (0, import_react10.useRef)(/* @__PURE__ */ new Set());
     const importInputRef = (0, import_react10.useRef)(null);
     const menuRef = (0, import_react10.useRef)(null);
     (0, import_react10.useEffect)(() => {
@@ -22256,8 +22342,19 @@
             desengage: !!a.desengage
           }))
         );
+        setAdherentsLoaded(true);
       })();
     }, []);
+    (0, import_react10.useEffect)(() => {
+      [pyramidYear, pyramidYear - 1, currentSeasonStartYear()].forEach((y) => {
+        if (photoRequested.current.has(y)) return;
+        photoRequested.current.add(y);
+        (async () => {
+          const snap = await loadJSON9(pyramidPhotoKey(y), null);
+          setPhotos((prev) => ({ ...prev, [y]: snap }));
+        })();
+      });
+    }, [pyramidYear]);
     (0, import_react10.useEffect)(() => {
       function onClickOutside(e) {
         if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
@@ -22308,6 +22405,7 @@
         "Email",
         "Telephone",
         "Statut",
+        ...adminMode ? ["Date de naissance"] : [],
         "Adherent depuis",
         "Numero de licence",
         "Desengage",
@@ -22325,6 +22423,7 @@
           a.email,
           a.telephone,
           a.statut,
+          ...adminMode ? [fmtBirthFR(a.dateNaissance)] : [],
           a.depuis ? fullYearFromAA(a.depuis) : "",
           a.numeroLicence || "",
           a.desengage ? "oui" : "non",
@@ -22354,7 +22453,10 @@
           setImportStatus("Fichier vide ou illisible. V\xE9rifiez qu'il s'agit bien d'un CSV avec une ligne d'en-t\xEAte.");
           return;
         }
-        const headerRow = rows[0].map(normalizeHeader);
+        const normRows = rows.slice(0, 15).map((r) => r.map(normalizeHeader));
+        const found = normRows.findIndex((r) => r.includes("nom") && r.includes("prenom"));
+        const headerIdx = found >= 0 ? found : 0;
+        const headerRow = normRows[headerIdx] || rows[0].map(normalizeHeader);
         const idx = (aliases) => headerRow.findIndex((h) => aliases.includes(h));
         const cols = {
           nom: idx(["nom"]),
@@ -22369,10 +22471,11 @@
           arbitre: idx(["arbitre"]),
           formateur: idx(["formateur"]),
           depuis: idx(["adherent depuis", "depuis", "annee adhesion", "annee d'adhesion", "membre depuis"]),
-          numeroLicence: idx(["numero de licence", "n de licence", "n\xB0 de licence", "licence", "num licence"])
+          numeroLicence: idx(["numero de licence", "n de licence", "n\xB0 de licence", "licence", "num licence"]),
+          dateNaissance: idx(["date de naissance", "date naissance", "naissance", "ne le", "nee le", "ne(e) le", "date de naiss", "date_de_naissance", "datenaissance"])
         };
         const imported = [];
-        for (let i = 1; i < rows.length; i++) {
+        for (let i = headerIdx + 1; i < rows.length; i++) {
           const r = rows[i];
           const get = (key) => {
             const raw = cols[key] >= 0 && r[cols[key]] !== void 0 ? (r[cols[key]] || "").trim() : "";
@@ -22381,6 +22484,7 @@
           const nom = get("nom");
           const prenom = get("prenom");
           if (!nom && !prenom) continue;
+          const dateNaissance = parseBirthDate(get("dateNaissance"));
           const depuisRaw = get("depuis").replace(/\D/g, "");
           const depuis = depuisRaw.length === 4 ? depuisRaw.slice(2) : depuisRaw.length === 2 ? depuisRaw : "";
           imported.push({
@@ -22394,6 +22498,8 @@
             statut: matchStatutCell(get("statut"), STATUTS),
             depuis,
             numeroLicence: get("numeroLicence"),
+            // Ne jamais effacer une date de naissance déjà saisie si le fichier n'en contient pas.
+            ...dateNaissance ? { dateNaissance } : {},
             sousStatuts: {
               competiteur: parseBoolCell(get("competiteur")),
               arbitre: parseBoolCell(get("arbitre")),
@@ -22500,7 +22606,7 @@ Continuer ?`;
       if (withYear.length === 0) return [];
       const fullYears = withYear.map((a) => fullYearFromAA(a.depuis)).filter((y) => y !== null);
       const minYear = Math.min(1995, ...fullYears);
-      const curYear = (/* @__PURE__ */ new Date()).getFullYear();
+      const curYear = currentSeasonStartYear();
       const cutoff = 2021;
       const cumulatifA = (y) => fullYears.filter((yy) => yy <= y).length;
       const points = [];
@@ -22522,6 +22628,46 @@ Continuer ?`;
       }
       return points;
     }, [activeAdherents]);
+    const pyramidStatsOf = (y) => {
+      if (y === currentSeasonStartYear()) return { ...agesForYear(activeAdherents, y), source: "direct" };
+      const snap = photos[y];
+      if (snap && Array.isArray(snap.bands)) {
+        return {
+          total: snap.total,
+          avg: snap.total ? snap.sumAges / snap.total : null,
+          moins20: snap.moins20,
+          bands: snap.bands,
+          sansDate: snap.sansDate || 0,
+          source: "photo",
+          takenAt: snap.takenAt
+        };
+      }
+      return { ...agesForYear(activeAdherents, y), source: "reconstitu\xE9" };
+    };
+    const pyramid = (() => {
+      const curSeason = currentSeasonStartYear();
+      const withBirth = activeAdherents.filter((a) => birthYearOf(a.dateNaissance) !== null);
+      const starts = withBirth.map((a) => fullYearFromAA(a.depuis)).filter((y) => y !== null);
+      const minStart = starts.length ? Math.min(...starts) : curSeason;
+      const years = [];
+      for (let y = curSeason; y >= Math.max(minStart + 1, curSeason - 14); y--) years.push(y);
+      if (years.length === 0) years.push(curSeason);
+      const n = years.includes(pyramidYear) ? pyramidYear : years[0];
+      return { hasData: withBirth.length > 0, years, n, cur: pyramidStatsOf(n), prev: pyramidStatsOf(n - 1) };
+    })();
+    (0, import_react10.useEffect)(() => {
+      if (!adminMode || !adherentsLoaded) return;
+      const y = currentSeasonStartYear();
+      if (photos[y] === void 0) return;
+      const live = agesForYear(adherents.filter((a) => !a.desengage), y);
+      if (live.total === 0) return;
+      const snap = { year: y, total: live.total, sumAges: live.sumAges, moins20: live.moins20, bands: live.bands, sansDate: live.sansDate };
+      const old = photos[y];
+      if (old && old.total === snap.total && old.sumAges === snap.sumAges && old.moins20 === snap.moins20 && (old.sansDate || 0) === snap.sansDate && JSON.stringify(old.bands) === JSON.stringify(snap.bands)) return;
+      const toSave = { ...snap, takenAt: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10) };
+      setPhotos((prev) => ({ ...prev, [y]: toSave }));
+      saveJSON9(pyramidPhotoKey(y), toSave);
+    }, [adminMode, adherentsLoaded, adherents, photos]);
     const openAdherent = adherents.find((a) => a.id === openId);
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.page, children: [
       /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("style", { children: `
@@ -22531,6 +22677,8 @@ Continuer ?`;
         .p5-root input, .p5-root textarea, .p5-root select { font-family: 'Raleway', sans-serif; font-size: 12.5px; padding: 6px 8px; border: 1px solid #C9C2AE; border-radius: 4px; background: #fdf8f0; }
         .p5-root button { cursor: pointer; font-family: 'Raleway', sans-serif; }
         .p5-table-scroll { overflow-x: auto; }
+        .p5-twocards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: start; margin-bottom: 14px; }
+        @media (max-width: 900px) { .p5-twocards { grid-template-columns: minmax(0, 1fr) !important; } }
         .p5-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 12.5px; }
         .p5-table th, .p5-table td { border: 1px solid #C9C2AE; padding: 7px 9px; text-align: left; background: #fff; color: #241d12; }
         .p5-table th { background: #f3ecd8; color: #0a1628; font-weight: 600; font-size: 11.5px; cursor: pointer; white-space: nowrap; }
@@ -22774,45 +22922,156 @@ Continuer ?`;
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0" }, children: "Force tous les appareils \xE0 retaper le mot de passe, m\xEAme ceux d\xE9j\xE0 m\xE9moris\xE9s. R\xE9serv\xE9 aux cas exceptionnels \u2014 un simple changement de mot de passe ci-dessus n'affecte pas les appareils d\xE9j\xE0 connect\xE9s." })
               ] })
             ] }),
-            evolutionParAnnee.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles10.card, marginBottom: 14 }, children: [
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles10.cardTitle, children: "\xC9volution du nombre d'adh\xE9rents (par saison)" }),
-              (() => {
-                const maxVal = Math.max(1, ...evolutionParAnnee.map((e) => e.valeur));
-                const barW = 46;
-                const gap = 14;
-                const chartH = 130;
-                const padTop = 26;
-                const padBottom = 40;
-                const svgW = evolutionParAnnee.length * (barW + gap) + gap;
-                const svgH = chartH + padTop + padBottom;
-                const manyBars = evolutionParAnnee.length > 8;
-                const sideMargin = 34;
-                const svgW2 = svgW + sideMargin * 2;
-                return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: svgW2, height: svgH, style: { display: "block" }, children: evolutionParAnnee.map((e, i) => {
-                  const x = sideMargin + gap + i * (barW + gap);
-                  const h = e.valeur / maxVal * chartH;
-                  const y = padTop + (chartH - h);
-                  const labelY = padTop + chartH + (manyBars ? 14 : 16);
-                  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("g", { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("title", { children: e.detail }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("rect", { x, y, width: barW, height: Math.max(h, 1), rx: 3, fill: "#c9a227", stroke: "#a07b10" }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: x + barW / 2, y: y - 6, textAnchor: "middle", fontSize: "12", fontWeight: "700", fill: "#4A2E1E", children: e.valeur }),
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                      "text",
-                      {
-                        x: x + barW / 2,
-                        y: labelY,
-                        textAnchor: manyBars ? "end" : "middle",
-                        fontSize: "10.5",
-                        fill: "#5F5E5A",
-                        transform: manyBars ? `rotate(-40 ${x + barW / 2} ${labelY})` : void 0,
-                        children: e.label
-                      }
-                    )
-                  ] }, e.label);
-                }) }) });
-              })(),
-              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Nombre total d'adh\xE9rents actifs cette saison-l\xE0 (un adh\xE9rent compte pour chaque saison depuis son adh\xE9sion, tant qu'il n'est pas d\xE9sengag\xE9) \u2014 moyenne pour la p\xE9riode fondatrice (1995-2020 selon les donn\xE9es), d\xE9tail saison par saison depuis 2021. Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche ; les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s. Ce graphique s'alimentera automatiquement des saisons futures." })
+            (evolutionParAnnee.length > 0 || pyramid.hasData || adminMode) && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "p5-twocards", style: evolutionParAnnee.length > 0 && (pyramid.hasData || adminMode) ? void 0 : { gridTemplateColumns: "minmax(0, 1fr)" }, children: [
+              evolutionParAnnee.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles10.card, marginBottom: 0 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles10.cardTitle, children: "\xC9volution du nombre d'adh\xE9rents (par saison)" }),
+                (() => {
+                  const maxVal = Math.max(1, ...evolutionParAnnee.map((e) => e.valeur));
+                  const barW = 46;
+                  const gap = 14;
+                  const chartH = 130;
+                  const padTop = 26;
+                  const padBottom = 40;
+                  const svgW = evolutionParAnnee.length * (barW + gap) + gap;
+                  const svgH = chartH + padTop + padBottom;
+                  const manyBars = evolutionParAnnee.length > 8;
+                  const sideMargin = 34;
+                  const svgW2 = svgW + sideMargin * 2;
+                  return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("svg", { width: svgW2, height: svgH, style: { display: "block" }, children: evolutionParAnnee.map((e, i) => {
+                    const x = sideMargin + gap + i * (barW + gap);
+                    const h = e.valeur / maxVal * chartH;
+                    const y = padTop + (chartH - h);
+                    const labelY = padTop + chartH + (manyBars ? 14 : 16);
+                    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("g", { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("title", { children: e.detail }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("rect", { x, y, width: barW, height: Math.max(h, 1), rx: 3, fill: "#c9a227", stroke: "#a07b10" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: x + barW / 2, y: y - 6, textAnchor: "middle", fontSize: "12", fontWeight: "700", fill: "#4A2E1E", children: e.valeur }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        "text",
+                        {
+                          x: x + barW / 2,
+                          y: labelY,
+                          textAnchor: manyBars ? "end" : "middle",
+                          fontSize: "10.5",
+                          fill: "#5F5E5A",
+                          transform: manyBars ? `rotate(-40 ${x + barW / 2} ${labelY})` : void 0,
+                          children: e.label
+                        }
+                      )
+                    ] }, e.label);
+                  }) }) });
+                })(),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Nombre total d'adh\xE9rents actifs cette saison-l\xE0 (un adh\xE9rent compte pour chaque saison depuis son adh\xE9sion, tant qu'il n'est pas d\xE9sengag\xE9) \u2014 moyenne pour la p\xE9riode fondatrice (1995-2020 selon les donn\xE9es), d\xE9tail saison par saison depuis 2021. Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche ; les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s. Ce graphique s'alimentera automatiquement des saisons futures." })
+              ] }),
+              (pyramid.hasData || adminMode) && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles10.card, marginBottom: 0 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles10.cardTitle, children: [
+                    "Pyramide des \xE2ges (",
+                    seasonLabelOfStartYear(pyramid.n - 1),
+                    " \xB7 ",
+                    seasonLabelOfStartYear(pyramid.n),
+                    ")"
+                  ] }),
+                  pyramid.hasData && pyramid.years.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { className: "no-print", style: { fontSize: 11.5, color: "#5F5E5A", display: "flex", alignItems: "center", gap: 6 }, children: [
+                    "Comparer",
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("select", { value: pyramid.n, onChange: (e) => setPyramidYear(parseInt(e.target.value, 10)), style: { padding: "3px 6px", fontSize: 12 }, children: pyramid.years.map((y) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("option", { value: y, children: [
+                      seasonLabelOfStartYear(y),
+                      " \xE0 ",
+                      seasonLabelOfStartYear(y - 1)
+                    ] }, y)) })
+                  ] })
+                ] }),
+                !pyramid.hasData ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { fontSize: 12, color: "#8A8368", fontStyle: "italic", margin: "6px 0 0" }, children: "Aucune date de naissance renseign\xE9e pour l'instant. Saisissez-la dans la fiche de chaque adh\xE9rent (visible des seuls administrateurs), ou importez un CSV contenant une colonne \xAB Date de naissance \xBB." }) : (() => {
+                  const { cur, prev, n } = pyramid;
+                  const L = seasonLabelOfStartYear;
+                  const maxVal = Math.max(1, ...cur.bands, ...prev.bands);
+                  const W = 520, rowH = 24, topPad = 50, bottomPad = 6, labelW = 66, maxLen = 170;
+                  const cx = W / 2, leftStart = cx - labelW / 2, rightStart = cx + labelW / 2;
+                  const H = topPad + AGE_BANDS.length * rowH + bottomPad;
+                  const fmtAge = (v) => v === null ? "\u2014" : `${v.toFixed(1).replace(".", ",")} ans`;
+                  const delta = cur.avg !== null && prev.avg !== null ? cur.avg - prev.avg : null;
+                  const pct = (v, t) => t > 0 ? ` (${Math.round(v / t * 100)} %)` : "";
+                  const provenance = (st) => st.source === "photo" ? `photo du ${fmtBirthFR(st.takenAt) || "\u2014"}` : st.source === "direct" ? "en direct" : "reconstitu\xE9e";
+                  return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("svg", { width: W, height: H, style: { display: "block", margin: "0 auto" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: leftStart - 6, y: 14, textAnchor: "end", fontSize: "13", fontWeight: "700", fill: "#8A8368", children: L(n - 1) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: rightStart + 6, y: 14, textAnchor: "start", fontSize: "13", fontWeight: "700", fill: "#a07b10", children: L(n) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("text", { x: leftStart - 6, y: 27, textAnchor: "end", fontSize: "9.5", fill: "#8A8368", children: [
+                        prev.total,
+                        " adh\xE9rent(s)"
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("text", { x: rightStart + 6, y: 27, textAnchor: "start", fontSize: "9.5", fill: "#a07b10", children: [
+                        cur.total,
+                        " adh\xE9rent(s)"
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: leftStart - 6, y: 39, textAnchor: "end", fontSize: "9", fontStyle: "italic", fill: "#8A8368", children: provenance(prev) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: rightStart + 6, y: 39, textAnchor: "start", fontSize: "9", fontStyle: "italic", fill: "#a07b10", children: provenance(cur) }),
+                      [...AGE_BANDS].reverse().map((b, i) => {
+                        const bi = AGE_BANDS.length - 1 - i;
+                        const y = topPad + i * rowH;
+                        const lp = prev.bands[bi] / maxVal * maxLen;
+                        const lc = cur.bands[bi] / maxVal * maxLen;
+                        return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("g", { children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("title", { children: `${b.label} ans \u2014 ${L(n - 1)} : ${prev.bands[bi]} \xB7 ${L(n)} : ${cur.bands[bi]}` }),
+                          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: cx, y: y + 16, textAnchor: "middle", fontSize: "10.5", fill: "#4A2E1E", fontWeight: "600", children: b.label }),
+                          prev.bands[bi] > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("rect", { x: leftStart - lp, y: y + 3, width: lp, height: rowH - 7, rx: 2, fill: "#D9D3BF", stroke: "#8A8368" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: leftStart - lp - 4, y: y + 16, textAnchor: "end", fontSize: "11", fontWeight: "700", fill: "#5F5E5A", children: prev.bands[bi] })
+                          ] }),
+                          cur.bands[bi] > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("rect", { x: rightStart, y: y + 3, width: lc, height: rowH - 7, rx: 2, fill: "#c9a227", stroke: "#a07b10" }),
+                            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("text", { x: rightStart + lc + 4, y: y + 16, textAnchor: "start", fontSize: "11", fontWeight: "700", fill: "#4A2E1E", children: cur.bands[bi] })
+                          ] })
+                        ] }, b.label);
+                      })
+                    ] }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: "4px 18px", flexWrap: "wrap", marginTop: 8, fontSize: 12.5, color: "#241d12" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: "\xC2ge moyen" }),
+                        " : ",
+                        L(n - 1),
+                        " : ",
+                        fmtAge(prev.avg),
+                        " \u2192 ",
+                        L(n),
+                        " : ",
+                        fmtAge(cur.avg),
+                        delta !== null && Math.abs(delta) >= 0.05 && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("strong", { style: { marginLeft: 6, color: delta < 0 ? "#3D7A5C" : "#B1432F" }, children: [
+                          delta < 0 ? "\u2212" : "+",
+                          Math.abs(delta).toFixed(1).replace(".", ","),
+                          " an",
+                          Math.abs(delta) >= 1.95 ? "s" : ""
+                        ] })
+                      ] }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: "Moins de 20 ans" }),
+                        " : ",
+                        L(n - 1),
+                        " : ",
+                        prev.moins20,
+                        pct(prev.moins20, prev.total),
+                        " \u2192 ",
+                        L(n),
+                        " : ",
+                        cur.moins20,
+                        pct(cur.moins20, cur.total)
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: [
+                      "\xC2ge atteint dans l'ann\xE9e de d\xE9but de saison (saison ",
+                      L(n),
+                      " : ",
+                      n,
+                      " moins l'ann\xE9e de naissance), par tranches de 10 ans.",
+                      " ",
+                      prev.source === "photo" ? `La saison ${L(n - 1)} provient de la photo enregistr\xE9e le ${fmtBirthFR(prev.takenAt) || "\u2014"} : elle inclut les adh\xE9rents partis depuis.` : `La saison ${L(n - 1)} est reconstitu\xE9e \xE0 partir de \xAB Adh\xE9rent depuis \xBB : les adh\xE9rents aujourd'hui d\xE9sengag\xE9s n'y figurent pas, la comparaison est donc approximative.`,
+                      " ",
+                      "La photo de la saison en cours est enregistr\xE9e automatiquement \xE0 chaque ouverture de cet onglet par un administrateur, puis conserv\xE9e telle quelle \xE0 la fin de la saison.",
+                      cur.sansDate > 0 && ` ${cur.sansDate} adh\xE9rent(s) de la saison ${L(n)} sans date de naissance exploitable ne sont pas pris en compte.`
+                    ] })
+                  ] });
+                })()
+              ] })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "p5-serif", style: styles10.pageTitle, children: [
@@ -22851,7 +23110,7 @@ Continuer ?`;
               ] })
             ] }),
             adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles10.importHint, className: "no-print", children: [
-              "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur, Adh\xE9rent depuis (ann\xE9e, ex. 2018 ou 18), Num\xE9ro de licence.",
+              "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur, Adh\xE9rent depuis (ann\xE9e, ex. 2018 ou 18), Num\xE9ro de licence, Date de naissance (jj/mm/aaaa \u2014 facultative, jamais effac\xE9e si absente du fichier).",
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: "Import intelligent" }),
               " : les fiches sont rapproch\xE9es par num\xE9ro de licence \u2014 une licence d\xE9j\xE0 connue met \xE0 jour la fiche existante (et la r\xE9active si elle \xE9tait d\xE9sengag\xE9e) au lieu d'en cr\xE9er une nouvelle. \xC0 d\xE9faut de licence (ligne du fichier ou fiche existante sans num\xE9ro), le rapprochement se fait par nom + pr\xE9nom, pour \xE9viter tout doublon. Un adh\xE9rent absent de la nouvelle liste (ni licence ni nom + pr\xE9nom retrouv\xE9s) est automatiquement marqu\xE9 comme d\xE9sengag\xE9 \u2014 jamais supprim\xE9. Pour les 3 derni\xE8res, indiquez \xAB oui \xBB ou \xAB 1 \xBB pour cocher. Exportez votre tableur existant au format CSV (dans Excel ou LibreOffice : Fichier \u2192 Enregistrer sous \u2192 CSV) puis importez-le ici.",
@@ -23734,7 +23993,10 @@ Continuer ?`;
           setImportStatus("Fichier vide ou illisible. V\xE9rifiez qu'il s'agit bien d'un CSV avec une ligne d'en-t\xEAte.");
           return;
         }
-        const headerRow = rows[0].map(normalizeHeader2);
+        const normRows = rows.slice(0, 15).map((r) => r.map(normalizeHeader2));
+        const found = normRows.findIndex((r) => r.includes("date") && (r.includes("nom") || r.includes("competition")));
+        const headerIdx = found >= 0 ? found : 0;
+        const headerRow = normRows[headerIdx] || rows[0].map(normalizeHeader2);
         const idx = (aliases) => headerRow.findIndex((h) => aliases.includes(h));
         const cols = {
           date: idx(["date"]),
@@ -23750,7 +24012,7 @@ Continuer ?`;
           notes: idx(["notes", "remarque", "remarques"])
         };
         const imported = [];
-        for (let i = 1; i < rows.length; i++) {
+        for (let i = headerIdx + 1; i < rows.length; i++) {
           const r = rows[i];
           const get = (key) => cols[key] >= 0 && r[cols[key]] !== void 0 ? (r[cols[key]] || "").trim() : "";
           const nom = get("nom");
