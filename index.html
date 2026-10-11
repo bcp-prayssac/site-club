@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="05/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="11/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -13,7 +13,11 @@
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -32,9 +36,9 @@
     mod
   ));
 
-  // ../../.npm-global/lib/node_modules/react/cjs/react.production.js
+  // ../../../../opt/npm-tools/node_modules/react/cjs/react.production.js
   var require_react_production = __commonJS({
-    "../../.npm-global/lib/node_modules/react/cjs/react.production.js"(exports) {
+    "../../../../opt/npm-tools/node_modules/react/cjs/react.production.js"(exports) {
       "use strict";
       var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element");
       var REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal");
@@ -469,13 +473,13 @@
       exports.useTransition = function() {
         return ReactSharedInternals.H.useTransition();
       };
-      exports.version = "19.2.5";
+      exports.version = "19.2.8";
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react/index.js
+  // ../../../../opt/npm-tools/node_modules/react/index.js
   var require_react = __commonJS({
-    "../../.npm-global/lib/node_modules/react/index.js"(exports, module) {
+    "../../../../opt/npm-tools/node_modules/react/index.js"(exports, module) {
       "use strict";
       if (true) {
         module.exports = require_react_production();
@@ -485,9 +489,9 @@
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react-dom/node_modules/scheduler/cjs/scheduler.production.js
+  // ../../../../opt/npm-tools/node_modules/scheduler/cjs/scheduler.production.js
   var require_scheduler_production = __commonJS({
-    "../../.npm-global/lib/node_modules/react-dom/node_modules/scheduler/cjs/scheduler.production.js"(exports) {
+    "../../../../opt/npm-tools/node_modules/scheduler/cjs/scheduler.production.js"(exports) {
       "use strict";
       function push(heap, node) {
         var index = heap.length;
@@ -758,9 +762,9 @@
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react-dom/node_modules/scheduler/index.js
+  // ../../../../opt/npm-tools/node_modules/scheduler/index.js
   var require_scheduler = __commonJS({
-    "../../.npm-global/lib/node_modules/react-dom/node_modules/scheduler/index.js"(exports, module) {
+    "../../../../opt/npm-tools/node_modules/scheduler/index.js"(exports, module) {
       "use strict";
       if (true) {
         module.exports = require_scheduler_production();
@@ -770,9 +774,9 @@
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react-dom/cjs/react-dom.production.js
+  // ../../../../opt/npm-tools/node_modules/react-dom/cjs/react-dom.production.js
   var require_react_dom_production = __commonJS({
-    "../../.npm-global/lib/node_modules/react-dom/cjs/react-dom.production.js"(exports) {
+    "../../../../opt/npm-tools/node_modules/react-dom/cjs/react-dom.production.js"(exports) {
       "use strict";
       var React15 = require_react();
       function formatProdErrorMessage(code) {
@@ -915,13 +919,13 @@
       exports.useFormStatus = function() {
         return ReactSharedInternals.H.useHostTransitionStatus();
       };
-      exports.version = "19.2.5";
+      exports.version = "19.2.8";
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react-dom/index.js
+  // ../../../../opt/npm-tools/node_modules/react-dom/index.js
   var require_react_dom = __commonJS({
-    "../../.npm-global/lib/node_modules/react-dom/index.js"(exports, module) {
+    "../../../../opt/npm-tools/node_modules/react-dom/index.js"(exports, module) {
       "use strict";
       function checkDCE() {
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") {
@@ -945,9 +949,9 @@
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react-dom/cjs/react-dom-client.production.js
+  // ../../../../opt/npm-tools/node_modules/react-dom/cjs/react-dom-client.production.js
   var require_react_dom_client_production = __commonJS({
-    "../../.npm-global/lib/node_modules/react-dom/cjs/react-dom-client.production.js"(exports) {
+    "../../../../opt/npm-tools/node_modules/react-dom/cjs/react-dom-client.production.js"(exports) {
       "use strict";
       var Scheduler = require_scheduler();
       var React15 = require_react();
@@ -12588,12 +12592,12 @@
         }
       };
       var isomorphicReactPackageVersion$jscomp$inline_1840 = React15.version;
-      if ("19.2.5" !== isomorphicReactPackageVersion$jscomp$inline_1840)
+      if ("19.2.8" !== isomorphicReactPackageVersion$jscomp$inline_1840)
         throw Error(
           formatProdErrorMessage(
             527,
             isomorphicReactPackageVersion$jscomp$inline_1840,
-            "19.2.5"
+            "19.2.8"
           )
         );
       ReactDOMSharedInternals.findDOMNode = function(componentOrElement) {
@@ -12611,10 +12615,10 @@
       };
       var internals$jscomp$inline_2347 = {
         bundleType: 0,
-        version: "19.2.5",
+        version: "19.2.8",
         rendererPackageName: "react-dom",
         currentDispatcherRef: ReactSharedInternals,
-        reconcilerVersion: "19.2.5"
+        reconcilerVersion: "19.2.8"
       };
       if ("undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__) {
         hook$jscomp$inline_2348 = __REACT_DEVTOOLS_GLOBAL_HOOK__;
@@ -12682,13 +12686,13 @@
         listenToAllSupportedEvents(container);
         return new ReactDOMHydrationRoot(initialChildren);
       };
-      exports.version = "19.2.5";
+      exports.version = "19.2.8";
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react-dom/client.js
+  // ../../../../opt/npm-tools/node_modules/react-dom/client.js
   var require_client = __commonJS({
-    "../../.npm-global/lib/node_modules/react-dom/client.js"(exports, module) {
+    "../../../../opt/npm-tools/node_modules/react-dom/client.js"(exports, module) {
       "use strict";
       function checkDCE() {
         if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ === "undefined" || typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.checkDCE !== "function") {
@@ -12712,9 +12716,9 @@
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react/cjs/react-jsx-runtime.production.js
+  // ../../../../opt/npm-tools/node_modules/react/cjs/react-jsx-runtime.production.js
   var require_react_jsx_runtime_production = __commonJS({
-    "../../.npm-global/lib/node_modules/react/cjs/react-jsx-runtime.production.js"(exports) {
+    "../../../../opt/npm-tools/node_modules/react/cjs/react-jsx-runtime.production.js"(exports) {
       "use strict";
       var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element");
       var REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment");
@@ -12742,9 +12746,9 @@
     }
   });
 
-  // ../../.npm-global/lib/node_modules/react/jsx-runtime.js
+  // ../../../../opt/npm-tools/node_modules/react/jsx-runtime.js
   var require_jsx_runtime = __commonJS({
-    "../../.npm-global/lib/node_modules/react/jsx-runtime.js"(exports, module) {
+    "../../../../opt/npm-tools/node_modules/react/jsx-runtime.js"(exports, module) {
       "use strict";
       if (true) {
         module.exports = require_react_jsx_runtime_production();
@@ -19992,6 +19996,8 @@
       }
       setPendingNew(null);
       setSelection(null);
+      setMyName("");
+      saveMyName("");
     };
     const cancelPendingNew = () => setPendingNew(null);
     const computeSpans = (tableId) => {
@@ -20055,8 +20061,8 @@
         .resa-cell-empty-btn { color: #C9C2AE; font-size: 14px; }
         .resa-cell.filled .resa-cell-btn { font-weight: 600; color: #123A30; }
         .resa-cell.recurring { background: #F3E3C0; }
-        .resa-cell.course { background: #D7E8ED; }
-        .resa-cell.course .resa-cell-btn { color: #123A30; font-weight: 600; }
+        .resa-cell.course { background: #B1432F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .resa-cell.course .resa-cell-btn { color: #fff !important; font-weight: 700; }
         .resa-cell.compet { background: #F0D2CC; }
         .resa-cell.compet .resa-cell-btn { color: #7E2C1C; font-weight: 600; }
         @media print {
@@ -20374,7 +20380,7 @@
             ] }, t.id);
           }) }),
           /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("p", { style: styles9.legend, className: "no-print", children: [
-            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 bleut\xE9e = cr\xE9neau de cours \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages respectives) \xB7 ",
+            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages respectives) \xB7 ",
             loading ? "Chargement\u2026" : "Cliquez sur une case libre pour r\xE9server (avec possibilit\xE9 d'ajouter jusqu'\xE0 3 invit\xE9s), ou sur une case occup\xE9e pour la modifier ou l'annuler."
           ] })
         ] }),
@@ -21934,6 +21940,19 @@
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "T\xE9l\xE9phone" }),
                 adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { value: adherent.telephone, onChange: (e) => onChange({ telephone: formatPhoneInput4(e.target.value) }), placeholder: "xx xx xx xx xx" }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: adherent.telephone || "\u2014" })
               ] })
+            ] }),
+            adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles10.coordGrid, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles10.fieldRow, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "T\xE9l\xE9phone parent 1" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { value: adherent.telephoneParent1 || "", onChange: (e) => onChange({ telephoneParent1: formatPhoneInput4(e.target.value) }), placeholder: "xx xx xx xx xx" })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles10.fieldRow, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "T\xE9l\xE9phone parent 2" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { value: adherent.telephoneParent2 || "", onChange: (e) => onChange({ telephoneParent2: formatPhoneInput4(e.target.value) }), placeholder: "xx xx xx xx xx" })
+                ] })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic" }, children: "Pour les mineurs (parents s\xE9par\xE9s, garde altern\xE9e) : pr\xE9venir les deux parents. Visibles des seuls administrateurs." })
             ] })
           ] })
         ] }),
@@ -21958,6 +21977,20 @@
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(SmartDateInput3, { fullYear: true, value: adherent.dateNaissance || "", onChange: (v) => onChange({ dateNaissance: v }) }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic" }, children: "Visible des seuls administrateurs \u2014 sert \xE0 la pyramide des \xE2ges." })
           ] })
+        ] }),
+        adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: { ...styles10.fieldRow, marginTop: 12 }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles10.fieldLabel, children: "Note" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+            "textarea",
+            {
+              value: adherent.note || "",
+              onChange: (e) => onChange({ note: e.target.value }),
+              rows: 3,
+              placeholder: "Information utile sur cet adh\xE9rent (personne \xE0 pr\xE9venir, disponibilit\xE9s, pr\xE9cisions\u2026)",
+              style: { width: "100%", resize: "vertical" }
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 10.5, color: "#8A8368", fontStyle: "italic" }, children: "Visible des seuls administrateurs." })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { marginTop: 12, padding: 10, borderRadius: 6, background: adherent.desengage ? "#F2E4E0" : "#F6F1E4", border: `1px solid ${adherent.desengage ? "#B1432F" : "#E3DCC5"}` }, children: [
           adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -22166,6 +22199,9 @@
       depuis: currentSeasonLabel().slice(0, 2),
       numeroLicence: "",
       dateNaissance: "",
+      telephoneParent1: "",
+      telephoneParent2: "",
+      note: "",
       desengage: false,
       sousStatuts: { competiteur: false, arbitre: false, formateur: false },
       engagements: { libre: false, cadre: false, unebande: false, troisbandes: false },
@@ -22405,13 +22441,14 @@
         "Email",
         "Telephone",
         "Statut",
-        ...adminMode ? ["Date de naissance"] : [],
+        ...adminMode ? ["Date de naissance", "Telephone parent 1", "Telephone parent 2"] : [],
         "Adherent depuis",
         "Numero de licence",
         "Desengage",
         "Competiteur",
         "Arbitre",
-        "Formateur"
+        "Formateur",
+        ...adminMode ? ["Note"] : []
       ];
       const rows = adherents.map(
         (a) => [
@@ -22423,13 +22460,14 @@
           a.email,
           a.telephone,
           a.statut,
-          ...adminMode ? [fmtBirthFR(a.dateNaissance)] : [],
+          ...adminMode ? [fmtBirthFR(a.dateNaissance), a.telephoneParent1 || "", a.telephoneParent2 || ""] : [],
           a.depuis ? fullYearFromAA(a.depuis) : "",
           a.numeroLicence || "",
           a.desengage ? "oui" : "non",
           a.sousStatuts && a.sousStatuts.competiteur ? "oui" : "non",
           a.sousStatuts && a.sousStatuts.arbitre ? "oui" : "non",
-          a.sousStatuts && a.sousStatuts.formateur ? "oui" : "non"
+          a.sousStatuts && a.sousStatuts.formateur ? "oui" : "non",
+          ...adminMode ? [a.note || ""] : []
         ].map(escapeCsv).join(";")
       );
       const csv = "\uFEFF" + [headers.join(";"), ...rows].join("\r\n");
@@ -22472,6 +22510,9 @@
           formateur: idx(["formateur"]),
           depuis: idx(["adherent depuis", "depuis", "annee adhesion", "annee d'adhesion", "membre depuis"]),
           numeroLicence: idx(["numero de licence", "n de licence", "n\xB0 de licence", "licence", "num licence"]),
+          telephoneParent1: idx(["telephone parent 1", "telephone parent1", "tel parent 1", "tel parent1", "tel. parent 1", "telephone du parent 1", "parent 1", "telephone 1 parent"]),
+          telephoneParent2: idx(["telephone parent 2", "telephone parent2", "tel parent 2", "tel parent2", "tel. parent 2", "telephone du parent 2", "parent 2", "telephone 2 parent"]),
+          note: idx(["note", "notes", "remarque", "remarques", "commentaire", "commentaires", "observation", "observations"]),
           dateNaissance: idx(["date de naissance", "date naissance", "naissance", "ne le", "nee le", "ne(e) le", "date de naiss", "date_de_naissance", "datenaissance"])
         };
         const imported = [];
@@ -22485,6 +22526,9 @@
           const prenom = get("prenom");
           if (!nom && !prenom) continue;
           const dateNaissance = parseBirthDate(get("dateNaissance"));
+          const telephoneParent1 = get("telephoneParent1");
+          const telephoneParent2 = get("telephoneParent2");
+          const note = get("note");
           const depuisRaw = get("depuis").replace(/\D/g, "");
           const depuis = depuisRaw.length === 4 ? depuisRaw.slice(2) : depuisRaw.length === 2 ? depuisRaw : "";
           imported.push({
@@ -22500,6 +22544,10 @@
             numeroLicence: get("numeroLicence"),
             // Ne jamais effacer une date de naissance déjà saisie si le fichier n'en contient pas.
             ...dateNaissance ? { dateNaissance } : {},
+            // Idem pour les téléphones des parents et la note : une cellule vide n'efface jamais une valeur déjà saisie.
+            ...telephoneParent1 ? { telephoneParent1 } : {},
+            ...telephoneParent2 ? { telephoneParent2 } : {},
+            ...note ? { note } : {},
             sousStatuts: {
               competiteur: parseBoolCell(get("competiteur")),
               arbitre: parseBoolCell(get("arbitre")),
@@ -23110,7 +23158,7 @@ Continuer ?`;
               ] })
             ] }),
             adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles10.importHint, className: "no-print", children: [
-              "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur, Adh\xE9rent depuis (ann\xE9e, ex. 2018 ou 18), Num\xE9ro de licence, Date de naissance (jj/mm/aaaa \u2014 facultative, jamais effac\xE9e si absente du fichier).",
+              "Colonnes reconnues (dans n'importe quel ordre) : Nom, Pr\xE9nom, Adresse, Code postal, Commune, Email, T\xE9l\xE9phone, Statut, Comp\xE9titeur, Arbitre, Formateur, Adh\xE9rent depuis (ann\xE9e, ex. 2018 ou 18), Num\xE9ro de licence, Date de naissance (jj/mm/aaaa), T\xE9l\xE9phone parent 1, T\xE9l\xE9phone parent 2, Note (facultatives : jamais effac\xE9es si absentes du fichier).",
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("br", {}),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: "Import intelligent" }),
               " : les fiches sont rapproch\xE9es par num\xE9ro de licence \u2014 une licence d\xE9j\xE0 connue met \xE0 jour la fiche existante (et la r\xE9active si elle \xE9tait d\xE9sengag\xE9e) au lieu d'en cr\xE9er une nouvelle. \xC0 d\xE9faut de licence (ligne du fichier ou fiche existante sans num\xE9ro), le rapprochement se fait par nom + pr\xE9nom, pour \xE9viter tout doublon. Un adh\xE9rent absent de la nouvelle liste (ni licence ni nom + pr\xE9nom retrouv\xE9s) est automatiquement marqu\xE9 comme d\xE9sengag\xE9 \u2014 jamais supprim\xE9. Pour les 3 derni\xE8res, indiquez \xAB oui \xBB ou \xAB 1 \xBB pour cocher. Exportez votre tableur existant au format CSV (dans Excel ou LibreOffice : Fichier \u2192 Enregistrer sous \u2192 CSV) puis importez-le ici.",
