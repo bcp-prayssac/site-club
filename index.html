@@ -22219,6 +22219,37 @@
     if (isNaN(n)) return null;
     return (n >= 50 ? 1900 : 2e3) + n;
   }
+  function CellInput({ value, onCommit, format, multiline, minWidth = 90, placeholder }) {
+    const [v, setV] = (0, import_react10.useState)(value || "");
+    (0, import_react10.useEffect)(() => {
+      setV(value || "");
+    }, [value]);
+    const commit = () => {
+      if (v === (value || "")) return;
+      if (onCommit(v) === false) setV(value || "");
+    };
+    const common = {
+      value: v,
+      placeholder,
+      className: "p5-cell-input",
+      style: { minWidth },
+      onChange: (e) => setV(format ? format(e.target.value) : e.target.value),
+      onBlur: commit
+    };
+    return multiline ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("textarea", { rows: 2, ...common }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("input", { ...common, onKeyDown: (e) => {
+      if (e.key === "Enter") e.currentTarget.blur();
+    } });
+  }
+  var ADMIN_EXTRA_COLS = [
+    { key: "dateNaissance", label: "Date de naissance", render: (a) => fmtBirthFR(a.dateNaissance) },
+    { key: "adresse", label: "Adresse", render: (a) => a.adresse },
+    { key: "codePostal", label: "Code postal", render: (a) => a.codePostal },
+    { key: "commune", label: "Commune", render: (a) => a.commune },
+    { key: "telephoneParent1", label: "T\xE9l. parent 1", render: (a) => a.telephoneParent1 },
+    { key: "telephoneParent2", label: "T\xE9l. parent 2", render: (a) => a.telephoneParent2 },
+    { key: "depuis", label: "Adh\xE9rent depuis", render: (a) => a.depuis ? fullYearFromAA(a.depuis) : "" },
+    { key: "note", label: "Note", render: (a) => a.note }
+  ];
   function parseBirthDate(raw) {
     const str = String(raw || "").trim();
     if (!str || str === "-") return "";
@@ -22725,6 +22756,9 @@ Continuer ?`;
         .p5-root input, .p5-root textarea, .p5-root select { font-family: 'Raleway', sans-serif; font-size: 12.5px; padding: 6px 8px; border: 1px solid #C9C2AE; border-radius: 4px; background: #fdf8f0; }
         .p5-root button { cursor: pointer; font-family: 'Raleway', sans-serif; }
         .p5-table-scroll { overflow-x: auto; }
+        .p5-cell-input { font-family: inherit; font-size: 12px; padding: 3px 5px; border: 1px solid #C9C2AE; border-radius: 3px; background: #fdf8f0; color: #241d12; box-sizing: border-box; }
+        .p5-cell-input:focus { outline: 2px solid #1E5A48; background: #fff; }
+        textarea.p5-cell-input { width: 100%; resize: vertical; }
         .p5-twocards { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: start; margin-bottom: 14px; }
         @media (max-width: 900px) { .p5-twocards { grid-template-columns: minmax(0, 1fr) !important; } }
         .p5-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 12.5px; }
@@ -23188,23 +23222,80 @@ Continuer ?`;
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("th", { onClick: () => toggleSort("sousStatuts"), style: { width: 90 }, children: [
                   "Sous-stat. ",
                   sortBy === "sousStatuts" ? sortDir === "asc" ? "\u25B2" : "\u25BC" : ""
-                ] })
+                ] }),
+                adminMode && ADMIN_EXTRA_COLS.map((c) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("th", { onClick: () => toggleSort(c.key), style: { whiteSpace: "nowrap" }, children: [
+                  c.label,
+                  " ",
+                  sortBy === c.key ? sortDir === "asc" ? "\u25B2" : "\u25BC" : ""
+                ] }, c.key))
               ] }) }),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tbody", { children: [
                 sortedAdherents.map((a) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { className: a.desengage ? "p5-row-desengage" : void 0, children: [
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.photoUrl ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("img", { src: a.photoUrl, alt: "", style: styles10.rowPhoto }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles10.rowPhotoPlaceholder, children: initials4(a.prenom + " " + a.nom) }) }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("td", { children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.nameLink, onClick: () => setOpenId(a.id), children: a.nom || "\u2014" }),
-                    a.desengage && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { marginLeft: 6, fontSize: 10, color: "#B1432F", fontWeight: 700 }, children: "D\xC9SENGAG\xC9" })
-                  ] }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.prenom || "\u2014" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.email || "\u2014" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.telephone || "\u2014" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.statut }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.numeroLicence || "\u2014" }),
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { title: SOUS_STATUTS.filter((s) => a.sousStatuts[s.key]).map((s) => s.label).join(", ") || "", children: SOUS_STATUTS.filter((s) => a.sousStatuts[s.key]).map((s) => SOUS_STATUT_ABBR[s.key] || s.label).join(", ") || "\u2014" })
+                  adminMode ? /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("td", { style: { whiteSpace: "nowrap" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.nom, minWidth: 110, onCommit: (v) => updateAdherent(a.id, { nom: v }) }),
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: { ...styles10.nameLink, marginLeft: 6, fontSize: 11 }, title: "Ouvrir la fiche compl\xE8te", onClick: () => setOpenId(a.id), children: "Fiche" }),
+                      a.desengage && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { marginLeft: 6, fontSize: 10, color: "#B1432F", fontWeight: 700 }, children: "D\xC9SENGAG\xC9" })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.prenom, minWidth: 100, onCommit: (v) => updateAdherent(a.id, { prenom: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.email, minWidth: 170, onCommit: (v) => updateAdherent(a.id, { email: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.telephone, minWidth: 105, format: formatPhoneInput4, onCommit: (v) => updateAdherent(a.id, { telephone: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("select", { className: "p5-cell-input", value: a.statut, onChange: (e) => updateAdherent(a.id, { statut: e.target.value }), children: STATUTS.map((st) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: st, children: st }, st)) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.numeroLicence, minWidth: 90, onCommit: (v) => updateAdherent(a.id, { numeroLicence: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { style: { whiteSpace: "nowrap" }, children: SOUS_STATUTS.map((st) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { title: st.label, style: { marginRight: 6, fontSize: 11, cursor: "pointer" }, children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                        "input",
+                        {
+                          type: "checkbox",
+                          checked: !!(a.sousStatuts && a.sousStatuts[st.key]),
+                          onChange: () => updateAdherent(a.id, { sousStatuts: { ...a.sousStatuts || {}, [st.key]: !(a.sousStatuts && a.sousStatuts[st.key]) } })
+                        }
+                      ),
+                      SOUS_STATUT_ABBR[st.key] || st.label
+                    ] }, st.key)) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                      CellInput,
+                      {
+                        value: fmtBirthFR(a.dateNaissance),
+                        minWidth: 95,
+                        placeholder: "jj/mm/aaaa",
+                        onCommit: (v) => {
+                          if (!v.trim()) {
+                            updateAdherent(a.id, { dateNaissance: "" });
+                            return true;
+                          }
+                          const iso = parseBirthDate(v);
+                          if (!iso) return false;
+                          updateAdherent(a.id, { dateNaissance: iso });
+                          return true;
+                        }
+                      }
+                    ) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.adresse, minWidth: 170, onCommit: (v) => updateAdherent(a.id, { adresse: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.codePostal, minWidth: 65, onCommit: (v) => updateAdherent(a.id, { codePostal: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.commune, minWidth: 110, onCommit: (v) => updateAdherent(a.id, { commune: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.telephoneParent1, minWidth: 105, format: formatPhoneInput4, onCommit: (v) => updateAdherent(a.id, { telephoneParent1: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.telephoneParent2, minWidth: 105, format: formatPhoneInput4, onCommit: (v) => updateAdherent(a.id, { telephoneParent2: v }) }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("select", { className: "p5-cell-input", value: a.depuis || "", onChange: (e) => updateAdherent(a.id, { depuis: e.target.value }), children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "", children: "\u2014" }),
+                      depuisYearOptions().map((y) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: y, children: fullYearFromAA(y) }, y))
+                    ] }) }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CellInput, { value: a.note, multiline: true, minWidth: 200, onCommit: (v) => updateAdherent(a.id, { note: v }) }) })
+                  ] }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("td", { children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles10.nameLink, onClick: () => setOpenId(a.id), children: a.nom || "\u2014" }),
+                      a.desengage && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { marginLeft: 6, fontSize: 10, color: "#B1432F", fontWeight: 700 }, children: "D\xC9SENGAG\xC9" })
+                    ] }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.prenom || "\u2014" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.email || "\u2014" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.telephone || "\u2014" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.statut }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { children: a.numeroLicence || "\u2014" }),
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { title: SOUS_STATUTS.filter((st) => a.sousStatuts[st.key]).map((st) => st.label).join(", ") || "", children: SOUS_STATUTS.filter((st) => a.sousStatuts[st.key]).map((st) => SOUS_STATUT_ABBR[st.key] || st.label).join(", ") || "\u2014" })
+                  ] })
                 ] }, a.id)),
-                sortedAdherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { colSpan: 7, style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucun adh\xE9rent pour l'instant." }) })
+                sortedAdherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { colSpan: 7 + (adminMode ? ADMIN_EXTRA_COLS.length : 0), style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucun adh\xE9rent pour l'instant." }) })
               ] })
             ] }) })
           ] })
