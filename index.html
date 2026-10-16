@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="11/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="16/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -20865,6 +20865,19 @@
   // src/EspaceAdherents.jsx
   var import_react11 = __toESM(require_react());
   var import_jsx_runtime11 = __toESM(require_jsx_runtime());
+  async function readCsvFile(file) {
+    const buf = await file.arrayBuffer();
+    const b = new Uint8Array(buf);
+    const name = (file.name || "").toLowerCase();
+    if (/\.(ods|xlsx|xls|xlsm|numbers)$/.test(name) || b.length > 3 && b[0] === 80 && b[1] === 75 && b[2] === 3 && b[3] === 4) {
+      throw new Error("Ce fichier est un classeur de tableur (\xAB " + file.name + " \xBB), pas un CSV. Ouvrez-le dans votre tableur, puis Fichier \u2192 Enregistrer sous \u2192 type \xAB Texte CSV \xBB (.csv), et importez ce nouveau fichier.");
+    }
+    try {
+      return new TextDecoder("utf-8", { fatal: true }).decode(buf).replace(/^\uFEFF/, "");
+    } catch (e) {
+      return new TextDecoder("windows-1252").decode(buf);
+    }
+  }
   function formatPhoneInput4(raw) {
     const digits = raw.replace(/\D/g, "").slice(0, 10);
     return digits.replace(/(\d{2})(?=\d)/g, "$1 ");
@@ -22453,6 +22466,9 @@
     { key: "depuis", label: "Adh\xE9rent depuis", render: (a) => a.depuis ? fullYearFromAA(a.depuis) : "" },
     { key: "note", label: "Note", render: (a) => a.note }
   ];
+  function normLicence(v) {
+    return String(v || "").replace(/\s+/g, "").toUpperCase();
+  }
   function parseBirthDate(raw) {
     const str = String(raw || "").trim();
     if (!str || str === "-") return "";
@@ -22719,7 +22735,7 @@
       if (!file) return;
       setImportStatus("Lecture du fichier\u2026");
       try {
-        const text = await file.text();
+        const text = await readCsvFile(file);
         const rows = parseCSV(text);
         if (rows.length < 2) {
           setImportStatus("Fichier vide ou illisible. V\xE9rifiez qu'il s'agit bien d'un CSV avec une ligne d'en-t\xEAte.");
@@ -22775,7 +22791,7 @@
             telephone: get("telephone"),
             statut: matchStatutCell(get("statut"), STATUTS),
             depuis,
-            numeroLicence: get("numeroLicence"),
+            numeroLicence: normLicence(get("numeroLicence")),
             // Ne jamais effacer une date de naissance déjà saisie si le fichier n'en contient pas.
             ...dateNaissance ? { dateNaissance } : {},
             // Idem pour les téléphones des parents et la note : une cellule vide n'efface jamais une valeur déjà saisie.
@@ -22797,7 +22813,7 @@
         const byName = /* @__PURE__ */ new Map();
         const normName = (a) => `${(a.nom || "").trim().toLowerCase()}|${(a.prenom || "").trim().toLowerCase()}`;
         adherents.forEach((a) => {
-          if (a.numeroLicence) byLicence.set(a.numeroLicence, a);
+          if (a.numeroLicence) byLicence.set(normLicence(a.numeroLicence), a);
           const key = normName(a);
           if (key !== "|") byName.set(key, a);
         });
@@ -22857,7 +22873,7 @@ Continuer ?`;
           `Import termin\xE9 : ${toCreate.length} cr\xE9\xE9(s), ${nbUpdated} mis \xE0 jour, ${nbReactivated} r\xE9activ\xE9(s), ${toDesengageIds.size} d\xE9sengag\xE9(s)` + (nbRapprochesParNom > 0 ? `, dont ${nbRapprochesParNom} rapproch\xE9(s) par nom + pr\xE9nom` : "") + `.`
         );
       } catch (e) {
-        setImportStatus("\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
+        setImportStatus(e && e.message && /tableur/.test(e.message) ? e.message : "\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
       }
     };
     const toggleSort = (col) => {
@@ -23403,6 +23419,7 @@ Continuer ?`;
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { className: "p5-table-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("table", { className: "p5-table", children: [
               /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("tr", { children: [
+                adminMode && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("th", { style: { cursor: "default" }, title: "Supprimer" }),
                 /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("th", {}),
                 /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("th", { onClick: () => toggleSort("nom"), children: [
                   "Nom ",
@@ -23434,6 +23451,23 @@ Continuer ?`;
               ] }) }),
               /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("tbody", { children: [
                 sortedAdherents.map((a) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("tr", { className: a.desengage ? "p5-row-desengage" : void 0, children: [
+                  adminMode && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { style: { textAlign: "center", padding: "4px" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(
+                    "button",
+                    {
+                      title: "Supprimer cet adh\xE9rent",
+                      "aria-label": `Supprimer ${a.prenom || ""} ${a.nom || ""}`,
+                      style: { border: "1px solid #B1432F", background: "#fff", color: "#B1432F", borderRadius: 4, width: 26, height: 26, cursor: "pointer", fontWeight: 700, lineHeight: 1 },
+                      onClick: () => {
+                        const nomComplet = `${a.prenom || ""} ${a.nom || ""}`.trim() || "cet adh\xE9rent";
+                        if (window.confirm(`Supprimer d\xE9finitivement ${nomComplet} ?
+
+Sa fiche (et sa fiche comp\xE9titeur \xE9ventuelle) sera perdue. En cas de non-renouvellement, il vaut mieux le marquer \xAB d\xE9sengag\xE9 \xBB dans sa fiche : il est alors conserv\xE9 sans \xEAtre compt\xE9.
+
+Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
+                      },
+                      children: "\xD7"
+                    }
+                  ) }),
                   /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { children: a.photoUrl ? /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("img", { src: a.photoUrl, alt: "", style: styles10.rowPhoto }) : /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: styles10.rowPhotoPlaceholder, children: initials4(a.prenom + " " + a.nom) }) }),
                   adminMode ? /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
                     /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("td", { style: { whiteSpace: "nowrap" }, children: [
@@ -23498,7 +23532,7 @@ Continuer ?`;
                     /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { title: SOUS_STATUTS.filter((st) => a.sousStatuts[st.key]).map((st) => st.label).join(", ") || "", children: SOUS_STATUTS.filter((st) => a.sousStatuts[st.key]).map((st) => SOUS_STATUT_ABBR[st.key] || st.label).join(", ") || "\u2014" })
                   ] })
                 ] }, a.id)),
-                sortedAdherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { colSpan: 7 + (adminMode ? ADMIN_EXTRA_COLS.length : 0), style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucun adh\xE9rent pour l'instant." }) })
+                sortedAdherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("td", { colSpan: 7 + (adminMode ? ADMIN_EXTRA_COLS.length + 1 : 0), style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucun adh\xE9rent pour l'instant." }) })
               ] })
             ] }) })
           ] })
@@ -23646,6 +23680,19 @@ Continuer ?`;
   // src/EspaceCalendrier.jsx
   var import_react12 = __toESM(require_react());
   var import_jsx_runtime12 = __toESM(require_jsx_runtime());
+  async function readCsvFile2(file) {
+    const buf = await file.arrayBuffer();
+    const b = new Uint8Array(buf);
+    const name = (file.name || "").toLowerCase();
+    if (/\.(ods|xlsx|xls|xlsm|numbers)$/.test(name) || b.length > 3 && b[0] === 80 && b[1] === 75 && b[2] === 3 && b[3] === 4) {
+      throw new Error("Ce fichier est un classeur de tableur (\xAB " + file.name + " \xBB), pas un CSV. Ouvrez-le dans votre tableur, puis Fichier \u2192 Enregistrer sous \u2192 type \xAB Texte CSV \xBB (.csv), et importez ce nouveau fichier.");
+    }
+    try {
+      return new TextDecoder("utf-8", { fatal: true }).decode(buf).replace(/^\uFEFF/, "");
+    } catch (e) {
+      return new TextDecoder("windows-1252").decode(buf);
+    }
+  }
   function SmartDateInput4({ value, onChange, style }) {
     const [d, setD] = (0, import_react12.useState)("");
     const [m, setM] = (0, import_react12.useState)("");
@@ -24329,7 +24376,7 @@ Continuer ?`;
       if (!file) return;
       setImportStatus("Lecture du fichier\u2026");
       try {
-        const text = await file.text();
+        const text = await readCsvFile2(file);
         const rows = parseCSV2(text);
         if (rows.length < 2) {
           setImportStatus("Fichier vide ou illisible. V\xE9rifiez qu'il s'agit bien d'un CSV avec une ligne d'en-t\xEAte.");
@@ -24435,7 +24482,7 @@ Continuer ?`;
         persist([...updated, ...toCreate]);
         setImportStatus(`Import termin\xE9 : ${toCreate.length} cr\xE9\xE9e(s), ${nbUpdated} mise(s) \xE0 jour.`);
       } catch (e) {
-        setImportStatus("\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
+        setImportStatus(e && e.message && /tableur/.test(e.message) ? e.message : "\xC9chec de la lecture du fichier. V\xE9rifiez qu'il s'agit bien d'un fichier CSV valide.");
       }
     };
     const removeCompet = async (id) => {
