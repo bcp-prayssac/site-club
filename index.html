@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="16/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="17/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -13489,11 +13489,18 @@
     const [news, setNews] = (0, import_react2.useState)(DEFAULT_NEWS);
     const [partners, setPartners] = (0, import_react2.useState)(DEFAULT_PARTNERS);
     const [openPartnerId, setOpenPartnerId] = (0, import_react2.useState)(null);
+    const [fichesVisibles, setFichesVisibles] = (0, import_react2.useState)(false);
+    const toggleFiches = () => {
+      const next = !fichesVisibles;
+      setFichesVisibles(next);
+      saveJSON("p7:fiches", next);
+    };
     const [social, setSocial] = (0, import_react2.useState)(DEFAULT_SOCIAL);
     const [saison, setSaison] = (0, import_react2.useState)("26/27");
     const [stats, setStats] = (0, import_react2.useState)({ adherents: 0, licencies: 0, competiteurs: 0 });
     const [localAdminMode, setLocalAdminMode] = (0, import_react2.useState)(false);
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
+    const fichesOuvrables = fichesVisibles || adminMode;
     const setAdminMode = onAdminModeChange || setLocalAdminMode;
     const [adminPassword, setAdminPassword] = (0, import_react2.useState)("admin2025");
     const [adminGate, setAdminGate] = (0, import_react2.useState)({ open: false, mode: "login", input: "", error: "", show: false });
@@ -13510,6 +13517,7 @@
         const rawPartners = await loadJSON2("home:partners", DEFAULT_PARTNERS);
         setPartners(rawPartners.map((p, i) => normalizePartner(p, i)));
         setSocial(await loadJSON2("home:social", DEFAULT_SOCIAL));
+        setFichesVisibles(await loadJSON2("p7:fiches", false));
         setSaison(await loadJSON2("home:saison", "26/27"));
         const adherentsList = (await loadJSON2("p5:adherents", [])).filter((a) => !a.desengage);
         setStats({
@@ -13823,9 +13831,9 @@
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.partnersScroller, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: partners.length > 3 ? "acc-partner-track" : "", style: styles.partnersTrack, children: loopPartners.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
             "button",
             {
-              style: styles.partnerLogo,
-              onClick: () => setOpenPartnerId(p.id),
-              title: `Voir la fiche de ${p.name || "ce partenaire"}`,
+              style: { ...styles.partnerLogo, ...fichesOuvrables ? {} : { cursor: "default" } },
+              onClick: fichesOuvrables ? () => setOpenPartnerId(p.id) : void 0,
+              title: fichesOuvrables ? `Voir la fiche de ${p.name || "ce partenaire"}` : p.name || "",
               children: [
                 p.logoUrl ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { src: p.logoUrl, alt: p.name, style: styles.partnerLogoImg }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 20, color: "#fdf8f0", opacity: 0.5 }, children: "\u{1F3E2}" }),
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles.partnerLogoName, children: p.name })
@@ -13848,7 +13856,8 @@
               /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { style: styles.miniRemove, onClick: () => removePartner(i), children: "\xD7" })
             ] }, i)),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { style: styles.miniAdd, onClick: addPartner, children: "+ Partenaire" }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles.adminHint, children: "(aliment\xE9 depuis la page \xAB Nos partenaires \xBB)" })
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles.adminHint, children: "(aliment\xE9 depuis la page \xAB Nos partenaires \xBB)" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { style: styles.miniAdd, onClick: toggleFiches, title: "Autorise ou non les visiteurs \xE0 ouvrir les fiches partenaires (page Nos partenaires et bandeau)", children: fichesVisibles ? "Fiches visibles : masquer" : "Fiches masqu\xE9es : afficher" })
           ] })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "acc-main", style: styles.main, children: [
@@ -18951,9 +18960,16 @@
     const [social, setSocial] = (0, import_react8.useState)(DEFAULT_SOCIAL7);
     const [partners, setPartners] = (0, import_react8.useState)([]);
     const [thanks, setThanks] = (0, import_react8.useState)({ texte: "", photo: [] });
+    const [fichesVisibles, setFichesVisibles] = (0, import_react8.useState)(false);
+    const toggleFiches = () => {
+      const next = !fichesVisibles;
+      setFichesVisibles(next);
+      saveJSON7("p7:fiches", next);
+    };
     const [openId, setOpenId] = (0, import_react8.useState)(null);
     const [localAdminMode, setLocalAdminMode] = (0, import_react8.useState)(false);
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
+    const showFiches = fichesVisibles || adminMode;
     const setAdminMode = onAdminModeChange || setLocalAdminMode;
     const [adminPassword, setAdminPassword] = (0, import_react8.useState)("admin2025");
     const [adminGate, setAdminGate] = (0, import_react8.useState)({ open: false, mode: "login", input: "", error: "", show: false });
@@ -19001,6 +19017,7 @@
         setPartners(normalized);
         saveJSON7("home:partners", normalized);
         setThanks(await loadJSON8("p7:thanks", { texte: "", photo: [] }));
+        setFichesVisibles(await loadJSON8("p7:fiches", false));
       })();
     }, []);
     (0, import_react8.useEffect)(() => {
@@ -19148,9 +19165,21 @@
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "p7-serif", style: styles7.pageTitle, children: "Nos partenaires" }),
             adminMode && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { style: styles7.miniAddLight, onClick: addPartner, children: "+ Ajouter un partenaire" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles7.pageIntro, children: "Cliquez sur un partenaire pour consulter ses coordonn\xE9es, photos et vid\xE9o. Cette liste alimente aussi le bandeau \xAB Partenaires \xBB de la page d'accueil." }),
+          adminMode && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", margin: "0 0 10px", padding: "8px 12px", background: fichesVisibles ? "#e4f3ec" : "#fff6dc", border: "1px solid #C9C2AE", borderRadius: 6, fontSize: 12.5, color: "#241d12" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { children: [
+                "Fiches partenaires : ",
+                fichesVisibles ? "VISIBLES" : "MASQU\xC9ES",
+                " pour les visiteurs."
+              ] }),
+              " ",
+              fichesVisibles ? "Les visiteurs peuvent ouvrir chaque fiche (coordonn\xE9es, lien, communication)." : "Les visiteurs voient seulement les logos et le remerciement (mode m\xE9c\xE9nat). Vous gardez toutes les fiches ici, pour l'administrateur."
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { style: styles7.btnGhostSmall, onClick: toggleFiches, children: fichesVisibles ? "Masquer les fiches" : "Afficher les fiches" })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles7.pageIntro, children: showFiches ? "Cliquez sur un partenaire pour consulter ses coordonn\xE9es, photos et vid\xE9o. Cette liste alimente aussi le bandeau \xAB Partenaires \xBB de la page d'accueil." : "Merci \xE0 nos m\xE9c\xE8nes pour leur soutien, qui contribue au d\xE9veloppement du club." }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: styles7.partnerGrid, children: [
-            partners.map((p) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "p7-partner-card", style: styles7.partnerCard, onClick: () => setOpenId(p.id), children: [
+            partners.map((p) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "p7-partner-card", style: { ...styles7.partnerCard, ...showFiches ? {} : { cursor: "default" } }, onClick: showFiches ? () => setOpenId(p.id) : void 0, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: styles7.partnerLogoWrap, children: p.logoUrl ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "img",
                 {
@@ -19160,7 +19189,7 @@
                 }
               ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles7.logoPlaceholderText, children: "LOGO" }) }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "p7-serif", style: styles7.partnerLabel, children: p.name || "Partenaire" }),
-              /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles7.partnerHint, children: "Voir la fiche \u2192" })
+              showFiches && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles7.partnerHint, children: "Voir la fiche \u2192" })
             ] }, p.id)),
             partners.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles7.emptyNote, children: "Aucun partenaire pour l'instant." })
           ] }),
