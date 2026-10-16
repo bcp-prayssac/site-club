@@ -13491,7 +13491,7 @@
     const [openPartnerId, setOpenPartnerId] = (0, import_react2.useState)(null);
     const [social, setSocial] = (0, import_react2.useState)(DEFAULT_SOCIAL);
     const [saison, setSaison] = (0, import_react2.useState)("26/27");
-    const [stats, setStats] = (0, import_react2.useState)({ licencies: 0, competiteurs: 0 });
+    const [stats, setStats] = (0, import_react2.useState)({ adherents: 0, licencies: 0, competiteurs: 0 });
     const [localAdminMode, setLocalAdminMode] = (0, import_react2.useState)(false);
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
     const setAdminMode = onAdminModeChange || setLocalAdminMode;
@@ -13513,6 +13513,7 @@
         setSaison(await loadJSON2("home:saison", "26/27"));
         const adherentsList = (await loadJSON2("p5:adherents", [])).filter((a) => !a.desengage);
         setStats({
+          adherents: adherentsList.length,
           licencies: adherentsList.filter((a) => a.statut === "Licenci\xE9").length,
           competiteurs: adherentsList.filter((a) => a.sousStatuts && a.sousStatuts.competiteur).length
         });
@@ -13925,6 +13926,10 @@
                 "\u{1F4C5} Saison",
                 " ",
                 adminMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { value: saison, onChange: (e) => updateSaison(e.target.value), style: { width: 70, display: "inline-block" } }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles.statValue, children: saison })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.statLine, children: [
+                "\u{1F9D1}\u200D\u{1F91D}\u200D\u{1F9D1} Adh\xE9rents : ",
+                /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles.statValue, children: stats.adherents })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.statLine, children: [
                 "\u{1F465} Licenci\xE9s : ",
@@ -22900,15 +22905,16 @@ Continuer ?`;
     }, [adherents, sortBy, sortDir]);
     const activeAdherents = adherents.filter((a) => !a.desengage);
     const evolutionParAnnee = (0, import_react11.useMemo)(() => {
+      if (activeAdherents.length === 0) return [];
       const withYear = activeAdherents.filter((a) => a.depuis);
-      if (withYear.length === 0) return [];
       const fullYears = withYear.map((a) => fullYearFromAA(a.depuis)).filter((y) => y !== null);
+      const sansAnnee = activeAdherents.length - fullYears.length;
       const minYear = Math.min(1995, ...fullYears);
       const curYear = currentSeasonStartYear();
       const cutoff = 2021;
       const cumulatifA = (y) => fullYears.filter((yy) => yy <= y).length;
       const points = [];
-      if (minYear < cutoff) {
+      if (fullYears.some((y) => y < cutoff)) {
         const spanStart = minYear;
         const spanEnd = cutoff - 1;
         const nbAnnees = spanEnd - spanStart + 1;
@@ -22921,8 +22927,8 @@ Continuer ?`;
         });
       }
       for (let y = Math.max(cutoff, minYear); y <= curYear; y++) {
-        const total = cumulatifA(y);
-        points.push({ label: String(y), valeur: total, detail: `${total} adh\xE9rent(s) actif(s) cette saison` });
+        const total = cumulatifA(y) + (y === curYear ? sansAnnee : 0);
+        points.push({ label: String(y), valeur: total, detail: `${total} adh\xE9rent(s) actif(s) cette saison` + (y === curYear && sansAnnee > 0 ? ` (dont ${sansAnnee} sans ann\xE9e d'adh\xE9sion renseign\xE9e)` : "") });
       }
       return points;
     }, [activeAdherents]);
@@ -23262,7 +23268,7 @@ Continuer ?`;
                     ] }, e.label);
                   }) }) });
                 })(),
-                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Nombre total d'adh\xE9rents actifs cette saison-l\xE0 (un adh\xE9rent compte pour chaque saison depuis son adh\xE9sion, tant qu'il n'est pas d\xE9sengag\xE9) \u2014 moyenne pour la p\xE9riode fondatrice (1995-2020 selon les donn\xE9es), d\xE9tail saison par saison depuis 2021. Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche ; les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s. Ce graphique s'alimentera automatiquement des saisons futures." })
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Nombre total d'adh\xE9rents actifs cette saison-l\xE0 (un adh\xE9rent compte pour chaque saison depuis son adh\xE9sion, tant qu'il n'est pas d\xE9sengag\xE9) \u2014 moyenne pour la p\xE9riode fondatrice (1995-2020 selon les donn\xE9es), d\xE9tail saison par saison depuis 2021. Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche ; les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s. Les adh\xE9rents sans ann\xE9e d'adh\xE9sion renseign\xE9e ne sont compt\xE9s que pour la saison en cours. Ce graphique s'alimentera automatiquement des saisons futures." })
               ] }),
               (pyramid.hasData || adminMode) && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { ...styles10.card, marginBottom: 0 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }, children: [
