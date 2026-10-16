@@ -13156,7 +13156,9 @@
       email: p.email || "",
       website: p.website || "",
       photos: p.photos || [],
-      videoUrl: p.videoUrl || ""
+      videoUrl: p.videoUrl || "",
+      communication: p.communication || "",
+      ficheVisible: !!p.ficheVisible
     };
   }
   var DEFAULT_PARTNERS = [
@@ -13831,9 +13833,9 @@
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: styles.partnersScroller, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: partners.length > 3 ? "acc-partner-track" : "", style: styles.partnersTrack, children: loopPartners.map((p, i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
             "button",
             {
-              style: { ...styles.partnerLogo, ...fichesOuvrables ? {} : { cursor: "default" } },
-              onClick: fichesOuvrables ? () => setOpenPartnerId(p.id) : void 0,
-              title: fichesOuvrables ? `Voir la fiche de ${p.name || "ce partenaire"}` : p.name || "",
+              style: { ...styles.partnerLogo, ...fichesOuvrables || p.ficheVisible ? {} : { cursor: "default" } },
+              onClick: fichesOuvrables || p.ficheVisible ? () => setOpenPartnerId(p.id) : void 0,
+              title: fichesOuvrables || p.ficheVisible ? `Voir la fiche de ${p.name || "ce partenaire"}` : p.name || "",
               children: [
                 p.logoUrl ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { src: p.logoUrl, alt: p.name, style: styles.partnerLogoImg }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: { fontSize: 20, color: "#fdf8f0", opacity: 0.5 }, children: "\u{1F3E2}" }),
                 /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { style: styles.partnerLogoName, children: p.name })
@@ -14127,6 +14129,7 @@
                 p.email
               ] }),
               p.website && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: p.website, target: "_blank", rel: "noreferrer", style: styles.partnerModalLink, children: "\u2192 Visiter le site web" }),
+              p.communication && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: styles.ruleText, children: p.communication }),
               p.photos && p.photos.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { style: { display: "flex", gap: 8, flexWrap: "wrap", marginTop: 4 }, children: p.photos.map((ph, i) => /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("img", { src: ph, alt: "", style: { width: 90, height: 70, objectFit: "cover", borderRadius: 6, border: "1px solid #C9C2AE" } }, i)) }),
               p.videoUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", { href: p.videoUrl, target: "_blank", rel: "noreferrer", style: styles.partnerModalLink, children: "\u25B6 Voir la vid\xE9o" }),
               !p.adresse && !p.tel && !p.email && !p.website && (!p.photos || p.photos.length === 0) && !p.videoUrl && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: styles.emptyNote, children: "Aucune coordonn\xE9e renseign\xE9e pour l'instant." })
@@ -18665,7 +18668,8 @@
       website: p.website || "",
       photos: p.photos || [],
       videoUrl: p.videoUrl || "",
-      communication: p.communication || ""
+      communication: p.communication || "",
+      ficheVisible: !!p.ficheVisible
     };
   }
   async function loadJSON8(key, fallback) {
@@ -18901,6 +18905,18 @@
           adminMode ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("input", { value: partner.name, onChange: (e) => onChange({ name: e.target.value }), style: { fontWeight: 700, fontSize: 15 } }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { className: "p7-serif", style: styles7.modalTitle, children: partner.name })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { style: styles7.btnGhostSmall, onClick: onClose, children: "Fermer" })
+      ] }),
+      adminMode && /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", margin: "8px 0", padding: "7px 10px", background: partner.ficheVisible ? "#e4f3ec" : "#fff6dc", border: "1px solid #C9C2AE", borderRadius: 6, fontSize: 12.5, color: "#241d12" }, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("span", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("strong", { children: [
+            "Cette fiche : ",
+            partner.ficheVisible ? "VISIBLE" : "MASQU\xC9E",
+            " pour les visiteurs."
+          ] }),
+          " ",
+          partner.ficheVisible ? "Les visiteurs peuvent l'ouvrir (m\xEAme si les fiches sont masqu\xE9es globalement)." : "Les visiteurs ne peuvent l'ouvrir que si l'affichage global des fiches est activ\xE9."
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { style: styles7.btnGhostSmall, onClick: () => onChange({ ficheVisible: !partner.ficheVisible }), children: partner.ficheVisible ? "Masquer cette fiche" : "Afficher cette fiche" })
       ] }),
       /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: styles7.coordGrid, children: [
         { key: "adresse", label: "Adresse" },
@@ -19177,9 +19193,9 @@
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("button", { style: styles7.btnGhostSmall, onClick: toggleFiches, children: fichesVisibles ? "Masquer les fiches" : "Afficher les fiches" })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles7.pageIntro, children: showFiches ? "Cliquez sur un partenaire pour consulter ses coordonn\xE9es, photos et vid\xE9o. Cette liste alimente aussi le bandeau \xAB Partenaires \xBB de la page d'accueil." : "Merci \xE0 nos m\xE9c\xE8nes pour leur soutien, qui contribue au d\xE9veloppement du club." }),
+          /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles7.pageIntro, children: showFiches || partners.some((p) => p.ficheVisible) ? "Cliquez sur un partenaire pour consulter ses coordonn\xE9es, photos et vid\xE9o. Cette liste alimente aussi le bandeau \xAB Partenaires \xBB de la page d'accueil." : "Merci \xE0 nos m\xE9c\xE8nes pour leur soutien, qui contribue au d\xE9veloppement du club." }),
           /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", { style: styles7.partnerGrid, children: [
-            partners.map((p) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "p7-partner-card", style: { ...styles7.partnerCard, ...showFiches ? {} : { cursor: "default" } }, onClick: showFiches ? () => setOpenId(p.id) : void 0, children: [
+            partners.map((p) => /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("button", { className: "p7-partner-card", style: { ...styles7.partnerCard, ...showFiches || p.ficheVisible ? {} : { cursor: "default" } }, onClick: showFiches || p.ficheVisible ? () => setOpenId(p.id) : void 0, children: [
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { style: styles7.partnerLogoWrap, children: p.logoUrl ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
                 "img",
                 {
@@ -19189,7 +19205,8 @@
                 }
               ) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles7.logoPlaceholderText, children: "LOGO" }) }),
               /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { className: "p7-serif", style: styles7.partnerLabel, children: p.name || "Partenaire" }),
-              showFiches && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles7.partnerHint, children: "Voir la fiche \u2192" })
+              (showFiches || p.ficheVisible) && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: styles7.partnerHint, children: "Voir la fiche \u2192" }),
+              adminMode && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("span", { style: { fontSize: 10, fontWeight: 700, color: p.ficheVisible || fichesVisibles ? "#1E5A48" : "#B1432F" }, children: p.ficheVisible || fichesVisibles ? "\u25CF fiche visible au public" : "\u25CB fiche masqu\xE9e au public" })
             ] }, p.id)),
             partners.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("p", { style: styles7.emptyNote, children: "Aucun partenaire pour l'instant." })
           ] }),
