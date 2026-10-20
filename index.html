@@ -19944,13 +19944,15 @@
     return `${prenomPart}-${nomPart}`;
   }
   function displayBooking(booking) {
+    if (booking.note && booking.note.trim()) return booking.note.trim();
     const guests = (booking.guests || []).filter(Boolean);
     if (guests.length === 0) return booking.name;
     return [booking.name, ...guests].map(abbreviateName).join(" + ");
   }
   function fullBookingLabel(booking) {
     const guests = (booking.guests || []).filter(Boolean);
-    return guests.length === 0 ? booking.name : [booking.name, ...guests].join(", ");
+    const names = guests.length === 0 ? booking.name : [booking.name, ...guests].join(", ");
+    return booking.note && booking.note.trim() ? `${booking.note.trim()} (${names})` : names;
   }
   function getMonday3(d) {
     const date = new Date(d);
@@ -20061,6 +20063,8 @@
     const [pendingPrincipal, setPendingPrincipal] = (0, import_react10.useState)("");
     const [pendingGuests, setPendingGuests] = (0, import_react10.useState)(["", "", ""]);
     const [pendingRecurring, setPendingRecurring] = (0, import_react10.useState)(false);
+    const [pendingNote, setPendingNote] = (0, import_react10.useState)("");
+    const [editNote, setEditNote] = (0, import_react10.useState)("");
     const [pendingWeeks, setPendingWeeks] = (0, import_react10.useState)(DEFAULT_RECURRENCE_WEEKS);
     const [editTarget, setEditTarget] = (0, import_react10.useState)(null);
     const [editPrincipal, setEditPrincipal] = (0, import_react10.useState)("");
@@ -20340,7 +20344,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
     };
     const allSlots = () => HOURS.flatMap((h) => DAYS2.map((_, d) => ({ day: d, hour: h })));
     const rowSlots = (h) => DAYS2.map((_, d) => ({ day: d, hour: h }));
-    const createBooking = async (tableId, day, hour, name, guests, recurring, weeks) => {
+    const createBooking = async (tableId, day, hour, name, guests, recurring, weeks, note = "") => {
       setLoading(true);
       const groupId = recurring ? `rec-${Date.now()}-${Math.random().toString(36).slice(2, 7)}` : null;
       const count = recurring ? Math.max(1, Math.min(MAX_RECURRENCE_WEEKS, weeks)) : 1;
@@ -20361,6 +20365,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
           hour,
           name,
           guests: guests.filter(Boolean),
+          note: (note || "").trim().slice(0, 40),
           recurringGroup: groupId
         });
         try {
@@ -20381,7 +20386,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
       const key = weekStorageKey2(weekOffset);
       let arr = await getWeekBookings(key);
       arr = arr.map(
-        (b) => b.id === editTarget.id ? { ...b, name: editPrincipal, guests: editGuests.filter(Boolean) } : b
+        (b) => b.id === editTarget.id ? { ...b, name: editPrincipal, guests: editGuests.filter(Boolean), note: editNote.trim().slice(0, 40) } : b
       );
       try {
         await window.storage.set(key, JSON.stringify(arr), true);
@@ -20432,18 +20437,20 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
       setPendingPrincipal(myName && adherents.includes(myName) ? myName : "");
       setPendingGuests(["", "", ""]);
       setPendingRecurring(false);
+      setPendingNote("");
       setPendingWeeks(DEFAULT_RECURRENCE_WEEKS);
     };
     const openEditBooking = (booking) => {
       setEditTarget(booking);
       setEditPrincipal(booking.name);
+      setEditNote(booking.note || "");
       setEditGuests([0, 1, 2].map((i) => booking.guests && booking.guests[i] || ""));
     };
     const confirmPendingNew = async () => {
       if (!pendingNew || !pendingPrincipal) return;
       const { tableId, day, hours } = pendingNew;
       for (const hour of hours) {
-        await createBooking(tableId, day, hour, pendingPrincipal, pendingGuests, pendingRecurring, pendingWeeks);
+        await createBooking(tableId, day, hour, pendingPrincipal, pendingGuests, pendingRecurring, pendingWeeks, pendingNote);
       }
       setPendingNew(null);
       setSelection(null);
@@ -20464,12 +20471,12 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
             continue;
           }
           let runLen = 1;
-          const sig = booking.name + "|" + (booking.guests || []).slice().sort().join(",");
+          const sig = booking.name + "|" + (booking.guests || []).slice().sort().join(",") + "|" + (booking.note || "");
           while (h + runLen < HOURS.length) {
             const nextHour = HOURS[h + runLen];
             const nextBooking = bookings.find((b) => b.tableId === tableId && b.day === d && b.hour === nextHour);
             if (!nextBooking) break;
-            const nextSig = nextBooking.name + "|" + (nextBooking.guests || []).slice().sort().join(",");
+            const nextSig = nextBooking.name + "|" + (nextBooking.guests || []).slice().sort().join(",") + "|" + (nextBooking.note || "");
             if (nextSig !== sig) break;
             runLen++;
           }
@@ -20934,6 +20941,19 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
               }
             )
           ] }, i)),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles9.fieldRow, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles9.fieldLabel, children: "Note (facultatif) \u2014 remplace les noms sur le planning" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              "input",
+              {
+                type: "text",
+                maxLength: 40,
+                placeholder: "ex. Entra\xEEnement jeunes, Match Cahors\u2026",
+                value: pendingNote,
+                onChange: (e) => setPendingNote(e.target.value)
+              }
+            )
+          ] }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles9.checkRow, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
               "input",
@@ -21011,6 +21031,19 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
               }
             )
           ] }, i)),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles9.fieldRow, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: styles9.fieldLabel, children: "Note (facultatif) \u2014 remplace les noms sur le planning" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+              "input",
+              {
+                type: "text",
+                maxLength: 40,
+                placeholder: "ex. Entra\xEEnement jeunes, Match Cahors\u2026",
+                value: editNote,
+                onChange: (e) => setEditNote(e.target.value)
+              }
+            )
+          ] }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles9.modalActions, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnPrimary, onClick: saveEditTarget, disabled: loading || !editPrincipal, children: "Enregistrer les modifications" }) }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles9.modalActions, marginTop: 4 }, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnDanger, onClick: () => cancelOccurrence(editTarget), disabled: loading, children: "Annuler cette semaine" }),
