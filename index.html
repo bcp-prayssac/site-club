@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="17/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="20/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -20242,6 +20242,104 @@
         return [];
       }
     };
+    const isIndispo = (b) => !!(b && b.recurringGroup && b.recurringGroup.startsWith("block-"));
+    const blockSlots = async (tableId, slots, what) => {
+      const wStr = window.prompt(
+        `Bloquer ${what}.
+
+Pendant combien de semaines, \xE0 partir de la semaine affich\xE9e ?
+(1 = cette semaine seulement)`,
+        "1"
+      );
+      if (wStr === null) return;
+      const weeks = Math.max(1, Math.min(52, parseInt(wStr, 10) || 1));
+      const motif = window.prompt("Motif affich\xE9 sur le planning (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :", "");
+      if (motif === null) return;
+      setLoading(true);
+      const groupId = `block-${Date.now()}`;
+      const label = motif.trim() ? `Indisponible \u2013 ${motif.trim()}` : "Indisponible";
+      const data = [];
+      let conflicts = 0;
+      for (let i = 0; i < weeks; i++) {
+        const key = weekStorageKey2(weekOffset + i);
+        const arr = await getWeekBookings(key);
+        data.push({ key, arr });
+        conflicts += arr.filter((b) => b.tableId === tableId && !isIndispo(b) && slots.some((sl) => sl.day === b.day && sl.hour === b.hour)).length;
+      }
+      let replace = false;
+      if (conflicts > 0) {
+        replace = window.confirm(
+          `${conflicts} r\xE9servation(s) existent d\xE9j\xE0 sur ces cr\xE9neaux (adh\xE9rents, cours ou comp\xE9titions).
+
+OK = les supprimer et bloquer quand m\xEAme.
+Annuler = les conserver (seuls les cr\xE9neaux libres seront bloqu\xE9s).`
+        );
+      }
+      for (const { key, arr: orig } of data) {
+        let arr = orig;
+        if (replace) arr = arr.filter((b) => !(b.tableId === tableId && !isIndispo(b) && slots.some((sl) => sl.day === b.day && sl.hour === b.hour)));
+        slots.forEach((sl, n) => {
+          if (arr.some((b) => b.tableId === tableId && b.day === sl.day && b.hour === sl.hour)) return;
+          arr.push({ id: `${Date.now()}-${n}-${Math.random().toString(36).slice(2, 5)}`, tableId, day: sl.day, hour: sl.hour, name: label, recurringGroup: groupId });
+        });
+        try {
+          await window.storage.set(key, JSON.stringify(arr), true);
+        } catch (e) {
+        }
+      }
+      await loadWeek(weekOffset);
+      setLoading(false);
+      setStatus(`Blocage enregistr\xE9 : ${what}, sur ${weeks} semaine${weeks > 1 ? "s" : ""}.`);
+    };
+    const unblockSlots = async (tableId, slots, what) => {
+      if (!window.confirm(`D\xE9bloquer ${what} ?
+
+Le d\xE9blocage s'applique \xE0 la semaine affich\xE9e et \xE0 toutes les semaines suivantes.`)) return;
+      setLoading(true);
+      for (let off = weekOffset; off <= weekOffset + 52; off++) {
+        const key = weekStorageKey2(off);
+        try {
+          const res = await window.storage.get(key, true);
+          if (!res || !res.value) continue;
+          const arr = JSON.parse(res.value);
+          const next = arr.filter((b) => !(isIndispo(b) && b.tableId === tableId && slots.some((sl) => sl.day === b.day && sl.hour === b.hour)));
+          if (next.length !== arr.length) await window.storage.set(key, JSON.stringify(next), true);
+        } catch (e) {
+        }
+      }
+      await loadWeek(weekOffset);
+      setLoading(false);
+      setStatus(`D\xE9blocage enregistr\xE9 : ${what}.`);
+    };
+    const toggleTableClosed = (t) => {
+      if (t.closed) {
+        if (!window.confirm(`Rouvrir la table \xAB ${t.name} \xBB aux r\xE9servations ?`)) return;
+        setTables((prev) => {
+          const next = prev.map((x) => x.id === t.id ? { ...x, closed: false, closedMotif: "" } : x);
+          persistTables(next);
+          return next;
+        });
+        setStatus(`La table \xAB ${t.name} \xBB est rouverte.`);
+        return;
+      }
+      const motif = window.prompt(
+        `Fermer la table \xAB ${t.name} \xBB jusqu'\xE0 ce que vous la rouvriez.
+
+Aucune r\xE9servation ne sera possible. Les r\xE9servations d\xE9j\xE0 enregistr\xE9es sont conserv\xE9es mais masqu\xE9es pendant la fermeture.
+
+Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
+        ""
+      );
+      if (motif === null) return;
+      setTables((prev) => {
+        const next = prev.map((x) => x.id === t.id ? { ...x, closed: true, closedMotif: motif.trim() } : x);
+        persistTables(next);
+        return next;
+      });
+      setStatus(`La table \xAB ${t.name} \xBB est ferm\xE9e jusqu'\xE0 sa r\xE9ouverture.`);
+    };
+    const allSlots = () => HOURS.flatMap((h) => DAYS2.map((_, d) => ({ day: d, hour: h })));
+    const rowSlots = (h) => DAYS2.map((_, d) => ({ day: d, hour: h }));
     const createBooking = async (tableId, day, hour, name, guests, recurring, weeks) => {
       setLoading(true);
       const groupId = recurring ? `rec-${Date.now()}-${Math.random().toString(36).slice(2, 7)}` : null;
@@ -20416,6 +20514,8 @@
         .resa-cell.recurring { background: #F3E3C0; }
         .resa-cell.course { background: #B1432F !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .resa-cell.course .resa-cell-btn { color: #fff !important; font-weight: 700; }
+        .resa-cell.indispo { background: repeating-linear-gradient(45deg, #5a5a5a, #5a5a5a 6px, #6c6c6c 6px, #6c6c6c 12px) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .resa-cell.indispo .resa-cell-btn { color: #fff !important; font-weight: 700; }
         .resa-cell.compet { background: #F0D2CC; }
         .resa-cell.compet .resa-cell-btn { color: #7E2C1C; font-weight: 600; }
         @media print {
@@ -20662,21 +20762,45 @@
             return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { className: "resa-table-block", style: styles9.tableBlock, children: [
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.tableBlockHead, className: "no-print", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { className: "resa-serif", style: styles9.tableBlockTitle, children: t.name }),
-                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-                  "button",
-                  {
-                    style: styles9.btnGhostSmall,
-                    onClick: () => setCollapsed((c) => ({ ...c, [t.id]: !isCollapsed })),
-                    children: isCollapsed ? "D\xE9plier" : "R\xE9duire"
-                  }
-                )
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { display: "flex", gap: 8, alignItems: "center" }, children: [
+                  adminMode && (t.closed ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "button",
+                    {
+                      style: { ...styles9.btnGhostSmall, borderColor: "#1E5A48", color: "#1E5A48", fontWeight: 700 },
+                      title: "Rouvrir la table aux r\xE9servations",
+                      onClick: () => toggleTableClosed(t),
+                      children: "\u21A9 Rouvrir la table"
+                    }
+                  ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "button",
+                    {
+                      style: { ...styles9.btnGhostSmall, borderColor: "#B1432F", color: "#B1432F", fontWeight: 700 },
+                      title: "Fermer la table jusqu'\xE0 sa r\xE9ouverture par l'administrateur (travaux, r\xE9fection\u2026)",
+                      onClick: () => toggleTableClosed(t),
+                      children: "\u2715 Fermer la table"
+                    }
+                  )),
+                  !t.closed && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "button",
+                    {
+                      style: styles9.btnGhostSmall,
+                      onClick: () => setCollapsed((c) => ({ ...c, [t.id]: !isCollapsed })),
+                      children: isCollapsed ? "D\xE9plier" : "R\xE9duire"
+                    }
+                  )
+                ] })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "resa-serif", style: styles9.printTableTitle, children: [
                 t.name,
                 " \u2014 ",
                 weekLabel(weekOffset)
               ] }),
-              !isCollapsed && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "resa-grid-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { className: "resa-grid", children: [
+              t.closed && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { padding: "18px 14px", textAlign: "center", color: "#fff", fontWeight: 700, borderRadius: 6, background: "repeating-linear-gradient(45deg, #5a5a5a, #5a5a5a 8px, #6c6c6c 8px, #6c6c6c 16px)", WebkitPrintColorAdjust: "exact", printColorAdjust: "exact" }, children: [
+                "Table ferm\xE9e",
+                t.closedMotif ? ` \u2014 ${t.closedMotif}` : "",
+                " \xB7 indisponible jusqu'\xE0 sa r\xE9ouverture"
+              ] }),
+              !t.closed && !isCollapsed && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { className: "resa-grid-scroll", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("table", { className: "resa-grid", children: [
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("thead", { children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { children: [
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("th", {}),
                   DAYS2.map((d, i) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("th", { children: [
@@ -20686,7 +20810,14 @@
                   ] }, d))
                 ] }) }),
                 /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("tbody", { children: HOURS.map((h) => /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("tr", { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("td", { className: "resa-hour", children: hourLabel2(h) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("td", { className: "resa-hour", children: [
+                    hourLabel2(h),
+                    adminMode && (() => {
+                      const nb = DAYS2.filter((_, d) => bookings.some((b) => b.tableId === t.id && b.day === d && b.hour === h && isIndispo(b))).length;
+                      const what = `l'horaire ${hourLabel2(h)} (tous les jours) de \xAB ${t.name} \xBB`;
+                      return nb === DAYS2.length ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "no-print", title: "D\xE9bloquer cet horaire", onClick: () => unblockSlots(t.id, rowSlots(h), what), style: { marginLeft: 6, border: "1px solid #1E5A48", background: "#fff", color: "#1E5A48", borderRadius: 3, fontSize: 10, padding: "0 4px", lineHeight: "14px" }, children: "\u21A9" }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { className: "no-print", title: "Bloquer cet horaire sur toute la semaine", onClick: () => blockSlots(t.id, rowSlots(h), what), style: { marginLeft: 6, border: "1px solid #B1432F", background: "#fff", color: "#B1432F", borderRadius: 3, fontSize: 10, padding: "0 4px", lineHeight: "14px", fontWeight: 700 }, children: "\u2715" });
+                    })()
+                  ] }),
                   DAYS2.map((_, dIdx) => {
                     if (skip[`${dIdx}-${h}`]) return null;
                     const booking = bookings.find(
@@ -20696,14 +20827,15 @@
                     const isCourse = booking && booking.recurringGroup && booking.recurringGroup.startsWith("course-");
                     const isCompet = booking && booking.recurringGroup && booking.recurringGroup.startsWith("compet-");
                     const isTournoi = booking && booking.recurringGroup && booking.recurringGroup.startsWith("tournoi-");
-                    const isBlocked = isCourse || isCompet || isTournoi;
-                    const title = isCourse ? "Cr\xE9neau de cours \u2014 g\xE9r\xE9 depuis la page \xC9cole du billard" : isCompet ? "Comp\xE9tition \xE0 domicile \u2014 g\xE9r\xE9e depuis le calendrier des comp\xE9titions" : isTournoi ? "Tournoi interne \u2014 g\xE9r\xE9 depuis l'onglet Tournois de l'espace membres" : booking ? fullBookingLabel(booking) + (booking.recurringGroup ? " (r\xE9current)" : "") : void 0;
+                    const isIndisp = isIndispo(booking);
+                    const isBlocked = isCourse || isCompet || isTournoi || isIndisp;
+                    const title = isIndisp ? `${booking.name} \u2014 cr\xE9neau bloqu\xE9 par l'administrateur` : isCourse ? "Cr\xE9neau de cours \u2014 g\xE9r\xE9 depuis la page \xC9cole du billard" : isCompet ? "Comp\xE9tition \xE0 domicile \u2014 g\xE9r\xE9e depuis le calendrier des comp\xE9titions" : isTournoi ? "Tournoi interne \u2014 g\xE9r\xE9 depuis l'onglet Tournois de l'espace membres" : booking ? fullBookingLabel(booking) + (booking.recurringGroup ? " (r\xE9current)" : "") : void 0;
                     const selected = !booking && isSelected(t.id, dIdx, h);
                     return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                       "td",
                       {
                         rowSpan: span,
-                        className: `resa-cell ${isLocked ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isCompet || isTournoi ? "compet" : ""} ${selected ? "selected" : ""}`,
+                        className: `resa-cell ${isLocked ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isIndisp ? "indispo" : ""} ${isCompet || isTournoi ? "compet" : ""} ${selected ? "selected" : ""}`,
                         title,
                         onMouseDown: () => !booking && !isLocked && handleCellMouseDown(t.id, dIdx, h),
                         onMouseEnter: () => !booking && !isLocked && handleCellMouseEnter(t.id, dIdx, h),
@@ -20713,7 +20845,7 @@
                             className: "resa-cell-btn",
                             disabled: isLocked || isBlocked,
                             onClick: () => openEditBooking(booking),
-                            children: displayBooking(booking)
+                            children: isIndisp ? booking.name : displayBooking(booking)
                           }
                         ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           "button",
@@ -20733,7 +20865,7 @@
             ] }, t.id);
           }) }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles9.legend, className: "no-print", children: [
-            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages respectives) \xB7 ",
+            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 gris ray\xE9 = horaire bloqu\xE9 ou table ferm\xE9e par l'administrateur (travaux) \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages respectives) \xB7 ",
             loading ? "Chargement\u2026" : "Cliquez sur une case libre pour r\xE9server (avec possibilit\xE9 d'ajouter jusqu'\xE0 3 invit\xE9s), ou sur une case occup\xE9e pour la modifier ou l'annuler."
           ] })
         ] }),
