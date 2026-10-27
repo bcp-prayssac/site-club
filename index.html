@@ -24103,6 +24103,7 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
     const startYear = now.getMonth() + 1 >= 8 ? y : y - 1;
     return `${String(startYear % 100).padStart(2, "0")}/${String((startYear + 1) % 100).padStart(2, "0")}`;
   }
+  var collatorFr = new Intl.Collator("fr", { sensitivity: "base" });
   function seasonOfDate(dateStr) {
     if (!dateStr) return null;
     const d = /* @__PURE__ */ new Date(dateStr + "T00:00:00");
@@ -24665,7 +24666,7 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
         setTables(await loadTables2());
         const allAdherents = await loadJSON11("p5:adherents", []);
         setCompeteurs(
-          allAdherents.filter((a) => !a.desengage && a.sousStatuts && a.sousStatuts.competiteur).sort((a, b) => (a.nom || "").localeCompare(b.nom || ""))
+          allAdherents.filter((a) => !a.desengage && a.sousStatuts && a.sousStatuts.competiteur).sort((a, b) => collatorFr.compare(a.nom || "", b.nom || "") || collatorFr.compare(a.prenom || "", b.prenom || ""))
         );
       })();
     }, []);
@@ -25767,7 +25768,10 @@ Continuer ?`;
         setAdminPassword(await loadJSON12("site:adminpassword", "admin2025"));
         setTournois(await loadJSON12("p5:tournois", []));
         setTables(await loadTables3());
-        const adherentsList = await loadJSON12("p5:adherents", []);
+        const collator = new Intl.Collator("fr", { sensitivity: "base" });
+        const adherentsList = [...await loadJSON12("p5:adherents", [])].sort(
+          (x, y) => collator.compare(x.nom || "", y.nom || "") || collator.compare(x.prenom || "", y.prenom || "")
+        );
         setAdherents(adherentsList.map((a) => `${a.prenom} ${a.nom}`.trim()).filter(Boolean));
         setCompeteurs(
           adherentsList.filter((a) => !a.desengage && a.sousStatuts && a.sousStatuts.competiteur).map((a) => `${a.prenom} ${a.nom}`.trim()).filter(Boolean)
