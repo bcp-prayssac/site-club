@@ -20147,7 +20147,9 @@
         try {
           const res = await window.storage.get("p5:adherents", true);
           const list = res && res.value ? JSON.parse(res.value) : [];
-          setAdherents(list.map((a) => `${a.prenom || ""} ${a.nom || ""}`.trim()).filter(Boolean));
+          const collator = new Intl.Collator("fr", { sensitivity: "base" });
+          const sorted = [...list].sort((x, y) => collator.compare(x.nom || "", y.nom || "") || collator.compare(x.prenom || "", y.prenom || ""));
+          setAdherents(sorted.map((a) => `${a.prenom || ""} ${a.nom || ""}`.trim()).filter(Boolean));
         } catch (e) {
         }
       })();
