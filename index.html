@@ -24599,6 +24599,7 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
     const [tables, setTables] = (0, import_react12.useState)([]);
     const [competiteurs, setCompeteurs] = (0, import_react12.useState)([]);
     const [openId, setOpenId] = (0, import_react12.useState)(null);
+    const [monthOpen, setMonthOpen] = (0, import_react12.useState)({});
     const [expandedPastIds, setExpandedPastIds] = (0, import_react12.useState)(() => /* @__PURE__ */ new Set());
     const togglePastExpanded = (id) => {
       setExpandedPastIds((prev) => {
@@ -24849,6 +24850,8 @@ Continuer ?`;
         .p5c-cal-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
         .p5c-cal-table th, .p5c-cal-table td { border: 1px solid #C9C2AE; padding: 6px 9px; text-align: left; }
         .p5c-cal-table th { background: #f3ecd8; color: #0a1628; font-weight: 600; font-size: 11px; }
+        .p5c-month-closed tr:not(.p5c-month-row) { display: none; }
+        @media print { .p5c-month-closed tr:not(.p5c-month-row) { display: table-row !important; } }
         .p5c-month-row td { background: #0a1628; color: #fdf8f0; font-weight: 700; font-family: 'Playfair Display', serif; font-size: 13px; }
         @media print {
           @page { size: A4 landscape; margin: 10mm; }
@@ -25100,16 +25103,28 @@ Continuer ?`;
                 /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("th", { children: "Horaire" }),
                 /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("th", { className: "no-print", children: "R\xE9sultats" })
               ] }) }),
-              /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("tbody", { children: [
-                Object.keys(grouped).length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { colSpan: 8, style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucune comp\xE9tition pour l'instant." }) }),
-                Object.entries(grouped).map(([month, comps]) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)(import_react12.default.Fragment, { children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { className: "p5c-month-row", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { colSpan: 8, children: month }) }),
+              Object.keys(grouped).length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tbody", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { colSpan: 8, style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucune comp\xE9tition pour l'instant." }) }) }),
+              Object.entries(grouped).map(([month, comps]) => {
+                const todayIso = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+                const monthDone = comps.length > 0 && comps.every((c) => c.date && c.date < todayIso);
+                const isOpen = month in monthOpen ? monthOpen[month] : !monthDone;
+                return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("tbody", { className: isOpen ? "" : "p5c-month-closed", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { className: "p5c-month-row", onClick: () => setMonthOpen((m) => ({ ...m, [month]: !isOpen })), style: { cursor: "pointer" }, title: isOpen ? "R\xE9duire ce mois" : "D\xE9plier ce mois", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("td", { colSpan: 8, children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "no-print", style: { display: "inline-block", width: 20, color: "#ffffff", fontSize: 14 }, children: isOpen ? "\u25BE" : "\u25B8" }),
+                    month,
+                    /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("span", { className: "no-print", style: { fontWeight: 400, fontSize: 11, opacity: 0.75, marginLeft: 10 }, children: [
+                      comps.length,
+                      " comp\xE9tition",
+                      comps.length > 1 ? "s" : "",
+                      monthDone ? " \xB7 termin\xE9" : ""
+                    ] })
+                  ] }) }),
                   comps.map((c) => {
                     const meta = TYPE_META.find((t) => t.id === c.type) || TYPE_META[0];
                     const isPast = c.date && c.date < (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
                     const isExpanded = expandedPastIds.has(c.id);
                     if (isPast && !isExpanded) {
-                      return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { className: "p5c-past-row", onClick: () => setOpenId(c.id), style: { cursor: "pointer" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("td", { colSpan: 8, style: styles11.pastCompetCell, children: [
+                      return /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { className: "p5c-past-row", onClick: () => setOpenId(c.id), style: { cursor: "pointer" }, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { colSpan: 8, style: styles11.pastCompetCell, children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("div", { style: styles11.pastCompetInner, children: [
                         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(
                           "button",
                           {
@@ -25126,7 +25141,7 @@ Continuer ?`;
                         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontWeight: 600 }, children: c.nom }),
                         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { color: "#5F5E5A" }, children: fmtDateLong2(c.date) }),
                         /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: styles11.pastCompetBadge, children: "Comp\xE9tition termin\xE9e" })
-                      ] }) }, c.id);
+                      ] }) }) }, c.id);
                     }
                     return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("tr", { onClick: () => setOpenId(c.id), style: { cursor: "pointer" }, children: [
                       /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("td", { children: [
@@ -25183,8 +25198,8 @@ Continuer ?`;
                       ) : adminMode ? /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: 11, color: "#8A8368", fontStyle: "italic" }, children: "Aucune photo" }) : /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { style: { fontSize: 11, color: "#8A8368" }, children: "\u2014" }) })
                     ] }, c.id);
                   })
-                ] }, month))
-              ] })
+                ] }, month);
+              })
             ] }) })
           ] })
         ] }),
@@ -25286,7 +25301,8 @@ Continuer ?`;
     legendChip: { display: "flex", alignItems: "center", gap: 6, border: "1px solid #C9C2AE", background: "#fdf8f0", color: "#0a1628", borderRadius: 14, padding: "4px 10px", fontSize: 11.5 },
     legendChipActive: { background: "#f3ecd8", fontWeight: 700, borderColor: WOOD9 },
     typeDot: { width: 10, height: 10, borderRadius: "50%", display: "inline-block" },
-    pastCompetCell: { display: "flex", alignItems: "center", gap: 10, background: "#F2F0E8", padding: "6px 4px" },
+    pastCompetCell: { background: "#F2F0E8", padding: "6px 4px" },
+    pastCompetInner: { display: "flex", alignItems: "center", gap: 10 },
     pastExpandBtn: { border: "1px solid #C9C2AE", background: "#fff", color: "#4A2E1E", borderRadius: 4, width: 22, height: 22, fontSize: 12, cursor: "pointer", flexShrink: 0, lineHeight: 1 },
     pastCompetBadge: { marginLeft: "auto", fontSize: 10.5, fontWeight: 700, color: "#8A8368", textTransform: "uppercase", letterSpacing: "0.04em" },
     miniAdd: { border: "1px dashed #8A8368", background: "transparent", color: WOOD9, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
