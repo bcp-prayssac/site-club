@@ -22829,7 +22829,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
     let sansDate = 0;
     activeList.forEach((a) => {
       const start = fullYearFromAA(a.depuis);
-      if (start === null || start > year) return;
+      if (start === null ? year !== currentSeasonStartYear() : start > year) return;
       const by = birthYearOf(a.dateNaissance);
       const age = by === null ? -1 : year - by;
       if (age < 0 || age > 110) {
@@ -23105,8 +23105,9 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
             email: get("email"),
             telephone: get("telephone"),
             statut: matchStatutCell(get("statut"), STATUTS),
-            depuis,
-            numeroLicence: normLicence(get("numeroLicence")),
+            // Une année d'adhésion ou une licence absente du fichier n'efface jamais celle déjà enregistrée.
+            ...depuis ? { depuis } : {},
+            ...normLicence(get("numeroLicence")) ? { numeroLicence: normLicence(get("numeroLicence")) } : {},
             // Ne jamais effacer une date de naissance déjà saisie si le fichier n'en contient pas.
             ...dateNaissance ? { dateNaissance } : {},
             // Idem pour les téléphones des parents et la note : une cellule vide n'efface jamais une valeur déjà saisie.
