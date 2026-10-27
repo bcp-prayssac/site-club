@@ -13802,15 +13802,24 @@
           ] })
         ] }),
         status && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: styles.statusBar, children: status }),
-        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-          "button",
-          {
-            className: "no-print",
-            style: styles.reserveBigBtn,
-            onClick: () => typeof onNavigate === "function" ? onNavigate("p5", "reservations") : null,
-            children: "\u{1F4C5} R\xE9server une table"
-          }
-        ),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "no-print", style: { display: "flex", flexWrap: "wrap", gap: 12, margin: "12px 16px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "button",
+            {
+              style: { ...styles.reserveBigBtn, flex: "1 1 280px", width: "auto", margin: 0 },
+              onClick: () => typeof onNavigate === "function" ? onNavigate("p5", "reservations") : null,
+              children: "\u{1F4C5} R\xE9server une table"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "button",
+            {
+              style: { ...styles.reserveBigBtn, flex: "1 1 280px", width: "auto", margin: 0 },
+              onClick: () => typeof onNavigate === "function" ? onNavigate("p5", "tournois") : null,
+              children: "\u{1F3C6} Inscription aide aux tournois internes"
+            }
+          )
+        ] }),
         adminMode && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_jsx_runtime2.Fragment, { children: [
           /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { style: styles.logosPanel, className: "no-print", children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("p", { style: styles.logosPanelTitle, children: "Logos du club (en-t\xEAte du site)" }),
