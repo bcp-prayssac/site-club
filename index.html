@@ -21382,6 +21382,12 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
   function seasonLabelOfStartYear(y) {
     return `${String(y % 100).padStart(2, "0")}/${String((y + 1) % 100).padStart(2, "0")}`;
   }
+  var EVOLUTION_FIRST_YEAR = 2025;
+  var EVOLUTION_DEFAULT_FIRST = 39;
+  var ARCHIVE_PYRAMID_2025 = { year: 2025, total: 34, sumAges: 2385, moins20: 0, bands: [0, 0, 0, 1, 0, 3, 11, 13, 6], sansDate: 5, takenAt: "2026-10-28", archive: true };
+  function evolutionKey(startYear) {
+    return "p5:evolution:" + startYear;
+  }
   function pyramidPhotoKey(startYear) {
     return "p5:pyramide:" + seasonLabelOfStartYear(startYear).replace("/", "-");
   }
@@ -22936,6 +22942,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
     const [pyramidYear, setPyramidYear] = (0, import_react11.useState)(currentSeasonStartYear());
     const [adherentsLoaded, setAdherentsLoaded] = (0, import_react11.useState)(false);
     const [photos, setPhotos] = (0, import_react11.useState)({});
+    const [evoSnaps, setEvoSnaps] = (0, import_react11.useState)({});
     const photoRequested = (0, import_react11.useRef)(/* @__PURE__ */ new Set());
     const importInputRef = (0, import_react11.useRef)(null);
     const menuRef = (0, import_react11.useRef)(null);
@@ -22956,6 +22963,14 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
         );
         setAdherentsLoaded(true);
       })();
+    }, []);
+    (0, import_react11.useEffect)(() => {
+      for (let y = EVOLUTION_FIRST_YEAR; y <= currentSeasonStartYear(); y++) {
+        (async () => {
+          const snap = await loadJSON10(evolutionKey(y), null);
+          setEvoSnaps((prev) => ({ ...prev, [y]: snap }));
+        })();
+      }
     }, []);
     (0, import_react11.useEffect)(() => {
       [pyramidYear, pyramidYear - 1, currentSeasonStartYear()].forEach((y) => {
@@ -23227,36 +23242,50 @@ Continuer ?`;
     }, [adherents, sortBy, sortDir]);
     const activeAdherents = adherents.filter((a) => !a.desengage);
     const evolutionParAnnee = (0, import_react11.useMemo)(() => {
-      if (activeAdherents.length === 0) return [];
-      const withYear = activeAdherents.filter((a) => a.depuis);
-      const fullYears = withYear.map((a) => fullYearFromAA(a.depuis)).filter((y) => y !== null);
-      const sansAnnee = activeAdherents.length - fullYears.length;
-      const minYear = Math.min(1995, ...fullYears);
       const curYear = currentSeasonStartYear();
-      const cutoff = 2021;
-      const cumulatifA = (y) => fullYears.filter((yy) => yy <= y).length;
       const points = [];
-      if (fullYears.some((y) => y < cutoff)) {
-        const spanStart = minYear;
-        const spanEnd = cutoff - 1;
-        const nbAnnees = spanEnd - spanStart + 1;
-        let somme = 0;
-        for (let y = spanStart; y <= spanEnd; y++) somme += cumulatifA(y);
-        points.push({
-          label: `${spanStart}-${spanEnd} (moy.)`,
-          valeur: Math.ceil(somme / nbAnnees),
-          detail: `Moyenne du nombre d'adh\xE9rents actifs sur ${nbAnnees} saisons`
-        });
-      }
-      for (let y = Math.max(cutoff, minYear); y <= curYear; y++) {
-        const total = cumulatifA(y) + (y === curYear ? sansAnnee : 0);
-        points.push({ label: String(y), valeur: total, detail: `${total} adh\xE9rent(s) actif(s) cette saison` + (y === curYear && sansAnnee > 0 ? ` (dont ${sansAnnee} sans ann\xE9e d'adh\xE9sion renseign\xE9e)` : "") });
+      for (let y = EVOLUTION_FIRST_YEAR; y <= curYear; y++) {
+        const snap = evoSnaps[y];
+        let valeur = null;
+        let detail = "";
+        if (y === curYear && activeAdherents.length > 0) {
+          valeur = activeAdherents.length;
+          detail = `Saison ${seasonLabelOfStartYear(y)} : ${valeur} adh\xE9rent(s) actif(s) \u2014 calcul\xE9 en direct d'apr\xE8s la liste, fig\xE9 \xE0 la fin de la saison`;
+        } else if (snap && typeof snap.total === "number") {
+          valeur = snap.total;
+          detail = `Saison ${seasonLabelOfStartYear(y)} : ${valeur} adh\xE9rent(s) \u2014 valeur fig\xE9e` + (snap.source === "manuel" ? " (saisie manuellement)" : "");
+        } else if (y === EVOLUTION_FIRST_YEAR) {
+          valeur = EVOLUTION_DEFAULT_FIRST;
+          detail = `Saison ${seasonLabelOfStartYear(y)} : ${valeur} adh\xE9rent(s) \u2014 derni\xE8res donn\xE9es d'archive`;
+        }
+        if (valeur !== null) points.push({ label: String(y), year: y, valeur, detail });
       }
       return points;
-    }, [activeAdherents]);
+    }, [activeAdherents, evoSnaps]);
+    (0, import_react11.useEffect)(() => {
+      if (!adminMode || !adherentsLoaded) return;
+      const y = currentSeasonStartYear();
+      if (y <= EVOLUTION_FIRST_YEAR || evoSnaps[y] === void 0) return;
+      const total = adherents.filter((a) => !a.desengage).length;
+      if (total === 0) return;
+      const old = evoSnaps[y];
+      if (old && old.total === total && old.source !== "manuel") return;
+      if (old && old.source === "manuel") return;
+      const toSave = { year: y, total, source: "auto", takenAt: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10) };
+      setEvoSnaps((prev) => ({ ...prev, [y]: toSave }));
+      saveJSON9(evolutionKey(y), toSave);
+    }, [adminMode, adherentsLoaded, adherents, evoSnaps]);
+    const setEvolutionValue = (y, raw) => {
+      const n = parseInt(raw, 10);
+      if (isNaN(n) || n < 0 || n > 999) return false;
+      const snap = { year: y, total: n, source: "manuel", takenAt: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10) };
+      setEvoSnaps((prev) => ({ ...prev, [y]: snap }));
+      saveJSON9(evolutionKey(y), snap);
+      return true;
+    };
     const pyramidStatsOf = (y) => {
       if (y === currentSeasonStartYear()) return { ...agesForYear(activeAdherents, y), source: "direct" };
-      const snap = photos[y];
+      const snap = photos[y] && Array.isArray(photos[y].bands) ? photos[y] : y === EVOLUTION_FIRST_YEAR ? ARCHIVE_PYRAMID_2025 : null;
       if (snap && Array.isArray(snap.bands)) {
         return {
           total: snap.total,
@@ -23264,27 +23293,24 @@ Continuer ?`;
           moins20: snap.moins20,
           bands: snap.bands,
           sansDate: snap.sansDate || 0,
-          source: "photo",
+          source: snap.archive ? "archive" : "photo",
           takenAt: snap.takenAt
         };
       }
-      return { ...agesForYear(activeAdherents, y), source: "reconstitu\xE9" };
+      return { total: 0, avg: null, moins20: 0, bands: AGE_BANDS.map(() => 0), sansDate: 0, source: "aucune" };
     };
     const pyramid = (() => {
       const curSeason = currentSeasonStartYear();
-      const withBirth = activeAdherents.filter((a) => birthYearOf(a.dateNaissance) !== null);
-      const starts = withBirth.map((a) => fullYearFromAA(a.depuis)).filter((y) => y !== null);
-      const minStart = starts.length ? Math.min(...starts) : curSeason;
       const years = [];
-      for (let y = curSeason; y >= Math.max(minStart + 1, curSeason - 14); y--) years.push(y);
+      for (let y = curSeason; y >= EVOLUTION_FIRST_YEAR + 1; y--) years.push(y);
       if (years.length === 0) years.push(curSeason);
       const n = years.includes(pyramidYear) ? pyramidYear : years[0];
-      return { hasData: withBirth.length > 0, years, n, cur: pyramidStatsOf(n), prev: pyramidStatsOf(n - 1) };
+      return { hasData: true, years, n, cur: pyramidStatsOf(n), prev: pyramidStatsOf(n - 1) };
     })();
     (0, import_react11.useEffect)(() => {
       if (!adminMode || !adherentsLoaded) return;
       const y = currentSeasonStartYear();
-      if (photos[y] === void 0) return;
+      if (y <= EVOLUTION_FIRST_YEAR || photos[y] === void 0) return;
       const live = agesForYear(adherents.filter((a) => !a.desengage), y);
       if (live.total === 0) return;
       const snap = { year: y, total: live.total, sumAges: live.sumAges, moins20: live.moins20, bands: live.bands, sansDate: live.sansDate };
@@ -23590,7 +23616,17 @@ Continuer ?`;
                     ] }, e.label);
                   }) }) });
                 })(),
-                /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: "Nombre total d'adh\xE9rents actifs cette saison-l\xE0 (un adh\xE9rent compte pour chaque saison depuis son adh\xE9sion, tant qu'il n'est pas d\xE9sengag\xE9) \u2014 moyenne pour la p\xE9riode fondatrice (1995-2020 selon les donn\xE9es), d\xE9tail saison par saison depuis 2021. Bas\xE9 sur le champ \xAB Adh\xE9rent depuis \xBB de chaque fiche ; les adh\xE9rents d\xE9sengag\xE9s ne sont pas comptabilis\xE9s. Les adh\xE9rents sans ann\xE9e d'adh\xE9sion renseign\xE9e ne sont compt\xE9s que pour la saison en cours. Ce graphique s'alimentera automatiquement des saisons futures." })
+                /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("p", { style: { fontSize: 10.5, color: "#5F5E5A", margin: "6px 0 0", fontStyle: "italic" }, children: [
+                  "Nombre d'adh\xE9rents par saison. La saison 2025 (25/26) reprend les derni\xE8res donn\xE9es d'archive (39 adh\xE9rents par d\xE9faut, modifiable par l'administrateur). La saison en cours est calcul\xE9e en direct d'apr\xE8s la liste actuelle (adh\xE9rents non d\xE9sengag\xE9s) ; \xE0 chaque changement de saison, sa valeur est fig\xE9e et la nouvelle saison commence.",
+                  adminMode && " Survolez une barre pour le d\xE9tail."
+                ] }),
+                adminMode && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { className: "no-print", style: { marginTop: 8, display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", fontSize: 11.5, color: "#5F5E5A" }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { style: { fontWeight: 600 }, children: "Corriger une saison termin\xE9e :" }),
+                  evolutionParAnnee.filter((e) => e.year < currentSeasonStartYear()).map((e) => /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 4 }, children: [
+                    e.year,
+                    /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(CellInput, { value: String(e.valeur), minWidth: 44, onCommit: (v) => setEvolutionValue(e.year, v) })
+                  ] }, e.year))
+                ] })
               ] }),
               (pyramid.hasData || adminMode) && /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { ...styles10.card, marginBottom: 0 }, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }, children: [
@@ -23620,7 +23656,7 @@ Continuer ?`;
                   const fmtAge = (v) => v === null ? "\u2014" : `${v.toFixed(1).replace(".", ",")} ans`;
                   const delta = cur.avg !== null && prev.avg !== null ? cur.avg - prev.avg : null;
                   const pct = (v, t) => t > 0 ? ` (${Math.round(v / t * 100)} %)` : "";
-                  const provenance = (st) => st.source === "photo" ? `photo du ${fmtBirthFR(st.takenAt) || "\u2014"}` : st.source === "direct" ? "en direct" : "reconstitu\xE9e";
+                  const provenance = (st) => st.source === "photo" ? `photo du ${fmtBirthFR(st.takenAt) || "\u2014"}` : st.source === "direct" ? "en direct" : st.source === "archive" ? "archive" : "aucune donn\xE9e";
                   return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(import_jsx_runtime11.Fragment, { children: [
                     /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", { style: { overflowX: "auto" }, children: /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)("svg", { width: W, height: H, style: { display: "block", margin: "0 auto" }, children: [
                       /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("text", { x: leftStart - 6, y: 14, textAnchor: "end", fontSize: "13", fontWeight: "700", fill: "#8A8368", children: L(n - 1) }),
@@ -23693,10 +23729,11 @@ Continuer ?`;
                       n,
                       " moins l'ann\xE9e de naissance), par tranches de 10 ans.",
                       " ",
-                      prev.source === "photo" ? `La saison ${L(n - 1)} provient de la photo enregistr\xE9e le ${fmtBirthFR(prev.takenAt) || "\u2014"} : elle inclut les adh\xE9rents partis depuis.` : `La saison ${L(n - 1)} est reconstitu\xE9e \xE0 partir de \xAB Adh\xE9rent depuis \xBB : les adh\xE9rents aujourd'hui d\xE9sengag\xE9s n'y figurent pas, la comparaison est donc approximative.`,
+                      prev.source === "photo" ? `La saison ${L(n - 1)} provient de la photo enregistr\xE9e le ${fmtBirthFR(prev.takenAt) || "\u2014"} : elle inclut les adh\xE9rents partis depuis.` : prev.source === "archive" ? `La saison ${L(n - 1)} provient du fichier d'archive des dates de naissance : elle reprend les 39 adh\xE9rents de la saison, y compris ceux partis depuis.` : `Aucune donn\xE9e enregistr\xE9e pour la saison ${L(n - 1)}.`,
                       " ",
                       "La photo de la saison en cours est enregistr\xE9e automatiquement \xE0 chaque ouverture de cet onglet par un administrateur, puis conserv\xE9e telle quelle \xE0 la fin de la saison.",
-                      cur.sansDate > 0 && ` ${cur.sansDate} adh\xE9rent(s) de la saison ${L(n)} sans date de naissance exploitable ne sont pas pris en compte.`
+                      cur.sansDate > 0 && ` ${cur.sansDate} adh\xE9rent(s) de la saison ${L(n)} sans date de naissance exploitable ne sont pas pris en compte.`,
+                      prev.sansDate > 0 && ` ${prev.sansDate} adh\xE9rent(s) de la saison ${L(n - 1)} sans date de naissance connue ne sont pas pris en compte (${prev.total} adh\xE9rents avec date sur ${prev.total + prev.sansDate}).`
                     ] })
                   ] });
                 })()
