@@ -13806,7 +13806,15 @@
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
             "button",
             {
-              style: { ...styles.reserveBigBtn, flex: "1 1 280px", width: "auto", margin: 0 },
+              style: { ...styles.reserveBigBtn, flex: "1 1 220px", width: "auto", margin: 0 },
+              onClick: () => typeof onNavigate === "function" ? onNavigate("p5", "adherents") : null,
+              children: "\u{1F512} Acc\xE8s membres du club"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
+            "button",
+            {
+              style: { ...styles.reserveBigBtn, flex: "1 1 220px", width: "auto", margin: 0 },
               onClick: () => typeof onNavigate === "function" ? onNavigate("p5", "reservations") : null,
               children: "\u{1F4C5} R\xE9server une table"
             }
@@ -13814,7 +13822,7 @@
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
             "button",
             {
-              style: { ...styles.reserveBigBtn, flex: "1 1 280px", width: "auto", margin: 0 },
+              style: { ...styles.reserveBigBtn, flex: "1 1 220px", width: "auto", margin: 0 },
               onClick: () => typeof onNavigate === "function" ? onNavigate("p5", "tournois") : null,
               children: "\u{1F3C6} Inscription aide aux tournois internes"
             }
@@ -14551,6 +14559,129 @@
     { id: "p8", label: "O\xF9 nous trouver" }
   ];
   var MAX_BUREAU = 10;
+  var DEFAULT_HISTOIRE_CLUB = `# Trente ans de billard \xE0 Prayssac
+
+## 1995 : la naissance du club
+
+Le Billard Club Prayssacois voit le jour en septembre 1995, \xE0 l'initiative et avec le soutien de la municipalit\xE9 de Prayssac, alors dirig\xE9e par M. Michel Lolm\xE8de. Une trentaine de passionn\xE9s se rassemblent et confient la pr\xE9sidence \xE0 Claude Bouysset. Les premi\xE8res adh\xE9sions financent l'achat de deux billards de 2,80 m et de l'\xE9quipement indispensable : lustres, monnayeurs, queues\u2026
+
+Le club s'installe dans un b\xE2timent communal, au deuxi\xE8me \xE9tage, au-dessus de l'office de tourisme, face \xE0 la mairie.
+
+## Francis Connesson, parrain du club
+
+Pour progresser en 1997, les joueurs participent \xE0 un stage d'une semaine organis\xE9 par Claude Bes, pr\xE9sident du district et membre \xE9galement du billard club de Cahors. Quatorze participants, dont une dizaine de Prayssacois, y suivent l'enseignement de Francis Connesson, figure l\xE9gendaire du billard carambole. Il revient ensuite \xE0 plusieurs reprises et devient le parrain du club.
+
+> Champion du monde pour la premi\xE8re fois en 1975 \xE0 Buenos-Aires, il le sera trois fois suppl\xE9mentaires par la suite, huit fois champion d'Europe et, excusez du peu, 57 fois champion de France toutes disciplines confondues. Il est le seul joueur Fran\xE7ais, notamment, \xE0 poss\xE9der un titre national dans les huit disciplines du billard fran\xE7ais : libre, 47/2, 47/1, 71/2, bande, trois bandes, artistique et pentathlon.
+
+## Des r\xE9sultats et des rencontres
+
+Plusieurs joueurs franchissent les paliers : Roger Petitprez et Michel Delbrayelle acc\xE8dent aux cat\xE9gories nationales, d'autres obtiennent de beaux r\xE9sultats en cat\xE9gories r\xE9gionales. La salle accueille de nombreuses comp\xE9titions, rencontres et finales de district, finales de ligue, ainsi que, plusieurs ann\xE9es durant, une action au profit du T\xE9l\xE9thon.
+
+## 2015-2022 : sept ann\xE9es de r\xE9sistance
+
+En 2015, la vente du b\xE2timent communal prive le club de sa salle. Les deux billards sont d\xE9mont\xE9s et entrepos\xE9s dans la cave d'un b\xE2timent municipal. Le bureau explore de nombreuses pistes et visite plusieurs locaux priv\xE9s, avant de trouver une salle chez un particulier sous le club de bridge, avenue du Mar\xE9chal Bessi\xE8res.
+
+Pendant sept ans, ce lieu permet au club de tenir, puis de se relancer. De nouveaux joueurs arrivent et le plaisir du jeu prend le pas sur la comp\xE9tition.
+
+## Depuis 2022 : la villa Santamaria
+
+Apr\xE8s l'acquisition de la villa Santamaria, la municipalit\xE9 met une salle \xE0 la disposition du club. Modeste par sa taille, elle all\xE8ge fortement les charges de l'association. Le club y retrouve une v\xE9ritable dynamique, port\xE9e par l'arriv\xE9e de nombreux joueurs investis dans la vie associative.
+
+## Aujourd'hui
+
+En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus de trente ans, passe le relais \xE0 **Michel Lacombe** et devient pr\xE9sident d'honneur. En 2025, le club compte 34 licenci\xE9s et obtient pour la saison 2025-2026 et 2026-2027 le label f\xE9d\xE9ral \xAB Club-\xC9cole \xBB de la F\xE9d\xE9ration Fran\xE7aise de Billard, niveau 1 D\xE9couverte-Initiation.
+
+| Ann\xE9e | \xC9tape |
+|---|---|
+| 1995 | Cr\xE9ation du club, premi\xE8re salle au-dessus de l'office de tourisme |
+| 2015 | Perte de la salle communale, installation dans un local priv\xE9 |
+| 2022 | Installation \xE0 la villa Santamaria |
+| 2025 | Claude Bouysset devient pr\xE9sident d'honneur, Michel Lacombe pr\xE9sident |
+| 2026 | Label f\xE9d\xE9ral Club-\xC9cole niveau 1 |
+`;
+  function renderInlineBold(text) {
+    return String(text).split(/(\*\*[^*]+\*\*)/g).map(
+      (part, i) => /^\*\*[^*]+\*\*$/.test(part) ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("strong", { children: part.slice(2, -2) }, i) : part
+    );
+  }
+  function parseHistoire(text) {
+    const blocks = [];
+    const lines = String(text || "").replace(/\r/g, "").split("\n");
+    let i = 0;
+    while (i < lines.length) {
+      const line = lines[i].trim();
+      if (!line) {
+        i++;
+        continue;
+      }
+      if (line.startsWith("|")) {
+        const rows = [];
+        while (i < lines.length && lines[i].trim().startsWith("|")) {
+          const cells = lines[i].trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+          if (!cells.every((c) => /^:?-{2,}:?$/.test(c))) rows.push(cells);
+          i++;
+        }
+        if (rows.length) blocks.push({ type: "table", head: rows[0], rows: rows.slice(1) });
+        continue;
+      }
+      if (line.startsWith("## ")) {
+        blocks.push({ type: "h2", text: line.slice(3).trim() });
+        i++;
+        continue;
+      }
+      if (line.startsWith("# ")) {
+        blocks.push({ type: "h1", text: line.slice(2).trim() });
+        i++;
+        continue;
+      }
+      if (line.startsWith(">")) {
+        const buf2 = [];
+        while (i < lines.length && lines[i].trim().startsWith(">")) {
+          buf2.push(lines[i].trim().replace(/^>\s?/, ""));
+          i++;
+        }
+        blocks.push({ type: "quote", text: buf2.join(" ") });
+        continue;
+      }
+      const buf = [];
+      while (i < lines.length && lines[i].trim() && !/^(#|>|\|)/.test(lines[i].trim())) {
+        buf.push(lines[i].trim());
+        i++;
+      }
+      blocks.push({ type: "p", text: buf.join(" ") });
+    }
+    return blocks;
+  }
+  function HistoireTexte({ text }) {
+    const blocks = parseHistoire(text);
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: "p1-histoire", children: blocks.filter((b) => b.type !== "table").map((b, i) => {
+      if (b.type === "h1") return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h3", { className: "p1-serif", style: styles2.histH1, children: b.text }, i);
+      if (b.type === "h2") {
+        const m = /^(.{1,14}?)\s:\s(.+)$/.exec(b.text);
+        if (m && /\d/.test(m[1])) {
+          return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("h4", { className: "p1-serif", style: styles2.histH2, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: styles2.histYear, children: m[1] }),
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: m[2] })
+          ] }, i);
+        }
+        return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("h4", { className: "p1-serif", style: styles2.histH2, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: b.text }) }, i);
+      }
+      if (b.type === "quote") return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("blockquote", { style: styles2.histQuote, children: renderInlineBold(b.text) }, i);
+      return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: styles2.histP, children: renderInlineBold(b.text) }, i);
+    }) });
+  }
+  function HistoireDatesCles({ text }) {
+    const tables = parseHistoire(text).filter((b) => b.type === "table");
+    if (tables.length === 0) return null;
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_jsx_runtime3.Fragment, { children: tables.map((t, ti) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: styles2.histDates, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "p1-serif", style: styles2.histDatesTitle, children: "Dates cl\xE9s" }),
+      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("ol", { style: styles2.histTimeline, children: t.rows.map((r, ri) => /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("li", { style: styles2.histTimelineItem, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: styles2.histTimelineDot }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { className: "p1-serif", style: styles2.histTimelineYear, children: r[0] }),
+        /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { style: styles2.histTimelineText, children: r.slice(1).join(" \u2014 ") })
+      ] }, ri)) })
+    ] }, ti)) });
+  }
   var DEFAULT_EDITO = {
     texte: "Ch\xE8res adh\xE9rentes, chers adh\xE9rents,\n\nBienvenue sur le site du Billard Club Prayssacois. Cette saison s'annonce riche en \xE9v\xE8nements sportifs et conviviaux\u2026\n\n(Texte modifiable par l'administrateur)",
     date: ""
@@ -15044,6 +15175,7 @@
     const [actionsFaites, setActionsFaites] = (0, import_react3.useState)(DEFAULT_ACTIONS_FAITES);
     const [actionsAFaire, setActionsAFaire] = (0, import_react3.useState)(DEFAULT_ACTIONS_A_FAIRE);
     const [diaporama, setDiaporama] = (0, import_react3.useState)([]);
+    const [diaporama2, setDiaporama2] = (0, import_react3.useState)([]);
     const [histoireClub, setHistoireClub] = (0, import_react3.useState)("");
     const [localAdminMode, setLocalAdminMode] = (0, import_react3.useState)(false);
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
@@ -15066,7 +15198,8 @@
         const loadedAFaire = await loadJSON3("p1:actions_a_faire", DEFAULT_ACTIONS_A_FAIRE);
         setActionsAFaire(loadedAFaire.map(normalizeActionItem));
         setDiaporama(await loadJSON3("p1:diaporama", []));
-        setHistoireClub(await loadJSON3("p1:histoireclub", ""));
+        setDiaporama2(await loadJSON3("p1:diaporama2", []));
+        setHistoireClub(await loadJSON3("p1:histoireclub", DEFAULT_HISTOIRE_CLUB));
       })();
     }, []);
     (0, import_react3.useEffect)(() => {
@@ -15166,6 +15299,10 @@
     const saveActionsAFaire = (next) => {
       setActionsAFaire(next);
       saveJSON2("p1:actions_a_faire", next);
+    };
+    const saveDiaporama2 = (next) => {
+      setDiaporama2(next);
+      saveJSON2("p1:diaporama2", next);
     };
     const saveDiaporama = (next) => {
       setDiaporama(next);
@@ -15312,20 +15449,49 @@
                 "/6)"
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Slideshow, { photos: diaporama }),
-              adminMode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { marginTop: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(PhotoGallery, { photos: diaporama, editable: adminMode, onChange: saveDiaporama, max: 6 }) })
+              adminMode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { marginTop: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(PhotoGallery, { photos: diaporama, editable: adminMode, onChange: saveDiaporama, max: 6 }) }),
+              !adminMode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(HistoireDatesCles, { text: histoireClub }),
+              (adminMode || diaporama2.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { marginTop: 18 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("p", { className: "p1-serif", style: styles2.cardTitle, children: [
+                  "Photos d'archives du club",
+                  adminMode ? ` (${diaporama2.length}/6)` : ""
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Slideshow, { photos: diaporama2 }),
+                adminMode && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { style: { marginTop: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(PhotoGallery, { photos: diaporama2, editable: adminMode, onChange: saveDiaporama2, max: 6 }) })
+              ] })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "p1-diaporama-col-text", style: styles2.diaporamaColText, children: [
               /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { className: "p1-serif", style: styles2.cardTitle, children: "L'histoire du club" }),
-              adminMode ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
-                "textarea",
-                {
-                  value: histoireClub,
-                  onChange: (e) => saveHistoireClub(e.target.value),
-                  rows: 10,
-                  placeholder: "Texte \xE0 renseigner\u2026",
-                  style: { width: "100%" }
-                }
-              ) : histoireClub ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: styles2.editoText, children: histoireClub }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: styles2.emptyNote, children: "Texte \xE0 renseigner\u2026" })
+              adminMode ? /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_jsx_runtime3.Fragment, { children: [
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+                  "textarea",
+                  {
+                    value: histoireClub,
+                    onChange: (e) => saveHistoireClub(e.target.value),
+                    rows: 18,
+                    placeholder: "Texte \xE0 renseigner\u2026",
+                    style: { width: "100%", fontFamily: "monospace", fontSize: 12 }
+                  }
+                ),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("p", { style: { fontSize: 11, color: "#5F5E5A", margin: "6px 0 10px", lineHeight: 1.5 }, children: [
+                  "Mise en page : ",
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("code", { children: "# Titre" }),
+                  " \xB7 ",
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("code", { children: "## Intertitre" }),
+                  " (un d\xE9but \xAB 1995 : \xBB devient une pastille d'ann\xE9e) \xB7",
+                  " ",
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("code", { children: "> Citation" }),
+                  " \xB7 ",
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("code", { children: "**gras**" }),
+                  " \xB7 tableau \xAB Dates cl\xE9s \xBB : lignes ",
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("code", { children: "| 1995 | \xC9v\xE9nement |" }),
+                  " \xB7 ligne vide = nouveau paragraphe. Aper\xE7u ci-dessous."
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: { borderTop: "1px dashed #C9C2AE", paddingTop: 10 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(HistoireTexte, { text: histoireClub }),
+                  /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(HistoireDatesCles, { text: histoireClub })
+                ] })
+              ] }) : histoireClub ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(HistoireTexte, { text: histoireClub }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("p", { style: styles2.emptyNote, children: "Texte \xE0 renseigner\u2026" })
             ] })
           ] }) }),
           /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { style: styles2.card, children: [
@@ -15501,6 +15667,18 @@
     slideshowDot: { width: 8, height: 8, borderRadius: "50%", border: "none", background: "#C9C2AE", padding: 0, cursor: "pointer" },
     slideshowDotActive: { background: "#c9a227" },
     editoDate: { margin: "0 0 6px", fontSize: 11.5, color: "#8A8368", fontStyle: "italic", fontWeight: 600 },
+    histH1: { margin: "0 0 12px", fontSize: 22, fontWeight: 900, color: "#1F6F8B", lineHeight: 1.2, letterSpacing: "0.01em" },
+    histH2: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", margin: "18px 0 6px", fontSize: 16, fontWeight: 700, color: "#2C7A94", lineHeight: 1.25, borderBottom: "1px solid #EEE7D3", paddingBottom: 5 },
+    histYear: { background: "#F6E7B0", color: "#7A5A0E", border: "1px solid #E4CF86", borderRadius: 999, padding: "2px 11px", fontSize: 13, fontWeight: 700, letterSpacing: "0.03em", whiteSpace: "nowrap" },
+    histP: { margin: "0 0 9px", fontSize: 13.5, color: "#241d12", lineHeight: 1.65, textAlign: "justify" },
+    histQuote: { margin: "6px 0 12px", padding: "10px 14px", background: "#FBF6E6", borderLeft: "4px solid #c9a227", borderRadius: "0 8px 8px 0", fontSize: 13, color: "#3b2f1a", lineHeight: 1.6, fontStyle: "italic" },
+    histDates: { marginTop: 16, padding: "12px 14px", background: "linear-gradient(160deg, #E6F2F7 0%, #F8F1DC 100%)", border: "1px solid #D9CFA8", borderRadius: 10, color: "#3b2f1a" },
+    histDatesTitle: { margin: "0 0 10px", fontSize: 15, fontWeight: 700, color: "#1F6F8B", letterSpacing: "0.04em", textTransform: "uppercase" },
+    histTimeline: { listStyle: "none", margin: 0, padding: "0 0 0 4px", display: "flex", flexDirection: "column", gap: 9, borderLeft: "2px solid #D8B94E" },
+    histTimelineItem: { position: "relative", display: "grid", gridTemplateColumns: "48px 1fr", gap: 8, paddingLeft: 12, alignItems: "baseline" },
+    histTimelineDot: { position: "absolute", left: -9, top: 6, width: 10, height: 10, borderRadius: "50%", background: "#D8B94E", border: "2px solid #fff" },
+    histTimelineYear: { fontSize: 15, fontWeight: 700, color: "#9A7410" },
+    histTimelineText: { fontSize: 13, fontWeight: 700, lineHeight: 1.45, color: "#3b2f1a" },
     editoText: { margin: 0, fontSize: 13.5, color: "#241d12", lineHeight: 1.6, whiteSpace: "pre-wrap" },
     peopleGrid3: { display: "grid", gridTemplateColumns: "repeat(3, minmax(0,1fr))", gap: 12 },
     peopleGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))", gap: 12 },
@@ -17338,7 +17516,7 @@
       setDiaporama(next);
       saveJSON5("p4:diaporama", next);
     };
-    const [horairesPhoto, setHorairesPhoto] = (0, import_react6.useState)({ url: "", pos: { x: 50, y: 50 } });
+    const [horairesDiapo, setHorairesDiapo] = (0, import_react6.useState)([]);
     const [formations, setFormations] = (0, import_react6.useState)(DEFAULT_FORMATIONS);
     const [videos, setVideos] = (0, import_react6.useState)(DEFAULT_VIDEOS);
     const [videoFilter, setVideoFilter] = (0, import_react6.useState)("tous");
@@ -17396,7 +17574,12 @@
         setHoraires(await loadJSON6("p4:horaires", DEFAULT_HORAIRES));
         setHorairesNote(await loadJSON6("p4:horairesnote", ""));
         setDiaporama(await loadJSON6("p4:diaporama", []));
-        setHorairesPhoto(await loadJSON6("p4:horairesphoto", { url: "", pos: { x: 50, y: 50 } }));
+        const diapo = await loadJSON6("p4:horairesdiapo", null);
+        if (Array.isArray(diapo)) setHorairesDiapo(diapo);
+        else {
+          const old = await loadJSON6("p4:horairesphoto", null);
+          setHorairesDiapo(old && old.url ? [old.url] : []);
+        }
         const loadedFormations = await loadJSON6("p4:formations", DEFAULT_FORMATIONS);
         setFormations(loadedFormations.map((f) => ({ liens: [], ...f })));
         setVideos(await loadJSON6("p4:videos", DEFAULT_VIDEOS));
@@ -17459,12 +17642,9 @@
       setHorairesNote(val);
       saveJSON5("p4:horairesnote", val);
     };
-    const saveHorairesPhoto = (patch) => {
-      setHorairesPhoto((prev) => {
-        const next = { ...prev, ...patch };
-        saveJSON5("p4:horairesphoto", next);
-        return next;
-      });
+    const saveHorairesDiapo = (next) => {
+      setHorairesDiapo(next);
+      saveJSON5("p4:horairesdiapo", next);
     };
     const updateHoraireRow = (id, patch) => updateHoraires(horaires.map((h) => h.id === id ? { ...h, ...patch } : h));
     const toggleHoraireTypeJeu = (id, gameId) => {
@@ -17791,17 +17971,15 @@
                   }
                 ) : horairesNote ? /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { ...styles5.ruleText, marginTop: 4 }, children: horairesNote }) : /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { ...styles5.emptyNote, marginTop: 4 }, children: "Non renseign\xE9." })
               ] }),
-              (adminMode || horairesPhoto.url) && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { flex: "0 0 220px" }, children: [
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: styles5.fieldLabel, children: "Photo" }),
-                /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { marginTop: 4 }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                  LogoDropRepositionable,
-                  {
-                    logoUrl: horairesPhoto.url,
-                    pos: horairesPhoto.pos,
-                    onChange: (v) => saveHorairesPhoto({ url: v }),
-                    onPosChange: (p) => saveHorairesPhoto({ pos: p })
-                  }
-                ) })
+              (adminMode || horairesDiapo.length > 0) && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { flex: "0 1 300px", minWidth: 220 }, children: [
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("span", { style: styles5.fieldLabel, children: [
+                  "Photos",
+                  adminMode ? ` (${horairesDiapo.length}/6)` : ""
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { marginTop: 4 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(EcoleSlideshow, { photos: horairesDiapo }),
+                  adminMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: { marginTop: 8 }, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(EcolePhotoGallery, { photos: horairesDiapo, editable: adminMode, onChange: saveHorairesDiapo, max: 6 }) })
+                ] })
               ] })
             ] })
           ] }),
@@ -25145,8 +25323,8 @@ Continuer ?`;
               ] }) }),
               Object.keys(grouped).length === 0 && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tbody", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { children: /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("td", { colSpan: 8, style: { color: "#8A8368", fontStyle: "italic" }, children: "Aucune comp\xE9tition pour l'instant." }) }) }),
               Object.entries(grouped).map(([month, comps]) => {
-                const todayIso = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-                const monthDone = comps.length > 0 && comps.every((c) => c.date && c.date < todayIso);
+                const todayIso2 = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+                const monthDone = comps.length > 0 && comps.every((c) => c.date && c.date < todayIso2);
                 const isOpen = month in monthOpen ? monthOpen[month] : !monthDone;
                 return /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("tbody", { className: isOpen ? "" : "p5c-month-closed", children: [
                   /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("tr", { className: "p5c-month-row", onClick: () => setMonthOpen((m) => ({ ...m, [month]: !isOpen })), style: { cursor: "pointer" }, title: isOpen ? "R\xE9duire ce mois" : "D\xE9plier ce mois", children: /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("td", { colSpan: 8, children: [
@@ -26326,6 +26504,20 @@ Continuer ?`;
   var DEFAULT_LOGOS12 = { club: "", ffb: "" };
   var DEFAULT_SOCIAL12 = { facebook: "", whatsapp: "" };
   var DEFAULT_PASSWORD5 = "bcp2025";
+  var PERMANENT_CATEGORIES = ["Statuts", "R\xE8glement int\xE9rieur"];
+  function seasonOfDateStr(iso) {
+    const d = iso ? /* @__PURE__ */ new Date(iso + "T00:00:00") : null;
+    if (!d || isNaN(d.getTime())) return null;
+    const y = d.getFullYear();
+    const start = d.getMonth() + 1 >= 8 ? y : y - 1;
+    return `${String(start % 100).padStart(2, "0")}/${String((start + 1) % 100).padStart(2, "0")}`;
+  }
+  function currentSeasonLabelDocs() {
+    return seasonOfDateStr((/* @__PURE__ */ new Date()).toISOString().slice(0, 10));
+  }
+  function todayIso() {
+    return (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+  }
   var DOC_CATEGORIES = ["Statuts", "Compte-rendu AG", "Compte-rendu de bureau", "R\xE8glement int\xE9rieur", "Autre"];
   async function loadJSON13(key, fallback) {
     try {
@@ -26351,8 +26543,8 @@ Continuer ?`;
     return {
       id: `d${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       titre: "Nouveau document",
-      categorie: DOC_CATEGORIES[0],
-      date: "",
+      categorie: "Compte-rendu de bureau",
+      date: todayIso(),
       texte: "",
       lien: ""
     };
@@ -26436,6 +26628,7 @@ Continuer ?`;
     const [showDocsPwd, setShowDocsPwd] = (0, import_react14.useState)(false);
     const [docsPwdError, setDocsPwdError] = (0, import_react14.useState)("");
     const [filterCat, setFilterCat] = (0, import_react14.useState)("toutes");
+    const [seasonTab, setSeasonTab] = (0, import_react14.useState)(currentSeasonLabelDocs());
     const [openId, setOpenId] = (0, import_react14.useState)(null);
     (0, import_react14.useEffect)(() => {
       (async () => {
@@ -26518,6 +26711,8 @@ Continuer ?`;
     const addDoc = () => {
       const nd = emptyDoc();
       persist([...docs, nd]);
+      setSeasonTab(seasonOfDateStr(nd.date) || currentSeasonLabelDocs());
+      setFilterCat("toutes");
       setOpenId(nd.id);
     };
     const removeDoc = (id) => {
@@ -26529,10 +26724,24 @@ Continuer ?`;
       saveJSON12("p5:docsPassword", val);
       if (!val) setDocsUnlocked(true);
     };
-    const filtered = (0, import_react14.useMemo)(
-      () => filterCat === "toutes" ? docs : docs.filter((d) => d.categorie === filterCat),
-      [docs, filterCat]
-    );
+    const tabOfDoc = (d) => PERMANENT_CATEGORIES.includes(d.categorie) ? "perm" : seasonOfDateStr(d.date) || "sans-date";
+    const seasonTabs = (0, import_react14.useMemo)(() => {
+      const cur = currentSeasonLabelDocs();
+      const set = /* @__PURE__ */ new Set([cur]);
+      docs.forEach((d) => {
+        const t = tabOfDoc(d);
+        if (t !== "perm" && t !== "sans-date") set.add(t);
+      });
+      const seasons = [...set].sort((a, b) => b.localeCompare(a));
+      const tabs = [{ id: "perm", label: "Documents permanents" }, ...seasons.map((id) => ({ id, label: id === cur ? `Saison en cours ${id}` : `Saison ${id}` }))];
+      if (docs.some((d) => tabOfDoc(d) === "sans-date")) tabs.push({ id: "sans-date", label: "Sans date" });
+      return tabs.map((t) => ({ ...t, count: docs.filter((d) => tabOfDoc(d) === t.id).length }));
+    }, [docs]);
+    const activeTab = seasonTabs.some((t) => t.id === seasonTab) ? seasonTab : currentSeasonLabelDocs();
+    const filtered = (0, import_react14.useMemo)(() => {
+      const inTab = docs.filter((d) => tabOfDoc(d) === activeTab);
+      return filterCat === "toutes" ? inTab : inTab.filter((d) => d.categorie === filterCat);
+    }, [docs, filterCat, activeTab]);
     const sorted = (0, import_react14.useMemo)(() => [...filtered].sort((a, b) => (b.date || "").localeCompare(a.date || "")), [filtered]);
     const openDoc = docs.find((d) => d.id === openId);
     return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: styles13.page, children: [
@@ -26767,6 +26976,29 @@ Continuer ?`;
                 adminMode && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: styles13.miniAdd, onClick: addDoc, children: "+ Ajouter un document" })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: styles13.pageIntro, children: "Statuts, comptes-rendus d'assembl\xE9es g\xE9n\xE9rales et de r\xE9unions de bureau, r\xE8glement int\xE9rieur \u2014 retrouvez ici les documents officiels du club." }),
+              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "no-print", style: styles13.seasonTabs, children: seasonTabs.map((t) => {
+                const on = t.id === activeTab && filterCat !== "archive" && filterCat !== "editos";
+                return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
+                  "button",
+                  {
+                    onClick: () => {
+                      setSeasonTab(t.id);
+                      if (filterCat === "archive" || filterCat === "editos") setFilterCat("toutes");
+                    },
+                    style: { ...styles13.seasonTab, ...on ? styles13.seasonTabActive : {} },
+                    children: [
+                      t.label,
+                      " ",
+                      /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("span", { style: { opacity: 0.65, fontWeight: 400 }, children: [
+                        "(",
+                        t.count,
+                        ")"
+                      ] })
+                    ]
+                  },
+                  t.id
+                );
+              }) }),
               /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: styles13.chipRow, className: "no-print", children: [
                 ["toutes", ...DOC_CATEGORIES].map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
                   "button",
@@ -26829,7 +27061,7 @@ Continuer ?`;
                   d.date && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 11.5, color: "#5F5E5A" }, children: fmtDateShort2(d.date) }),
                   /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 11.5, color: "#1E5A48" }, children: "Consulter \u2192" })
                 ] }, d.id)),
-                sorted.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: styles13.emptyNote, children: "Aucun document pour l'instant." })
+                sorted.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: styles13.emptyNote, children: filterCat === "toutes" ? "Aucun document dans cet onglet pour l'instant." : "Aucun document de cette cat\xE9gorie dans cet onglet." })
               ] })
             ] })
           ] })
@@ -26921,6 +27153,9 @@ Continuer ?`;
     emptyNote: { color: "#fdf8f0", fontSize: 12.5, fontStyle: "italic", opacity: 0.85 },
     adminPanel: { background: "#fff", borderRadius: 10, padding: 14, borderTop: `4px solid ${GOLD12}` },
     cardTitleDark: { margin: "0 0 8px", fontSize: 14, fontWeight: 700, color: WOOD11 },
+    seasonTabs: { display: "flex", gap: 4, flexWrap: "wrap", marginBottom: 12, borderBottom: "2px solid #c9a227" },
+    seasonTab: { border: "1px solid #C9C2AE", borderBottom: "none", background: "#EDE6D2", color: "#5F5E5A", borderRadius: "8px 8px 0 0", padding: "8px 14px", fontSize: 12.5, fontWeight: 600, cursor: "pointer" },
+    seasonTabActive: { background: "#c9a227", color: "#0a1628", borderColor: "#c9a227" },
     chipRow: { display: "flex", gap: 6, flexWrap: "wrap" },
     chip: { border: "1px solid #C9C2AE", background: "#fdf8f0", color: "#5F5E5A", borderRadius: 14, padding: "5px 12px", fontSize: 12 },
     chipActive: { background: GOLD12, color: WOOD11, borderColor: GOLD12, fontWeight: 700 },
