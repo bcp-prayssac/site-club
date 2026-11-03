@@ -17497,6 +17497,108 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       photos.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles5.slideshowDots, children: photos.map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { onClick: () => setIndex(i), style: { ...styles5.slideshowDot, ...i === index ? styles5.slideshowDotActive : {} }, "aria-label": `Aller \xE0 la photo ${i + 1}` }, i)) })
     ] });
   }
+  // ===== Séances de l'école (registre simplifié) =====
+  var SEANCE_MAX_FORMES = 6;
+  var MOIS_FR = ["janvier", "f\xE9vrier", "mars", "avril", "mai", "juin", "juillet", "ao\xFBt", "septembre", "octobre", "novembre", "d\xE9cembre"];
+  function EcoleSeancesPanel({ adminMode, formateurs }) {
+    const R = import_react6, J = import_jsx_runtime6;
+    const [seances, setSeances] = (0, R.useState)([]);
+    const [adherents, setAdherents] = (0, R.useState)([]);
+    const [open, setOpen] = (0, R.useState)({});
+    const [confirmId, setConfirmId] = (0, R.useState)(null);
+    (0, R.useEffect)(() => {
+      (async () => {
+        const v = await loadJSON6("p4:seances", []);
+        setSeances(Array.isArray(v) ? v : []);
+        if (adminMode) {
+          const a = await loadJSON6("p5:adherents", []);
+          setAdherents((Array.isArray(a) ? a : []).filter((x) => !x.desengage).sort((x, y) => ((x.nom || "") + (x.prenom || "")).localeCompare((y.nom || "") + (y.prenom || ""))));
+        }
+      })();
+    }, [adminMode]);
+    const save = (next) => {
+      setSeances(next);
+      saveJSON5("p4:seances", next);
+    };
+    const upd = (id, patch) => save(seances.map((s) => s.id === id ? { ...s, ...patch } : s));
+    const todayIso3 = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
+    const addSeance = () => {
+      const s = { id: "se" + Date.now() + "-" + Math.random().toString(36).slice(2, 6), createdAt: Date.now(), date: todayIso3, formateur: "", formes: [""] };
+      save([s, ...seances]);
+      setOpen((o) => ({ ...o, [todayIso3.slice(0, 7)]: true }));
+    };
+    const removeSeance = (id) => {
+      if (confirmId !== id) {
+        setConfirmId(id);
+        return;
+      }
+      setConfirmId(null);
+      save(seances.filter((s) => s.id !== id));
+    };
+    const nomForme = (id) => {
+      const a = adherents.find((x) => x.id === id);
+      return a ? (a.nom || "") + " " + (a.prenom || "") : "";
+    };
+    const formNames = Array.from(new Set([...(formateurs || []).map((f) => f.nom).filter(Boolean), ...seances.map((s) => s.formateur).filter(Boolean)]));
+    const sorted = [...seances].sort((a, b) => a.date !== b.date ? a.date < b.date ? 1 : -1 : (b.createdAt || 0) - (a.createdAt || 0));
+    const groups = [];
+    sorted.forEach((s) => {
+      const m = (s.date || "????-??").slice(0, 7);
+      let g = groups.find((x) => x.m === m);
+      if (!g) groups.push(g = { m, list: [] });
+      g.list.push(s);
+    });
+    const monthLabel = (m) => {
+      const [y, mm] = m.split("-");
+      return MOIS_FR[parseInt(mm, 10) - 1] ? MOIS_FR[parseInt(mm, 10) - 1].replace(/^./, (c) => c.toUpperCase()) + " " + y : "Sans date";
+    };
+    const isOpen = (m) => open[m] !== void 0 ? open[m] : m === todayIso3.slice(0, 7) || groups.length && m === groups[0].m;
+    const curSeason = (() => {
+      const d = /* @__PURE__ */ new Date();
+      const y = d.getMonth() + 1 >= 9 ? d.getFullYear() : d.getFullYear() - 1;
+      return [y + "-09-01", y + 1 + "-08-31"];
+    })();
+    const inSeason = seances.filter((s) => s.date >= curSeason[0] && s.date <= curSeason[1]);
+    const nbFormes = new Set(inSeason.flatMap((s) => (s.formes || []).filter(Boolean))).size;
+    if (!adminMode) {
+      if (!inSeason.length) return null;
+      return J.jsx("div", { style: styles5.card, children: J.jsxs("p", { style: { margin: 0, fontSize: 14, color: "#0a1628" }, children: ["\u{1F393} Cette saison : ", J.jsx("b", { children: inSeason.length + " s\xE9ance" + (inSeason.length > 1 ? "s" : "") }), " de formation" + (nbFormes ? " pour " + nbFormes + " adh\xE9rent" + (nbFormes > 1 ? "s" : "") + " form\xE9" + (nbFormes > 1 ? "s" : "") : "") + "."] }) });
+    }
+    const inS = { padding: "5px 6px", border: "1px solid #C9C2AE", borderRadius: 4, fontSize: 12.5, boxSizing: "border-box", fontFamily: "inherit", background: "#fff" };
+    const small = { border: "1px dashed rgba(201,162,39,0.8)", background: "transparent", color: "#8a6d12", borderRadius: 4, padding: "4px 8px", fontSize: 11.5, cursor: "pointer" };
+    const row = (s) => {
+      const formes = s.formes && s.formes.length ? s.formes : [""];
+      const setForme = (i, v) => upd(s.id, { formes: formes.map((f, k) => k === i ? v : f) });
+      const delForme = (i) => upd(s.id, { formes: formes.filter((_, k) => k !== i) });
+      return J.jsxs("div", { style: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-start", padding: "8px 0", borderBottom: "1px solid #ece7d8" }, children: [
+        J.jsx("input", { type: "date", value: s.date || "", onChange: (e) => upd(s.id, { date: e.target.value }), style: { ...inS, width: 140 } }),
+        J.jsxs("select", { value: s.formateur, onChange: (e) => upd(s.id, { formateur: e.target.value }), style: { ...inS, width: 180 }, children: [J.jsx("option", { value: "", children: "— Formateur —" }), ...formNames.map((n) => J.jsx("option", { value: n, children: n }, n))] }),
+        J.jsxs("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, flex: 1, minWidth: 220, alignItems: "center" }, children: [
+          ...formes.map((f, i) => J.jsxs("span", { style: { display: "inline-flex", alignItems: "center", gap: 2 }, children: [
+            J.jsxs("select", { value: f, onChange: (e) => setForme(i, e.target.value), style: { ...inS, width: 170 }, children: [J.jsx("option", { value: "", children: "— Form\xE9 —" }), ...adherents.map((a) => J.jsx("option", { value: a.id, children: (a.nom || "") + " " + (a.prenom || "") }, a.id)), f && !adherents.some((a) => a.id === f) ? J.jsx("option", { value: f, children: "(ancien adh\xE9rent)" }) : null] }),
+            formes.length > 1 && J.jsx("button", { onClick: () => delForme(i), title: "Retirer ce form\xE9", style: { border: "none", background: "transparent", color: "#e74c3c", fontWeight: 700, cursor: "pointer", fontSize: 14, padding: "0 3px" }, children: "\xD7" })
+          ] }, i)),
+          formes.length < SEANCE_MAX_FORMES && J.jsx("button", { style: small, onClick: () => upd(s.id, { formes: [...formes, ""] }), children: "+ form\xE9 (" + formes.length + "/" + SEANCE_MAX_FORMES + ")" })
+        ] }),
+        J.jsx("button", { onClick: () => removeSeance(s.id), title: "Supprimer la s\xE9ance", style: { border: "none", background: confirmId === s.id ? "#e74c3c" : "transparent", color: confirmId === s.id ? "#fff" : "#e74c3c", borderRadius: 3, fontWeight: 700, cursor: "pointer", fontSize: confirmId === s.id ? 11 : 15, padding: "3px 6px", whiteSpace: "nowrap" }, children: confirmId === s.id ? "Supprimer ?" : "\xD7" })
+      ] }, s.id);
+    };
+    return J.jsxs("div", { style: styles5.card, children: [
+      J.jsxs("div", { style: styles5.cardHeadRow, children: [
+        J.jsx("p", { className: "p4-serif", style: styles5.cardTitle, children: "S\xE9ances de formation" }),
+        J.jsx("button", { style: styles5.miniAdd, onClick: addSeance, children: "+ Nouvelle s\xE9ance" })
+      ] }),
+      J.jsx("p", { style: { margin: "4px 0 6px", fontSize: 12, color: "#5F5E5A" }, children: "\u{1F512} Visible uniquement en mode \xE9dition. Les visiteurs voient seulement le nombre de s\xE9ances et de form\xE9s. Ces donn\xE9es alimentent la synth\xE8se de saison." }),
+      J.jsxs("p", { style: { margin: "0 0 6px", fontSize: 13, color: "#0a1628" }, children: ["Saison en cours : ", J.jsx("b", { children: inSeason.length + " s\xE9ance(s)" }), " \xB7 " + nbFormes + " adh\xE9rent(s) form\xE9(s)"] }),
+      groups.length ? groups.map((g) => J.jsxs("div", { style: { border: "1px solid #E3DCC5", borderRadius: 6, marginTop: 6, background: "#fdfbf5" }, children: [
+        J.jsxs("button", { onClick: () => setOpen((o) => ({ ...o, [g.m]: !isOpen(g.m) })), style: { width: "100%", textAlign: "left", border: "none", background: "transparent", padding: "8px 10px", fontSize: 13.5, fontWeight: 700, color: "#0a1628", cursor: "pointer", display: "flex", justifyContent: "space-between" }, children: [
+          J.jsx("span", { children: (isOpen(g.m) ? "▼ " : "▶ ") + monthLabel(g.m) }),
+          J.jsx("span", { style: { fontWeight: 400, color: "#5F5E5A", fontSize: 12 }, children: g.list.length + " s\xE9ance(s) \xB7 " + new Set(g.list.flatMap((s) => (s.formes || []).filter(Boolean))).size + " form\xE9(s)" })
+        ] }),
+        isOpen(g.m) && J.jsx("div", { style: { padding: "0 10px 4px" }, children: g.list.map(row) })
+      ] }, g.m)) : J.jsx("p", { style: { margin: "6px 0 0", fontSize: 12.5, fontStyle: "italic", color: "#5F5E5A" }, children: "Aucune s\xE9ance enregistr\xE9e. Cliquez sur \xAB + Nouvelle s\xE9ance \xBB." })
+    ] });
+  }
   function PageEcoleBillard({ onNavigate, adminMode: adminModeProp, onAdminModeChange, adminScope = "full" } = {}) {
     const [showBackToTop, setShowBackToTop] = (0, import_react6.useState)(false);
     (0, import_react6.useEffect)(() => {
@@ -18011,6 +18113,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
               ] })
             ] })
           ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(EcoleSeancesPanel, { adminMode, formateurs }),
           /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles5.card, children: [
             /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles5.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "Formations propos\xE9es par la F\xE9d\xE9ration et la Ligue" }),
@@ -26677,6 +26780,7 @@ Continuer ?`;
     d.weeks = [];
     for (const k of weekKeys) d.weeks.push({ week: k.slice(10), bookings: await synLoad(k, []) });
     d.horaires = await synLoad("p4:horaires", []);
+    d.seances = (await synLoad("p4:seances", [])).filter((x) => x.date && x.date >= start && x.date <= end);
     d.formateurs = await synLoad("p4:formateurs", []);
     d.projects = await synLoad("p6:projects", {});
     d.extraProjects = await synLoad("p6:extraprojects", []);
@@ -26872,7 +26976,23 @@ Continuer ?`;
   ${res.length ? "<ul class=\"clean\">" + res.map((r) => "<li>" + synEsc(r) + "</li>").join("") + "</ul>" : todo("R\xE9sultats et podiums", `Saisissez les r\xE9sultats marquants dans le formulaire (une ligne par r\xE9sultat). Pour info : ${tqF} r\xE9sultats de TQ sur ${tqS} sont saisis dans les fiches comp\xE9tition.`)}
   ${foot(3)}</section>`);
     const hRows = d.horaires.map((h) => `<tr><td style="white-space:nowrap">${synEsc(h.jour)} ${h.debut}h-${h.fin}h</td><td>${synEsc((TBL[h.tableId] || "?").replace("Billard ", "B"))}</td><td>${synEsc(h.formateurs || "–")}</td></tr>`).join("");
-    const eleves = inp.eleves !== "" && inp.eleves != null ? `<p style="margin:2mm 0 0"><b>${synEsc(inp.eleves)} \xE9l\xE8ves</b>${inp.elevesJeunes ? ` dont ${synEsc(inp.elevesJeunes)} jeunes` : ""}${inp.diplomes ? ` \xB7 ${synEsc(inp.diplomes)} dipl\xF4mes ou billes obtenus` : ""}.</p>` : todo("\xC9l\xE8ves de l'\xE9cole", "Nombre d'\xE9l\xE8ves, dont jeunes, et dipl\xF4mes obtenus : \xE0 saisir dans le formulaire.");
+    const sea = d.seances || [];
+    const formesIds = Array.from(new Set(sea.flatMap((x) => (x.formes || []).filter(Boolean))));
+    const adhById = {};
+    d.adherents.forEach((a) => adhById[a.id] = a);
+    const jeunesF = formesIds.filter((id) => {
+      const a = adhById[id];
+      return a && a.dateNaissance && (now - new Date(a.dateNaissance)) / 315576e5 < 18;
+    }).length;
+    const parForm = {};
+    sea.forEach((x) => {
+      if (x.formateur) parForm[x.formateur] = (parForm[x.formateur] || 0) + 1;
+    });
+    if ((inp.eleves === "" || inp.eleves == null) && formesIds.length) {
+      inp = { ...inp, eleves: String(formesIds.length), elevesJeunes: inp.elevesJeunes || String(jeunesF) };
+    }
+    const seaTxt = sea.length ? `<p style="margin:2mm 0 0"><b>${sea.length} s\xE9ance${sea.length > 1 ? "s" : ""} de formation</b>${Object.keys(parForm).length ? " (" + Object.entries(parForm).sort((a, b) => b[1] - a[1]).map(([n, c]) => synEsc(n) + " : " + c).join(", ") + ")" : ""}.</p>` : "";
+    const eleves = seaTxt + (inp.eleves !== "" && inp.eleves != null ? `<p style="margin:2mm 0 0"><b>${synEsc(inp.eleves)} \xE9l\xE8ves form\xE9s</b>${inp.elevesJeunes ? ` dont ${synEsc(inp.elevesJeunes)} jeunes` : ""}${inp.diplomes ? ` \xB7 ${synEsc(inp.diplomes)} dipl\xF4mes ou billes obtenus` : ""}.</p>` : todo("\xC9l\xE8ves de l'\xE9cole", "Enregistrez les s\xE9ances (page L'\xE9cole du billard, mode \xE9dition) ou saisissez les chiffres dans le formulaire."));
     const useMonths = resaMonths.length > 8;
     const rl = useMonths ? resaMonths.map((m) => mlab[months.indexOf(m)]) : wk.map((w) => synDdmm(w.week));
     const rs = useMonths ? ["adh", "comp", "cours"].map((k) => resaMonths.map((m) => byMonth[m][k])) : ["adh", "comp", "cours"].map((k) => wk.map((w) => w[k]));
@@ -27039,7 +27159,7 @@ Continuer ?`;
         inp && J.jsxs("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }, children: [
           F("agDate", "Date de l'AG", "ex. samedi 10 octobre 2027"),
           F("effectifPrecedent", "Effectif saison pr\xE9c\xE9dente", data && (data.evoPrev || data.pyrPrev) ? "auto si vide" : "ex. 39"),
-          F("eleves", "\xC9l\xE8ves de l'\xE9cole", "ex. 12"),
+          F("eleves", "\xC9l\xE8ves form\xE9s", "auto (s\xE9ances) si vide"),
           F("elevesJeunes", "dont jeunes", "ex. 5"),
           F("diplomes", "Dipl\xF4mes / billes obtenus", "ex. 4"),
           F("resultats", "R\xE9sultats marquants (une ligne par r\xE9sultat)", "ex. Championnat de Ligue libre R2 : J. Dupont champion", true, 4),
