@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="03/11/2026";</script>
+<script>window.__SITE_BUILD_DATE__="20/10/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -17497,109 +17497,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       photos.length > 1 && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles5.slideshowDots, children: photos.map((_, i) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { onClick: () => setIndex(i), style: { ...styles5.slideshowDot, ...i === index ? styles5.slideshowDotActive : {} }, "aria-label": `Aller \xE0 la photo ${i + 1}` }, i)) })
     ] });
   }
-  // ===== Séances de l'école (registre simplifié) =====
-  var SEANCE_MAX_FORMES = 6;
-  var MOIS_FR = ["janvier", "f\xE9vrier", "mars", "avril", "mai", "juin", "juillet", "ao\xFBt", "septembre", "octobre", "novembre", "d\xE9cembre"];
-  function EcoleSeancesPanel({ adminMode, formateurs }) {
-    const R = import_react6, J = import_jsx_runtime6;
-    const [seances, setSeances] = (0, R.useState)([]);
-    const [adherents, setAdherents] = (0, R.useState)([]);
-    const [open, setOpen] = (0, R.useState)({});
-    const [confirmId, setConfirmId] = (0, R.useState)(null);
-    (0, R.useEffect)(() => {
-      (async () => {
-        const v = await loadJSON6("p4:seances", []);
-        setSeances(Array.isArray(v) ? v : []);
-        if (adminMode) {
-          const a = await loadJSON6("p5:adherents", []);
-          setAdherents((Array.isArray(a) ? a : []).filter((x) => !x.desengage).sort((x, y) => ((x.nom || "") + (x.prenom || "")).localeCompare((y.nom || "") + (y.prenom || ""))));
-        }
-      })();
-    }, [adminMode]);
-    const save = (next) => {
-      setSeances(next);
-      saveJSON5("p4:seances", next);
-    };
-    const upd = (id, patch) => save(seances.map((s) => s.id === id ? { ...s, ...patch } : s));
-    const todayIso3 = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-    const addSeance = () => {
-      const s = { id: "se" + Date.now() + "-" + Math.random().toString(36).slice(2, 6), createdAt: Date.now(), date: todayIso3, formateur: "", formes: [""] };
-      save([s, ...seances]);
-      setOpen((o) => ({ ...o, [todayIso3.slice(0, 7)]: true }));
-    };
-    const removeSeance = (id) => {
-      if (confirmId !== id) {
-        setConfirmId(id);
-        return;
-      }
-      setConfirmId(null);
-      save(seances.filter((s) => s.id !== id));
-    };
-    const nomForme = (id) => {
-      const a = adherents.find((x) => x.id === id);
-      return a ? (a.nom || "") + " " + (a.prenom || "") : "";
-    };
-    const formNames = Array.from(new Set([...(formateurs || []).map((f) => f.nom).filter(Boolean), ...seances.map((s) => s.formateur).filter(Boolean)]));
-    const sorted = [...seances].sort((a, b) => a.date !== b.date ? a.date < b.date ? 1 : -1 : (b.createdAt || 0) - (a.createdAt || 0));
-    const groups = [];
-    sorted.forEach((s) => {
-      const m = (s.date || "????-??").slice(0, 7);
-      let g = groups.find((x) => x.m === m);
-      if (!g) groups.push(g = { m, list: [] });
-      g.list.push(s);
-    });
-    const monthLabel = (m) => {
-      const [y, mm] = m.split("-");
-      return MOIS_FR[parseInt(mm, 10) - 1] ? MOIS_FR[parseInt(mm, 10) - 1].replace(/^./, (c) => c.toUpperCase()) + " " + y : "Sans date";
-    };
-    const isOpen = (m) => open[m] !== void 0 ? open[m] : m === todayIso3.slice(0, 7) || groups.length && m === groups[0].m;
-    const curSeason = (() => {
-      const d = /* @__PURE__ */ new Date();
-      const y = d.getMonth() + 1 >= 9 ? d.getFullYear() : d.getFullYear() - 1;
-      return [y + "-09-01", y + 1 + "-08-31"];
-    })();
-    const inSeason = seances.filter((s) => s.date >= curSeason[0] && s.date <= curSeason[1]);
-    const nbFormes = new Set(inSeason.flatMap((s) => (s.formes || []).filter(Boolean))).size;
-    if (!adminMode) {
-      if (!inSeason.length) return null;
-      return J.jsx("div", { style: styles5.card, children: J.jsxs("p", { style: { margin: 0, fontSize: 14, color: "#0a1628" }, children: ["\u{1F393} Cette saison : ", J.jsx("b", { children: inSeason.length + " s\xE9ance" + (inSeason.length > 1 ? "s" : "") }), " de formation" + (nbFormes ? " pour " + nbFormes + " adh\xE9rent" + (nbFormes > 1 ? "s" : "") + " form\xE9" + (nbFormes > 1 ? "s" : "") : "") + "."] }) });
-    }
-    const inS = { padding: "5px 6px", border: "1px solid #C9C2AE", borderRadius: 4, fontSize: 12.5, boxSizing: "border-box", fontFamily: "inherit", background: "#fff" };
-    const small = { border: "1px dashed rgba(201,162,39,0.8)", background: "transparent", color: "#8a6d12", borderRadius: 4, padding: "4px 8px", fontSize: 11.5, cursor: "pointer" };
-    const row = (s) => {
-      const formes = s.formes && s.formes.length ? s.formes : [""];
-      const setForme = (i, v) => upd(s.id, { formes: formes.map((f, k) => k === i ? v : f) });
-      const delForme = (i) => upd(s.id, { formes: formes.filter((_, k) => k !== i) });
-      return J.jsxs("div", { style: { display: "flex", flexWrap: "wrap", gap: 8, alignItems: "flex-start", padding: "8px 0", borderBottom: "1px solid #ece7d8" }, children: [
-        J.jsx("input", { type: "date", value: s.date || "", onChange: (e) => upd(s.id, { date: e.target.value }), style: { ...inS, width: 140 } }),
-        J.jsxs("select", { value: s.formateur, onChange: (e) => upd(s.id, { formateur: e.target.value }), style: { ...inS, width: 180 }, children: [J.jsx("option", { value: "", children: "— Formateur —" }), ...formNames.map((n) => J.jsx("option", { value: n, children: n }, n))] }),
-        J.jsxs("div", { style: { display: "flex", flexWrap: "wrap", gap: 6, flex: 1, minWidth: 220, alignItems: "center" }, children: [
-          ...formes.map((f, i) => J.jsxs("span", { style: { display: "inline-flex", alignItems: "center", gap: 2 }, children: [
-            J.jsxs("select", { value: f, onChange: (e) => setForme(i, e.target.value), style: { ...inS, width: 170 }, children: [J.jsx("option", { value: "", children: "— Form\xE9 —" }), ...adherents.map((a) => J.jsx("option", { value: a.id, children: (a.nom || "") + " " + (a.prenom || "") }, a.id)), f && !adherents.some((a) => a.id === f) ? J.jsx("option", { value: f, children: "(ancien adh\xE9rent)" }) : null] }),
-            formes.length > 1 && J.jsx("button", { onClick: () => delForme(i), title: "Retirer ce form\xE9", style: { border: "none", background: "transparent", color: "#e74c3c", fontWeight: 700, cursor: "pointer", fontSize: 14, padding: "0 3px" }, children: "\xD7" })
-          ] }, i)),
-          formes.length < SEANCE_MAX_FORMES && J.jsx("button", { style: small, onClick: () => upd(s.id, { formes: [...formes, ""] }), children: "+ form\xE9 (" + formes.length + "/" + SEANCE_MAX_FORMES + ")" })
-        ] }),
-        J.jsx("button", { onClick: () => removeSeance(s.id), title: "Supprimer la s\xE9ance", style: { border: "none", background: confirmId === s.id ? "#e74c3c" : "transparent", color: confirmId === s.id ? "#fff" : "#e74c3c", borderRadius: 3, fontWeight: 700, cursor: "pointer", fontSize: confirmId === s.id ? 11 : 15, padding: "3px 6px", whiteSpace: "nowrap" }, children: confirmId === s.id ? "Supprimer ?" : "\xD7" })
-      ] }, s.id);
-    };
-    return J.jsxs("div", { style: styles5.card, children: [
-      J.jsxs("div", { style: styles5.cardHeadRow, children: [
-        J.jsx("p", { className: "p4-serif", style: styles5.cardTitle, children: "S\xE9ances de formation" }),
-        J.jsx("button", { style: styles5.miniAdd, onClick: addSeance, children: "+ Nouvelle s\xE9ance" })
-      ] }),
-      J.jsx("p", { style: { margin: "4px 0 6px", fontSize: 12, color: "#5F5E5A" }, children: "\u{1F512} Visible uniquement en mode \xE9dition. Les visiteurs voient seulement le nombre de s\xE9ances et de form\xE9s. Ces donn\xE9es alimentent la synth\xE8se de saison." }),
-      J.jsxs("p", { style: { margin: "0 0 6px", fontSize: 13, color: "#0a1628" }, children: ["Saison en cours : ", J.jsx("b", { children: inSeason.length + " s\xE9ance(s)" }), " \xB7 " + nbFormes + " adh\xE9rent(s) form\xE9(s)"] }),
-      groups.length ? groups.map((g) => J.jsxs("div", { style: { border: "1px solid #E3DCC5", borderRadius: 6, marginTop: 6, background: "#fdfbf5" }, children: [
-        J.jsxs("button", { onClick: () => setOpen((o) => ({ ...o, [g.m]: !isOpen(g.m) })), style: { width: "100%", textAlign: "left", border: "none", background: "transparent", padding: "8px 10px", fontSize: 13.5, fontWeight: 700, color: "#0a1628", cursor: "pointer", display: "flex", justifyContent: "space-between" }, children: [
-          J.jsx("span", { children: (isOpen(g.m) ? "▼ " : "▶ ") + monthLabel(g.m) }),
-          J.jsx("span", { style: { fontWeight: 400, color: "#5F5E5A", fontSize: 12 }, children: g.list.length + " s\xE9ance(s) \xB7 " + new Set(g.list.flatMap((s) => (s.formes || []).filter(Boolean))).size + " form\xE9(s)" })
-        ] }),
-        isOpen(g.m) && J.jsx("div", { style: { padding: "0 10px 4px" }, children: g.list.map(row) })
-      ] }, g.m)) : J.jsx("p", { style: { margin: "6px 0 0", fontSize: 12.5, fontStyle: "italic", color: "#5F5E5A" }, children: "Aucune s\xE9ance enregistr\xE9e. Cliquez sur \xAB + Nouvelle s\xE9ance \xBB." })
-    ] });
-  }
-  function PageEcoleBillard({ onNavigate, adminMode: adminModeProp, onAdminModeChange, adminScope = "full" } = {}) {
+  function PageEcoleBillard({ onNavigate, adminMode: adminModeProp, onAdminModeChange } = {}) {
     const [showBackToTop, setShowBackToTop] = (0, import_react6.useState)(false);
     (0, import_react6.useEffect)(() => {
       const onScroll = () => setShowBackToTop(window.scrollY > 400);
@@ -17629,12 +17527,10 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
     const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
     const setAdminMode = onAdminModeChange || setLocalAdminMode;
     const [adminPassword, setAdminPassword] = (0, import_react6.useState)("admin2025");
-    const [ecolePassword, setEcolePassword] = (0, import_react6.useState)("");
     const [adminGate, setAdminGate] = (0, import_react6.useState)({ open: false, mode: "login", input: "", error: "", show: false });
     (0, import_react6.useEffect)(() => {
       (async () => {
         setAdminPassword(await loadJSON6("site:adminpassword", "admin2025"));
-        setEcolePassword(await loadJSON6("site:ecolepassword", ""));
       })();
     }, []);
     const requestAdmin = () => {
@@ -17645,30 +17541,15 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const openEcolePwd = () => setAdminGate({ open: true, mode: "ecole", input: ecolePassword || "", error: "" });
     const submitAdminGate = () => {
       if (adminGate.mode === "login") {
         if (adminGate.input === adminPassword) {
-          setAdminMode(true, "full");
-          setAdminGate((g) => ({ ...g, open: false }));
-        } else if (ecolePassword && adminGate.input === ecolePassword) {
-          setAdminMode(true, "ecole");
+          setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
           setAdminGate((g) => ({ ...g, error: "Mot de passe incorrect." }));
         }
-      } else if (adminGate.mode === "ecole") {
-        if (adminScope === "ecole") return;
-        const val = adminGate.input.trim();
-        if (val && val === adminPassword) {
-          setAdminGate((g) => ({ ...g, error: "Ce mot de passe doit \xEAtre diff\xE9rent du mot de passe administrateur principal." }));
-          return;
-        }
-        setEcolePassword(val);
-        saveJSON5("site:ecolepassword", val);
-        setAdminGate((g) => ({ ...g, open: false }));
       } else {
-        if (adminScope === "ecole") return;
         const val = adminGate.input.trim();
         if (!val) {
           setAdminGate((g) => ({ ...g, error: "Entrez un nouveau mot de passe." }));
@@ -17850,7 +17731,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
             ] }),
             menuOpen && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles5.menuPanel, children: PAGES5.map((p) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: { ...styles5.menuItem, ...p.id === "p4" ? styles5.menuItemActive : {} }, onClick: () => goTo(p), children: p.label }, p.id)) }),
             /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: { ...styles5.adminToggle, ...adminMode ? styles5.adminToggleActive : {} }, onClick: requestAdmin, children: adminMode ? "Quitter l'\xE9dition" : "Mode administrateur" }),
-            adminMode && adminScope !== "ecole" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            adminMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
               "button",
               {
                 style: { border: "1px solid rgba(201,162,39,0.6)", background: "transparent", color: "#c9a227", borderRadius: 5, padding: "9px 10px", fontSize: 11 },
@@ -17859,16 +17740,6 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
                 children: "\u{1F511}"
               }
             ),
-            adminMode && adminScope !== "ecole" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-              "button",
-              {
-                style: { border: "1px solid rgba(201,162,39,0.6)", background: "transparent", color: "#c9a227", borderRadius: 5, padding: "9px 10px", fontSize: 11, whiteSpace: "nowrap" },
-                onClick: openEcolePwd,
-                title: "D\xE9finir le mot de passe de l'administrateur \xC9cole (acc\xE8s limit\xE9 \xE0 cette page)",
-                children: "\u{1F393} MdP \xC9cole"
-              }
-            ),
-            adminMode && adminScope === "ecole" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("span", { style: { color: "#c9a227", fontSize: 11, padding: "0 4px", whiteSpace: "nowrap" }, children: "Acc\xE8s \xC9cole uniquement" }),
             adminGate.open && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
               "div",
               {
@@ -17881,8 +17752,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
                     style: { background: "#fff", borderRadius: 8, padding: 20, width: "min(340px, 100%)", borderTop: "4px solid #c9a227", boxShadow: "0 10px 40px rgba(0,0,0,0.3)" },
                     onClick: (e) => e.stopPropagation(),
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { margin: "0 0 10px", fontSize: 15, fontWeight: 700, color: "#0a1628" }, children: adminGate.mode === "login" ? "Acc\xE8s administrateur" : adminGate.mode === "ecole" ? "Mot de passe administrateur \xC9cole" : "Changer le mot de passe admin" }),
-                      adminGate.mode === "ecole" && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { margin: "0 0 10px", fontSize: 12, color: "#555", lineHeight: 1.4 }, children: "Ce mot de passe permet de modifier uniquement la page \xAB L'\xE9cole du billard \xBB. Laissez vide puis Enregistrer pour d\xE9sactiver cet acc\xE8s." }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { margin: "0 0 10px", fontSize: 15, fontWeight: 700, color: "#0a1628" }, children: adminGate.mode === "login" ? "Acc\xE8s administrateur" : "Changer le mot de passe admin" }),
                       /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { position: "relative" }, children: [
                         /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                           "input",
@@ -17894,7 +17764,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
                             onKeyDown: (e) => {
                               if (e.key === "Enter") submitAdminGate();
                             },
-                            placeholder: adminGate.mode === "login" ? "Mot de passe administrateur" : adminGate.mode === "ecole" ? "Mot de passe \xC9cole (vide = d\xE9sactiv\xE9)" : "Nouveau mot de passe",
+                            placeholder: adminGate.mode === "login" ? "Mot de passe administrateur" : "Nouveau mot de passe",
                             style: { width: "100%", padding: "8px 34px 8px 10px", border: "1px solid #C9C2AE", borderRadius: 4, marginBottom: 8, boxSizing: "border-box" }
                           }
                         ),
@@ -18113,7 +17983,6 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
               ] })
             ] })
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(EcoleSeancesPanel, { adminMode, formateurs }),
           /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles5.card, children: [
             /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: styles5.cardHeadRow, children: [
               /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { className: "p4-serif", style: styles5.cardTitle, children: "Formations propos\xE9es par la F\xE9d\xE9ration et la Ligue" }),
@@ -20247,7 +20116,10 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
   var DEFAULT_TABLES = ["Billard 1", "Billard 2 avec Pool-Shot", "Billard 3"];
   var MAX_TABLES = 10;
   var DEFAULT_RECURRENCE_WEEKS = 4;
-  var MAX_RECURRENCE_WEEKS = 26;
+  var MAX_RECURRENCE_WEEKS = 24;
+  var RENEW_DAYS = 14;
+  var DEFAULT_RENEW_WEEKS = 12;
+  var RECURRENCE_CHOICES = Array.from({ length: MAX_RECURRENCE_WEEKS - 1 }, (_, i) => i + 2);
   var EXTERIOR = "Ext\xE9rieur";
   var GUEST_SLOTS = 3;
   function abbreviateName(full) {
@@ -20280,6 +20152,10 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
     date.setHours(0, 0, 0, 0);
     return date;
   }
+  function todayIndex() {
+    const d = (/* @__PURE__ */ new Date()).getDay();
+    return d === 0 ? 6 : d - 1;
+  }
   function weekMonday2(offset) {
     const base = getMonday3(/* @__PURE__ */ new Date());
     base.setDate(base.getDate() + offset * 7);
@@ -20296,7 +20172,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
     const s = new Date(m);
     s.setDate(s.getDate() + 6);
     let tag = "";
-    if (offset === 0) tag = " \xB7 semaine en cours (verrouill\xE9e)";
+    if (offset === 0) tag = " \xB7 semaine en cours (r\xE9servable \xE0 partir de demain)";
     else if (offset === 1) tag = " \xB7 semaine prochaine";
     else if (offset < 0) tag = " \xB7 archive";
     return `Semaine du ${fmtDate(m)} au ${fmtDate(s)}${tag}`;
@@ -20339,7 +20215,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
     const [pwdError, setPwdError] = (0, import_react10.useState)("");
     const [tables, setTables] = (0, import_react10.useState)([]);
     const [adherents, setAdherents] = (0, import_react10.useState)([]);
-    const [weekOffset, setWeekOffset] = (0, import_react10.useState)(1);
+    const [weekOffset, setWeekOffset] = (0, import_react10.useState)(todayIndex() === 6 ? 1 : 0);
     const [bookings, setBookings] = (0, import_react10.useState)([]);
     const [myName, setMyName] = (0, import_react10.useState)("");
     const [pendingNew, setPendingNew] = (0, import_react10.useState)(null);
@@ -20557,7 +20433,8 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       } catch (e) {
       }
     };
-    const isLocked = weekOffset <= 0;
+    const isDayLocked = (dIdx) => weekOffset < 0 || weekOffset === 0 && dIdx <= todayIndex();
+    const isLocked = weekOffset < 0 || weekOffset === 0 && todayIndex() >= 6;
     const getWeekBookings = async (key) => {
       try {
         const res = await window.storage.get(key, true);
@@ -20565,6 +20442,75 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       } catch (e) {
         return [];
       }
+    };
+    const [renewals, setRenewals] = (0, import_react10.useState)([]);
+    const [renewWeeks, setRenewWeeks] = (0, import_react10.useState)({});
+    const [renewDismissed, setRenewDismissed] = (0, import_react10.useState)({});
+    const [renewTick, setRenewTick] = (0, import_react10.useState)(0);
+    (0, import_react10.useEffect)(() => {
+      if (!unlocked) return;
+      let cancelled = false;
+      (async () => {
+        const weeks = await Promise.all([0, 1, 2, 3].map((i) => getWeekBookings(weekStorageKey2(i))));
+        const today = /* @__PURE__ */ new Date();
+        today.setHours(0, 0, 0, 0);
+        const limit = new Date(today);
+        limit.setDate(limit.getDate() + RENEW_DAYS);
+        const inLast = new Set((weeks[3] || []).map((b) => b.recurringGroup).filter(Boolean));
+        const lastSeen = {};
+        for (let i = 0; i < 3; i++) {
+          for (const b of weeks[i] || []) {
+            if (!b.recurringGroup || b.recurringGroup.startsWith("block-") || inLast.has(b.recurringGroup)) continue;
+            lastSeen[b.recurringGroup] = { off: i, b };
+          }
+        }
+        const merged = {};
+        for (const g of Object.keys(lastSeen)) {
+          const { off, b } = lastSeen[g];
+          const d = new Date(weekMonday2(off));
+          d.setDate(d.getDate() + b.day);
+          if (d < today || d > limit) continue;
+          const key = `${b.name}|${b.tableId}|${b.day}|${off}`;
+          if (!merged[key]) merged[key] = { key, name: b.name, tableId: b.tableId, day: b.day, lastOff: off, lastDate: d, items: [] };
+          merged[key].items.push(b);
+        }
+        const list = Object.values(merged).map((m) => ({ ...m, items: m.items.sort((a, c) => a.hour - c.hour) }));
+        list.sort((a, c) => a.lastDate - c.lastDate || a.name.localeCompare(c.name, "fr"));
+        if (!cancelled) setRenewals(list);
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, [unlocked, renewTick]);
+    const renewSeries = async (r) => {
+      const n = Math.max(2, Math.min(MAX_RECURRENCE_WEEKS, renewWeeks[r.key] || DEFAULT_RENEW_WEEKS));
+      setLoading(true);
+      let skipped = 0;
+      for (let i = 1; i <= n; i++) {
+        const key = weekStorageKey2(r.lastOff + i);
+        const arr = await getWeekBookings(key);
+        let changed = false;
+        for (const b of r.items) {
+          if (arr.some((x) => x.tableId === b.tableId && x.day === b.day && x.hour === b.hour)) {
+            skipped++;
+            continue;
+          }
+          arr.push({ ...b, id: `${Date.now()}-r${i}-${Math.random().toString(36).slice(2, 5)}` });
+          changed = true;
+        }
+        if (changed) {
+          try {
+            await window.storage.set(key, JSON.stringify(arr), true);
+          } catch (e) {
+          }
+        }
+      }
+      await loadWeek(weekOffset);
+      setLoading(false);
+      setRenewTick((t) => t + 1);
+      setStatus(
+        skipped > 0 ? `Cr\xE9neau prolong\xE9 de ${n} semaines (${skipped} cr\xE9neau(x) d\xE9j\xE0 occup\xE9(s) ignor\xE9(s)).` : `Cr\xE9neau prolong\xE9 de ${n} semaines.`
+      );
     };
     const isIndispo = (b) => !!(b && b.recurringGroup && b.recurringGroup.startsWith("block-"));
     const blockSlots = async (tableId, slots, what) => {
@@ -20695,6 +20641,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
       }
       await saveMyName(name);
       await loadWeek(weekOffset);
+      setRenewTick((t) => t + 1);
       setLoading(false);
       setStatus(
         skipped > 0 ? `R\xE9servation enregistr\xE9e (${skipped} semaine(s) d\xE9j\xE0 occup\xE9e(s) ignor\xE9e(s)).` : recurring ? `R\xE9servation enregistr\xE9e sur ${count} semaines.` : "R\xE9servation enregistr\xE9e."
@@ -20733,7 +20680,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
     };
     const cancelSeries = async (booking) => {
       setLoading(true);
-      for (let i = 0; i < MAX_RECURRENCE_WEEKS + 2; i++) {
+      for (let i = 0; i < MAX_RECURRENCE_WEEKS * 4; i++) {
         const off = weekOffset + i;
         const key = weekStorageKey2(off);
         try {
@@ -21050,6 +20997,46 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnPrimary, onClick: checkPassword, children: "Acc\xE9der \xE0 l'espace membres" }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles9.gateHint, children: "Mot de passe communiqu\xE9 par le club \u2014 demandez-le au bureau si besoin." })
         ] }) }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_jsx_runtime10.Fragment, { children: [
+          (() => {
+            const visible = renewals.filter((r) => !renewDismissed[r.key] && (adminMode || myName && r.name === myName));
+            if (visible.length === 0) return null;
+            return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.renewBox, className: "no-print", "data-testid": "renew-banner", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "resa-serif", style: styles9.adminTitle, children: adminMode ? "S\xE9ries de r\xE9servation qui se terminent bient\xF4t" : "Votre r\xE9servation r\xE9currente se termine bient\xF4t" }),
+              visible.map((r) => {
+                const tname = (tables.find((t) => t.id === r.tableId) || {}).name || r.tableId;
+                const hrs = r.items.map((b) => hourLabel2(b.hour)).join(" + ");
+                return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.renewRow, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: { flex: "1 1 260px", fontSize: 13 }, children: [
+                    adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("strong", { children: [
+                      r.name,
+                      " \u2014 "
+                    ] }),
+                    tname,
+                    ", ",
+                    DAYS2[r.day],
+                    " ",
+                    hrs,
+                    " : derni\xE8re s\xE9ance le ",
+                    /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("strong", { children: fmtDate(r.lastDate) }),
+                    "."
+                  ] }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 12.5 }, children: "Prolonger de" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                    "select",
+                    {
+                      "aria-label": "Prolonger de combien de semaines",
+                      value: renewWeeks[r.key] || DEFAULT_RENEW_WEEKS,
+                      onChange: (e) => setRenewWeeks({ ...renewWeeks, [r.key]: Number(e.target.value) }),
+                      children: RECURRENCE_CHOICES.map((n) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: n, children: n }, n))
+                    }
+                  ),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 12.5 }, children: "semaines" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnPrimarySmall || styles9.btnGhostSmall, onClick: () => renewSeries(r), disabled: loading, children: "Prolonger" }),
+                  /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnGhostSmall, onClick: () => setRenewDismissed({ ...renewDismissed, [r.key]: true }), children: "Non merci" })
+                ] }, r.key);
+              })
+            ] });
+          })(),
           adminMode && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.adminPanel, className: "no-print", children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { className: "resa-serif", style: styles9.adminTitle, children: [
               "Adh\xE9rents pouvant r\xE9server (",
@@ -21079,10 +21066,12 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.weekNavBtn, onClick: () => setWeekOffset((w) => w - 1), children: "\u2190 Semaine pr\xE9c\xE9dente" }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("select", { value: weekOffset, onChange: (e) => setWeekOffset(parseInt(e.target.value, 10)), style: { minWidth: 220 }, children: weekOptions.map((o) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: o, children: weekOptionLabel(o) }, o)) }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.weekNavBtn, onClick: () => setWeekOffset((w) => w + 1), children: "Semaine suivante \u2192" }),
+            weekOffset !== 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.weekNavBtn, onClick: () => setWeekOffset(0), children: "Semaine en cours" }),
             weekOffset !== 1 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.weekNavBtn, onClick: () => setWeekOffset(1), children: "Semaine prochaine" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "resa-serif", style: styles9.weekTitle, children: weekLabel(weekOffset) }),
-          isLocked && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles9.lockedNote, className: "no-print", children: weekOffset === 0 ? "La semaine en cours est verrouill\xE9e : aucune r\xE9servation ni modification n'est possible." : "Semaine archiv\xE9e, consultable uniquement." }),
+          weekOffset < 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles9.lockedNote, className: "no-print", children: "Semaine archiv\xE9e, consultable uniquement." }),
+          weekOffset === 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles9.lockedNote, className: "no-print", children: todayIndex() >= 6 ? "Il n'y a plus de jour r\xE9servable dans la semaine en cours : r\xE9servez dans la semaine prochaine." : "On r\xE9serve \xE0 partir de demain : les jours pass\xE9s et aujourd'hui sont verrouill\xE9s (gris\xE9s), aucune r\xE9servation ni modification n'y est possible." }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles9.tablesWrap, children: tables.map((t) => {
             const isCollapsed = collapsed[t.id] === void 0 ? true : collapsed[t.id];
             const { spanStart, skip } = !isCollapsed ? computeSpans(t.id) : { spanStart: {}, skip: {} };
@@ -21162,15 +21151,15 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                       "td",
                       {
                         rowSpan: span,
-                        className: `resa-cell ${isLocked ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isIndisp ? "indispo" : ""} ${isCompet || isTournoi ? "compet" : ""} ${selected ? "selected" : ""}`,
+                        className: `resa-cell ${isDayLocked(dIdx) ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isIndisp ? "indispo" : ""} ${isCompet || isTournoi ? "compet" : ""} ${selected ? "selected" : ""}`,
                         title,
-                        onMouseDown: () => !booking && !isLocked && handleCellMouseDown(t.id, dIdx, h),
-                        onMouseEnter: () => !booking && !isLocked && handleCellMouseEnter(t.id, dIdx, h),
+                        onMouseDown: () => !booking && !isDayLocked(dIdx) && handleCellMouseDown(t.id, dIdx, h),
+                        onMouseEnter: () => !booking && !isDayLocked(dIdx) && handleCellMouseEnter(t.id, dIdx, h),
                         children: booking ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
                           "button",
                           {
                             className: "resa-cell-btn",
-                            disabled: isLocked || isBlocked,
+                            disabled: isDayLocked(dIdx) || isBlocked,
                             onClick: () => openEditBooking(booking),
                             children: isIndisp ? booking.name : displayBooking(booking)
                           }
@@ -21178,7 +21167,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                           "button",
                           {
                             className: `resa-cell-btn resa-cell-empty-btn ${selected ? "selected" : ""}`,
-                            disabled: isLocked || adherents.length === 0,
+                            disabled: isDayLocked(dIdx) || adherents.length === 0,
                             onClick: () => handleCellClick(t.id, dIdx, h),
                             children: selected ? "\u2713" : "+"
                           }
@@ -21274,35 +21263,31 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
               }
             )
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles9.checkRow, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-              "input",
-              {
-                type: "checkbox",
-                checked: pendingRecurring,
-                onChange: (e) => setPendingRecurring(e.target.checked),
-                style: { width: "auto" }
-              }
-            ),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "R\xE9p\xE9ter ce cr\xE9neau chaque semaine" })
-          ] }),
-          pendingRecurring && /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: styles9.fieldRow, children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("span", { style: styles9.fieldLabel, children: [
-              "Nombre de semaines (max ",
-              MAX_RECURRENCE_WEEKS,
-              ")"
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles9.checkRow, flexWrap: "wrap" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("label", { style: { display: "flex", alignItems: "center", gap: 8, cursor: "pointer" }, children: [
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
+                "input",
+                {
+                  type: "checkbox",
+                  checked: pendingRecurring,
+                  onChange: (e) => setPendingRecurring(e.target.checked),
+                  style: { width: "auto" }
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { children: "R\xE9p\xE9ter ce cr\xE9neau chaque semaine pendant" })
             ] }),
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
-              "input",
+              "select",
               {
-                type: "number",
-                min: 1,
-                max: MAX_RECURRENCE_WEEKS,
-                value: pendingWeeks,
-                onChange: (e) => setPendingWeeks(parseInt(e.target.value, 10) || 1),
-                style: { width: 90 }
+                value: pendingWeeks < 2 ? 2 : pendingWeeks,
+                disabled: !pendingRecurring,
+                onChange: (e) => setPendingWeeks(parseInt(e.target.value, 10)),
+                style: { width: 70, opacity: pendingRecurring ? 1 : 0.5 },
+                "aria-label": "Nombre de semaines",
+                children: RECURRENCE_CHOICES.map((n) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: n, children: n }, n))
               }
-            )
+            ),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { opacity: pendingRecurring ? 1 : 0.5 }, children: "semaines" })
           ] }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.modalActions, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnPrimary, onClick: confirmPendingNew, disabled: loading || !pendingPrincipal, children: loading ? "\u2026" : "Valider la r\xE9servation" }),
@@ -21403,6 +21388,8 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
     ] });
   }
   var styles9 = {
+    renewBox: { margin: "14px 22px 0", padding: 12, background: "#fff3d6", border: "2px solid #c9a227", borderRadius: 6 },
+    renewRow: { display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", padding: "6px 0", borderTop: "1px solid #e6d29a" },
     app: { background: "radial-gradient(ellipse at 50% 40%, #0096d6 0%, #007BB5 35%, #005a85 65%, #003a57 100%)", minHeight: "100%", padding: "24px 16px" },
     appInner: {
       maxWidth: 1080,
@@ -21458,6 +21445,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
     legend: { fontSize: 11.5, color: "#5F5E5A", padding: "0 22px 18px" },
     btnGhost: { border: "1px solid rgba(246,241,228,0.5)", background: "transparent", color: "#fdf8f0", borderRadius: 4, padding: "8px 14px", fontSize: 13 },
     btnGhostActive: { background: "#c9a227", color: "#0a1628", borderColor: "#c9a227", fontWeight: 600 },
+    btnPrimarySmall: { border: "1px solid #a07b10", background: "#c9a227", color: "#0a1628", fontWeight: 700, borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     btnGhostSmall: { border: "1px solid #C9C2AE", background: "transparent", color: "#0a1628", borderRadius: 4, padding: "6px 12px", fontSize: 12 },
     btnDanger: { border: "1px solid #B1432F", background: "transparent", color: "#B1432F", borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 600 },
     btnPrimary: { border: "1px solid #c9a227", background: "#c9a227", color: "#0a1628", borderRadius: 4, padding: "8px 14px", fontSize: 13, fontWeight: 600 },
@@ -26724,460 +26712,6 @@ Continuer ?`;
       adminMode && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: { ...styles13.removeBtn, marginTop: 14 }, onClick: onDelete, children: "Supprimer ce document" })
     ] }) });
   }
-  // ===== Synthèse de saison (AG) =====
-  var SYN_CSS = "\n@page { size: A4; margin: 0; }\n:root { --navy:#0a1628; --gold:#c9a227; --gold-l:#f3e9c6; --ink:#1d2433; --mute:#5f6675; --line:#dfdacb; --paper:#fbf9f3; --green:#2e7d4f; --red:#b0413e; }\n* { box-sizing:border-box; }\nbody { margin:0; font-family: \"DejaVu Sans\", Arial, sans-serif; color:var(--ink); font-size:10.5pt; line-height:1.45; }\n.page { width:210mm; height:297mm; padding:16mm 16mm 14mm; position:relative; page-break-after:always; overflow:hidden; background:#fff; }\n.page:last-child { page-break-after:auto; }\n.serif { font-family: \"DejaVu Serif\", Georgia, serif; }\nh2 { font-family:\"DejaVu Serif\", Georgia, serif; color:var(--navy); font-size:17pt; margin:0 0 2mm; }\nh2 .n { color:var(--gold); margin-right:3mm; }\nh3 { font-size:11pt; color:var(--navy); margin:5mm 0 2mm; text-transform:uppercase; letter-spacing:.04em; }\n.lead { color:var(--mute); margin:0 0 5mm; }\n.rule { height:2px; background:var(--gold); width:24mm; margin:0 0 4mm; }\n.foot { position:absolute; bottom:8mm; left:16mm; right:16mm; display:flex; justify-content:space-between; font-size:8pt; color:var(--mute); border-top:1px solid var(--line); padding-top:2mm; }\n.example { position:absolute; top:6mm; right:16mm; font-size:7.5pt; color:var(--red); border:1px solid var(--red); border-radius:3px; padding:1px 6px; letter-spacing:.05em; }\n/* cover */\n.cover { background:var(--navy); color:#fff; padding:0; }\n.cover .inner { padding:40mm 20mm 0; }\n.cover .club { color:var(--gold); letter-spacing:.25em; font-size:11pt; }\n.cover h1 { font-family:\"DejaVu Serif\", Georgia, serif; font-size:36pt; line-height:1.1; margin:10mm 0 6mm; font-weight:normal; }\n.cover .season { font-size:20pt; color:var(--gold); }\n.cover .sub { margin-top:14mm; font-size:12pt; color:#c8cfdc; max-width:140mm; }\n.cover .band { position:absolute; left:0; right:0; bottom:0; height:70mm; background:var(--paper); color:var(--navy); padding:12mm 20mm; }\n.cover .band .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6mm; }\n.cover .band .k { font-family:\"DejaVu Serif\",Georgia,serif; font-size:24pt; color:var(--navy); }\n.cover .band .l { font-size:9pt; color:var(--mute); }\n.cover .band .ag { margin-top:10mm; font-size:9pt; color:var(--mute); }\n.balls { position:absolute; right:22mm; top:120mm; }\n/* kpis */\n.kpis { display:grid; grid-template-columns:repeat(3,1fr); gap:4mm; margin-bottom:5mm; }\n.kpi { border:1px solid var(--line); border-top:3px solid var(--gold); border-radius:3px; padding:3.5mm 4mm; background:var(--paper); }\n.kpi .v { font-family:\"DejaVu Serif\",Georgia,serif; font-size:22pt; color:var(--navy); line-height:1.1; }\n.kpi .t { font-size:9pt; color:var(--mute); }\n.kpi .d { font-size:8.5pt; font-weight:bold; margin-top:1mm; }\n.up { color:var(--green); } .down { color:var(--red); }\n.two { display:grid; grid-template-columns:1fr 1fr; gap:6mm; }\ntable { width:100%; border-collapse:collapse; font-size:9.5pt; }\nth { white-space:nowrap; text-align:left; background:var(--navy); color:#fff; font-weight:normal; padding:1.8mm 2.5mm; font-size:8.5pt; letter-spacing:.03em; }\ntd { padding:1.8mm 2.5mm; border-bottom:1px solid var(--line); }\ntd.num, th.num { text-align:right; }\ntr.tot td { font-weight:bold; border-top:1.5px solid var(--navy); }\n.note { font-size:8.5pt; color:var(--mute); margin-top:2mm; }\n.box { background:var(--paper); border-left:3px solid var(--gold); padding:3mm 4mm; margin:3mm 0; }\nul.clean { margin:0; padding-left:5mm; } ul.clean li { margin-bottom:1.2mm; }\n.medal { display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:4px; vertical-align:middle; }\n.prog { display:grid; grid-template-columns:52mm 1fr 14mm; align-items:center; gap:3mm; margin:2.2mm 0; font-size:9.5pt; }\n.bar { height:4mm; background:#ece7d8; border-radius:2px; overflow:hidden; }\n.bar i { display:block; height:100%; background:var(--gold); }\n.bar i.done { background:var(--green); }\n.tag { font-size:7.5pt; padding:0 5px; border-radius:2px; background:var(--gold-l); color:#6b5413; margin-left:4px; }\n.cal { display:grid; grid-template-columns:22mm 1fr; gap:1.5mm 4mm; font-size:9.5pt; }\n.cal b { color:var(--navy); }\nsvg text { font-family:\"DejaVu Sans\", Arial, sans-serif; }\n</head><body>\n\n.src { display:inline-block; font-size:7.3pt; color:#24613f; background:#e4f1e8; border-radius:2px; padding:0 5px; margin:0 0 1.5mm; letter-spacing:.01em; }\n.src.man { color:#6b5413; background:#f6edcc; }\n.todo { border:1.5px dashed #d88a1c; background:#fff7ea; border-radius:3px; padding:2.5mm 3.5mm; margin:2.5mm 0; font-size:9pt; }\n.todo b.t { color:#b5650a; font-size:7.5pt; letter-spacing:.06em; display:block; margin-bottom:.5mm; }\n.legend { display:flex; gap:6mm; font-size:8.5pt; margin-top:3mm; }\n.sw { display:inline-block; width:9px; height:9px; margin-right:4px; vertical-align:middle; border-radius:1px; }\ntable.src-t td { vertical-align:top; font-size:8.6pt; padding:1.4mm 2mm; }\ntable.src-t th { font-size:8pt; padding:1.4mm 2mm; }\n.ok { color:#24613f; font-weight:bold; } .ko { color:#b5650a; font-weight:bold; }\n\nbody { -webkit-print-color-adjust:exact; print-color-adjust:exact; }\n@media screen { body { background:#e9e6dd; padding:10px 0; } .page { margin:0 auto 10px; box-shadow:0 2px 10px rgba(0,0,0,.18); } }\n@media screen and (max-width:820px) { body { zoom:.45; } }\n";
-  function synEsc(s) {
-    return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-  function synSeasonLabel(sy) {
-    return sy + "-" + (sy + 1);
-  }
-  function synDefaultStartYear() {
-    const d = /* @__PURE__ */ new Date();
-    return d.getMonth() + 1 >= 9 ? d.getFullYear() : d.getFullYear() - 1;
-  }
-  function synDdmm(iso) {
-    const p = String(iso || "").split("-");
-    return p.length === 3 ? p[2] + "/" + p[1] : "";
-  }
-  async function synLoad(key, fb) {
-    try {
-      const r = await window.storage.get(key, true);
-      return r && r.value ? JSON.parse(r.value) : fb;
-    } catch (e) {
-      return fb;
-    }
-  }
-  async function synList(prefix) {
-    try {
-      const r = await window.storage.list(prefix);
-      return r && r.keys ? r.keys : [];
-    } catch (e) {
-      return [];
-    }
-  }
-  async function collectSyntheseData(sy) {
-    const start = sy + "-09-01", end = sy + 1 + "-08-31";
-    const yy = (n) => String(n).slice(2);
-    const d = { sy, start, end };
-    d.adherents = await synLoad("p5:adherents", []);
-    d.evoPrev = await synLoad("p5:evolution:" + (sy - 1), null);
-    d.evoCur = await synLoad("p5:evolution:" + sy, null);
-    d.pyrPrev = await synLoad("p5:pyramide:" + yy(sy - 1) + "-" + yy(sy), null);
-    if (!d.pyrPrev && sy - 1 === 2025 && typeof ARCHIVE_PYRAMID_2025 !== "undefined") d.pyrPrev = ARCHIVE_PYRAMID_2025;
-    d.competitions = (await synLoad("p5:competitions", [])).filter((c) => !c.date || c.date >= start && c.date <= end);
-    d.allCompetitions = await synLoad("p5:competitions", []);
-    d.tournois = (await synLoad("p5:tournois", [])).filter((t) => t.date && t.date >= start && t.date <= end);
-    const sheetKeys = await synList("p5:competition:");
-    d.sheets = [];
-    for (const k of sheetKeys) d.sheets.push(await synLoad(k, null));
-    d.seasonKey = yy(sy) + "/" + yy(sy + 1);
-    d.tables = await synLoad("resa:tables", []);
-    const weekKeys = (await synList("resa:week:")).filter((k) => {
-      const w = k.slice(10);
-      return w >= sy + "-08-25" && w <= end;
-    }).sort();
-    d.weeks = [];
-    for (const k of weekKeys) d.weeks.push({ week: k.slice(10), bookings: await synLoad(k, []) });
-    d.horaires = await synLoad("p4:horaires", []);
-    d.seances = (await synLoad("p4:seances", [])).filter((x) => x.date && x.date >= start && x.date <= end);
-    d.formateurs = await synLoad("p4:formateurs", []);
-    d.projects = await synLoad("p6:projects", {});
-    d.extraProjects = await synLoad("p6:extraprojects", []);
-    const news = (await synLoad("home:news", [])).concat(await synLoad("home:news:archive", []));
-    const seen = {};
-    d.news = news.filter((n) => n && n.date && n.date >= start && n.date <= end && !seen[n.date + n.title] && (seen[n.date + n.title] = 1)).sort((a, b) => a.date < b.date ? -1 : 1);
-    d.actionsAFaire = await synLoad("p1:actions_a_faire", typeof DEFAULT_ACTIONS_A_FAIRE !== "undefined" ? DEFAULT_ACTIONS_A_FAIRE : []);
-    const statKeys = (await synList("stats:")).filter((k) => {
-      const m = k.slice(6);
-      return m >= sy + "-09" && m <= sy + 1 + "-08";
-    });
-    d.stats = [];
-    for (const k of statKeys) d.stats.push(await synLoad(k, null));
-    return d;
-  }
-  function buildSyntheseHTML(d, inp, final, etape) {
-    const today = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-    const cut = today < d.end ? today : d.end;
-    const season = synSeasonLabel(d.sy);
-    const yy = String(d.sy).slice(2);
-    const act = d.adherents.filter((a) => !a.desengage);
-    const nAct = act.length;
-    const lic = act.filter((a) => a.statut === "Licenci\xE9").length;
-    const hon = act.filter((a) => a.statut === "Membre d'honneur").length;
-    const ss = (a, k) => a.sousStatuts && a.sousStatuts[k];
-    const compFlag = act.filter((a) => ss(a, "competiteur")).length;
-    const arb = act.filter((a) => ss(a, "arbitre")).length;
-    const form = act.filter((a) => ss(a, "formateur")).length;
-    const newM = act.filter((a) => String(a.depuis || "") === yy).length;
-    const noDepuis = act.filter((a) => !a.depuis).length;
-    const pray = act.filter((a) => (a.commune || "").toUpperCase().trim() === "PRAYSSAC").length;
-    const ncom = new Set(act.map((a) => (a.commune || "").toUpperCase().replace(/Ê/g, "E").replace(/-/g, " ").trim()).filter(Boolean)).size;
-    const now = new Date(cut);
-    const ages = act.filter((a) => a.dateNaissance).map((a) => (now - new Date(a.dateNaissance)) / 315576e5);
-    const ageAvg = ages.length ? Math.round(ages.reduce((s, x) => s + x, 0) / ages.length) : null;
-    const band = (lo, hi) => ages.filter((x) => x >= lo && x < hi).length;
-    const bCur = [band(0, 20), band(20, 60), band(60, 70), band(70, 80), band(80, 200)];
-    let bPrev = null, agePrev = null, totPrevAuto = null;
-    if (d.pyrPrev && Array.isArray(d.pyrPrev.bands)) {
-      const b = d.pyrPrev.bands;
-      bPrev = [b[0] + b[1], b[2] + b[3] + b[4] + b[5], b[6], b[7], b[8]];
-      agePrev = d.pyrPrev.total ? Math.round(d.pyrPrev.sumAges / d.pyrPrev.total) : null;
-      totPrevAuto = d.pyrPrev.total + (d.pyrPrev.sansDate || 0);
-    }
-    if (d.evoPrev && d.evoPrev.total) totPrevAuto = d.evoPrev.total;
-    const totPrev = inp.effectifPrecedent !== "" && inp.effectifPrecedent != null && !isNaN(parseInt(inp.effectifPrecedent)) ? parseInt(inp.effectifPrecedent) : totPrevAuto;
-    const diff = totPrev != null ? nAct - totPrev : null;
-    const C = d.competitions;
-    const typ = (t) => C.filter((c) => c.type === t).length;
-    const played = C.filter((c) => c.date && c.date <= cut);
-    const aclub = C.filter((c) => c.auClub).length;
-    const players = /* @__PURE__ */ new Set();
-    let engagements = 0;
-    C.forEach((c) => (c.lieux || []).forEach((l) => (l.joueurs || []).forEach((j) => {
-      if (j) {
-        players.add(j);
-        engagements++;
-      }
-    })));
-    const undated = C.filter((c) => !c.date).length;
-    const months = [], mlab = ["sept", "oct", "nov", "d\xE9c", "janv", "f\xE9vr", "mars", "avr", "mai", "juin", "juil", "ao\xFBt"];
-    for (let i = 0; i < 12; i++) {
-      const y = i < 4 ? d.sy : d.sy + 1, m = (i + 8) % 12 + 1;
-      months.push(y + "-" + String(m).padStart(2, "0"));
-    }
-    const mp = months.map((m) => C.filter((c) => c.date && c.date.slice(0, 7) === m && c.date <= cut).length);
-    const mf = months.map((m) => C.filter((c) => c.date && c.date.slice(0, 7) === m && c.date > cut).length);
-    let lastM = 11;
-    while (lastM > 8 && mp[lastM] + mf[lastM] === 0) lastM--;
-    const catN = (x) => String(x || "").replace(/\s/g, "");
-    const modes = [["carambole", "Partie libre"], ["unebande", "1 bande"], ["troisbandes", "3 bandes"], ["cadre", "Cadre"]];
-    const off = {};
-    C.filter((c) => c.type === "officielle").forEach((c) => {
-      const k = c.typeJeu + "|" + catN(c.categorie);
-      off[k] = (off[k] || 0) + 1;
-    });
-    let tqF = 0, tqS = 0;
-    d.sheets.forEach((s) => {
-      const se = s && s.seasons && s.seasons[d.seasonKey];
-      if (!se) return;
-      Object.values(se).forEach((g) => (g.tq || []).forEach((t) => {
-        if (t.tq0) return;
-        tqS++;
-        if (t.points && t.reprises) tqF++;
-      }));
-    });
-    const TBL = {};
-    d.tables.forEach((t) => TBL[t.id] = (t.name || "").replace(" avec Pool-Shot", ""));
-    const wk = [], tb = {}, names = /* @__PURE__ */ new Set();
-    let resaTot = 0;
-    d.weeks.forEach((w) => {
-      const c = { adh: 0, comp: 0, cours: 0 };
-      (w.bookings || []).forEach((b) => {
-        const day = new Date(w.week);
-        day.setDate(day.getDate() + (b.day || 0));
-        const iso = day.toISOString().slice(0, 10);
-        if (iso < d.start || iso > cut) return;
-        const g = b.recurringGroup || "";
-        if (g.startsWith("block-")) return;
-        const t = g.startsWith("course-") ? "cours" : g.startsWith("compet-") || g.startsWith("tournoi-") ? "comp" : "adh";
-        c[t]++;
-        resaTot++;
-        tb[b.tableId] = (tb[b.tableId] || 0) + 1;
-        if (t === "adh" && b.name) names.add(b.name);
-      });
-      if (w.week <= cut && c.adh + c.comp + c.cours > 0) wk.push({ week: w.week, ...c });
-    });
-    const byMonth = {};
-    wk.forEach((w) => {
-      const m = w.week.slice(0, 7);
-      byMonth[m] = byMonth[m] || { adh: 0, comp: 0, cours: 0 };
-      ["adh", "comp", "cours"].forEach((k) => byMonth[m][k] += w[k]);
-    });
-    const resaMonths = months.filter((m) => byMonth[m] && byMonth[m].adh + byMonth[m].comp + byMonth[m].cours > 0);
-    let vis = 0, pv = 0;
-    d.stats.forEach((s) => s && s.d && Object.values(s.d).forEach((x) => {
-      vis += x.v || 0;
-      pv += x.pv || 0;
-    }));
-    const ptitles = { agrandissement: "L'agrandissement de la salle", poolshot: "Le Pool-Shot", feminin: "Le billard au f\xE9minin", jeunes: "L'ouverture aux jeunes", handibillard: "Le Handi-Billard" };
-    d.extraProjects.forEach((e) => ptitles[e.id] = e.title);
-    const projs = Object.entries(d.projects || {}).filter(([, v]) => v && !v.abandoned).sort((a, b) => (b[1].progress || 0) - (a[1].progress || 0));
-    const lines = (t) => String(t || "").split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-    const src = (t, man) => final ? "" : `<span class="src${man ? " man" : ""}">${man ? "✎ Saisie dans le formulaire" : "⚙ Automatique"} \xB7 ${t}</span>`;
-    const todo = (t, x) => final ? "" : `<div class="todo"><b class="t">\xC0 COMPL\xC9TER — ${t}</b>${x}</div>`;
-    const foot = (n) => `<div class="foot"><span>Billard Club Prayssacois \xB7 Synth\xE8se saison ${season}</span><span>${n}</span></div>`;
-    const tag = final ? "" : `<div class="example" style="color:#24613f;border-color:#24613f">APER\xC7U – DONN\xC9ES AU ${synDdmm(cut)}/${cut.slice(0, 4)}</div>`;
-    const kpi = (v, t, dd, cls) => `<div class="kpi"><div class="v">${v}</div><div class="t">${t}</div><div class="d ${cls || ""}">${dd || ""}</div></div>`;
-    function grouped(cats, s1, s2, n1, n2) {
-      const W = 600, H = 190, top = 20, base = H - 30, mx = Math.max(1, ...s1, ...s2), sc = (base - top) / (mx * 1.1), gw = (W - 50) / cats.length, bw = gw * 0.3;
-      let o = `<svg width="100%" viewBox="0 0 ${W} ${H}"><line x1="40" y1="${base}" x2="${W - 5}" y2="${base}" stroke="#0a1628"/>`;
-      cats.forEach((c, i) => {
-        const x0 = 45 + i * gw + gw * 0.18;
-        [[s1[i], "#0a1628"], [s2[i], "#c9a227"]].forEach(([v, col], j) => {
-          const x = x0 + j * (bw + 4), h = v * sc;
-          o += `<rect x="${x.toFixed(1)}" y="${(base - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" fill="${col}"/><text x="${(x + bw / 2).toFixed(1)}" y="${(base - h - 4).toFixed(1)}" font-size="11" font-weight="bold" fill="#0a1628" text-anchor="middle">${v}</text>`;
-        });
-        o += `<text x="${(x0 + bw + 2).toFixed(1)}" y="${base + 16}" font-size="11" fill="#1d2433" text-anchor="middle">${c}</text>`;
-      });
-      return o + `</svg><div class="legend"><span><i class="sw" style="background:#0a1628"></i>${n1}</span><span><i class="sw" style="background:#c9a227"></i>${n2}</span></div>`;
-    }
-    function stacked(labels, series, cols, nms, W, H) {
-      const tots = labels.map((_, i) => series.reduce((s, x) => s + x[i], 0)), top = 18, base = H - 30, mx = Math.max(1, ...tots), sc = (base - top) / (mx * 1.08), gw = (W - 30) / labels.length, bw = gw * 0.56;
-      let o = `<svg width="100%" viewBox="0 0 ${W} ${H}"><line x1="20" y1="${base}" x2="${W - 5}" y2="${base}" stroke="#0a1628"/>`;
-      labels.forEach((l, i) => {
-        const x = 25 + i * gw + (gw - bw) / 2;
-        let y = base;
-        series.forEach((s, k) => {
-          const h = s[i] * sc;
-          if (h) {
-            o += `<rect x="${x.toFixed(1)}" y="${(y - h).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" fill="${cols[k]}"/>`;
-            y -= h;
-          }
-        });
-        if (tots[i]) o += `<text x="${(x + bw / 2).toFixed(1)}" y="${(y - 4).toFixed(1)}" font-size="10.5" font-weight="bold" fill="#0a1628" text-anchor="middle">${tots[i]}</text>`;
-        o += `<text x="${(x + bw / 2).toFixed(1)}" y="${base + 15}" font-size="10" fill="#1d2433" text-anchor="middle">${l}</text>`;
-      });
-      return o + `</svg><div class="legend">` + nms.map((n, k) => `<span><i class="sw" style="background:${cols[k]}"></i>${n}</span>`).join("") + `</div>`;
-    }
-    const P = [];
-    const agTxt = inp.agDate ? "Assembl\xE9e g\xE9n\xE9rale du <b>" + synEsc(inp.agDate) + "</b> \xB7 " : "";
-    P.push(`<section class="page cover">${final ? "" : '<div class="example" style="color:#9fd3b4;border-color:#9fd3b4">APER\xC7U</div>'}
-  <div class="inner"><div class="club">BILLARD CLUB PRAYSSACOIS</div><h1>Synth\xE8se de l'activit\xE9<br>du club</h1><div class="season">Saison ${d.sy} – ${d.sy + 1}</div>${etape ? `<div style="margin-top:4mm;font-size:15pt;color:#fff">Point d'\xE9tape au ${synEsc(etape)}</div>` : ""}
-  <div class="sub">${etape ? "Situation interm\xE9diaire de la saison : adh\xE9rents" : "Bilan pr\xE9sent\xE9 \xE0 l'assembl\xE9e g\xE9n\xE9rale : adh\xE9rents"}, comp\xE9titions, \xE9cole du billard, actions men\xE9es et projets du club.</div></div>
-  <svg class="balls" style="top:165mm" width="150" height="90" viewBox="0 0 150 90"><circle cx="35" cy="50" r="28" fill="#f4f1e8"/><circle cx="85" cy="40" r="28" fill="#c9a227"/><circle cx="125" cy="62" r="22" fill="#b0413e"/></svg>
-  <div class="band"><div class="grid">
-    <div><div class="k">${nAct}</div><div class="l">adh\xE9rents${diff != null ? `<br><b style="color:${diff >= 0 ? "#2e7d4f" : "#b0413e"}">${diff >= 0 ? "+" : ""}${diff}</b> sur un an` : ""}</div></div>
-    <div><div class="k">${compFlag}</div><div class="l">comp\xE9titeurs</div></div>
-    <div><div class="k">${C.length}</div><div class="l">comp\xE9titions<br>au calendrier</div></div>
-    <div><div class="k">${resaTot} h</div><div class="l">de billard<br>r\xE9serv\xE9es</div></div>
-  </div><div class="ag">${agTxt}Document \xE9tabli par le bureau, arr\xEAt\xE9 au ${synDdmm(cut)}/${cut.slice(0, 4)}</div></div></section>`);
-    P.push(`<section class="page">${tag}<h2><span class="n">1</span>Les adh\xE9rents</h2><div class="rule"></div>
-  <p class="lead">Le club compte <b>${nAct} adh\xE9rents</b> cette saison${totPrev != null ? `, contre ${totPrev} la saison pr\xE9c\xE9dente (${diff >= 0 ? "+" : ""}${diff})` : ""}. ${newM} adh\xE9rents sont arriv\xE9s cette saison${ageAvg != null ? ` ; l'\xE2ge moyen est de ${ageAvg} ans` : ""}.</p>
-  ${src("Espace membres › Adh\xE9rents (fiches non \xAB d\xE9sengag\xE9es \xBB)")}
-  <div class="kpis">${kpi(nAct, "adh\xE9rents " + season, diff != null ? (diff >= 0 ? "▲ +" : "▼ ") + diff + " vs saison pr\xE9c\xE9dente (" + totPrev + ")" : "", diff != null ? diff >= 0 ? "up" : "down" : "")}${kpi(newM, "nouveaux adh\xE9rents", "")}${kpi(ageAvg != null ? ageAvg + " ans" : "–", "\xE2ge moyen", agePrev != null && ageAvg != null ? (ageAvg <= agePrev ? "▼ " : "▲ ") + Math.abs(agePrev - ageAvg) + " an(s) vs saison pr\xE9c\xE9dente" : "")}</div>
-  <h3>R\xE9partition par \xE2ge</h3>
-  ${bPrev ? grouped(["moins de 20 ans", "20-59 ans", "60-69 ans", "70-79 ans", "80 ans et +"], bPrev, bCur, "saison pr\xE9c\xE9dente", "saison " + season) : grouped(["moins de 20 ans", "20-59 ans", "60-69 ans", "70-79 ans", "80 ans et +"], [0, 0, 0, 0, 0], bCur, "saison pr\xE9c\xE9dente (non connue)", "saison " + season)}
-  <div class="two" style="margin-top:3mm"><div><h3>Profil des adh\xE9rents</h3><table><tr><th>Indicateur</th><th class="num">${season}</th></tr>
-    <tr><td>Licenci\xE9s</td><td class="num">${lic}</td></tr><tr><td>Membres d'honneur</td><td class="num">${hon}</td></tr>
-    <tr><td>Arbitres / formateurs</td><td class="num">${arb} / ${form}</td></tr><tr><td>Habitants de Prayssac</td><td class="num">${pray}</td></tr>
-    <tr><td>Communes repr\xE9sent\xE9es</td><td class="num">${ncom}</td></tr></table></div>
-    <div>${totPrev == null ? todo("Effectif de la saison pr\xE9c\xE9dente", "Saisissez-le dans le formulaire (champ \xAB Effectif saison pr\xE9c\xE9dente \xBB).") : ""}${noDepuis || ages.length < nAct ? todo("Fiches incompl\xE8tes", `${noDepuis} fiche(s) sans \xAB adh\xE9rent depuis \xBB et ${nAct - ages.length} sans date de naissance (Espace membres › Adh\xE9rents).`) : ""}</div></div>
-  ${foot(2)}</section>`);
-    const offRows = modes.filter(([m]) => ["R1", "R2", "R3", "R4"].some((c) => off[m + "|" + c])).map(([m, l]) => `<tr><td>${l}</td>` + ["R1", "R2", "R3", "R4"].map((c) => `<td class="num">${off[m + "|" + c] || "–"}</td>`).join("") + `<td class="num"><b>${["R1", "R2", "R3", "R4"].reduce((s, c) => s + (off[m + "|" + c] || 0), 0)}</b></td></tr>`).join("");
-    const res = lines(inp.resultats);
-    P.push(`<section class="page">${tag}<h2><span class="n">2</span>Comp\xE9titions et comp\xE9titeurs</h2><div class="rule"></div>
-  <p class="lead"><b>${compFlag} comp\xE9titeurs</b> et ${players.size} joueurs engag\xE9s pour <b>${C.length} comp\xE9titions</b>, dont ${aclub} accueillies \xE0 Prayssac.</p>
-  ${src("Espace membres › Calendrier des comp\xE9titions et fiches adh\xE9rents")}
-  <div class="kpis">${kpi(C.length, "comp\xE9titions", typ("officielle") + " officielles \xB7 " + typ("interclub") + " interclubs \xB7 " + typ("interne") + " internes")}${kpi(aclub, "comp\xE9titions au club", d.tournois.length + " tournois organis\xE9s")}${kpi(players.size, "joueurs engag\xE9s", engagements + " engagements individuels")}</div>
-  <div class="two"><div><h3>Comp\xE9titions par mois</h3>${stacked(mlab.slice(0, lastM + 1), [mp.slice(0, lastM + 1), mf.slice(0, lastM + 1)], ["#0a1628", "#dcc78a"], ["jou\xE9es", "\xE0 venir"], 320, 170)}${undated ? `<p class="note">${undated} comp\xE9tition(s) sans date.</p>` : ""}</div>
-  <div><h3>Comp\xE9titions officielles par mode et cat\xE9gorie</h3><table><tr><th>Mode</th><th class="num">R1</th><th class="num">R2</th><th class="num">R3</th><th class="num">R4</th><th class="num">Total</th></tr>${offRows}</table></div></div>
-  ${res.length || !final ? `<h3>R\xE9sultats marquants</h3>` : ""}${src("formulaire (une ligne par r\xE9sultat)", true)}
-  ${res.length ? "<ul class=\"clean\">" + res.map((r) => "<li>" + synEsc(r) + "</li>").join("") + "</ul>" : todo("R\xE9sultats et podiums", `Saisissez les r\xE9sultats marquants dans le formulaire (une ligne par r\xE9sultat). Pour info : ${tqF} r\xE9sultats de TQ sur ${tqS} sont saisis dans les fiches comp\xE9tition.`)}
-  ${foot(3)}</section>`);
-    const hRows = d.horaires.map((h) => `<tr><td style="white-space:nowrap">${synEsc(h.jour)} ${h.debut}h-${h.fin}h</td><td>${synEsc((TBL[h.tableId] || "?").replace("Billard ", "B"))}</td><td>${synEsc(h.formateurs || "–")}</td></tr>`).join("");
-    const sea = d.seances || [];
-    const formesIds = Array.from(new Set(sea.flatMap((x) => (x.formes || []).filter(Boolean))));
-    const adhById = {};
-    d.adherents.forEach((a) => adhById[a.id] = a);
-    const jeunesF = formesIds.filter((id) => {
-      const a = adhById[id];
-      return a && a.dateNaissance && (now - new Date(a.dateNaissance)) / 315576e5 < 18;
-    }).length;
-    const parForm = {};
-    sea.forEach((x) => {
-      if (x.formateur) parForm[x.formateur] = (parForm[x.formateur] || 0) + 1;
-    });
-    if ((inp.eleves === "" || inp.eleves == null) && formesIds.length) {
-      inp = { ...inp, eleves: String(formesIds.length), elevesJeunes: inp.elevesJeunes || String(jeunesF) };
-    }
-    const seaTxt = sea.length ? `<p style="margin:2mm 0 0"><b>${sea.length} s\xE9ance${sea.length > 1 ? "s" : ""} de formation</b>${Object.keys(parForm).length ? " (" + Object.entries(parForm).sort((a, b) => b[1] - a[1]).map(([n, c]) => synEsc(n) + " : " + c).join(", ") + ")" : ""}.</p>` : "";
-    const eleves = seaTxt + (inp.eleves !== "" && inp.eleves != null ? `<p style="margin:2mm 0 0"><b>${synEsc(inp.eleves)} \xE9l\xE8ves form\xE9s</b>${inp.elevesJeunes ? ` dont ${synEsc(inp.elevesJeunes)} jeunes` : ""}${inp.diplomes ? ` \xB7 ${synEsc(inp.diplomes)} dipl\xF4mes ou billes obtenus` : ""}.</p>` : todo("\xC9l\xE8ves de l'\xE9cole", "Enregistrez les s\xE9ances (page L'\xE9cole du billard, mode \xE9dition) ou saisissez les chiffres dans le formulaire."));
-    const useMonths = resaMonths.length > 8;
-    const rl = useMonths ? resaMonths.map((m) => mlab[months.indexOf(m)]) : wk.map((w) => synDdmm(w.week));
-    const rs = useMonths ? ["adh", "comp", "cours"].map((k) => resaMonths.map((m) => byMonth[m][k])) : ["adh", "comp", "cours"].map((k) => wk.map((w) => w[k]));
-    const newsLis = d.news.filter((n) => !/^convocation/i.test(n.title || "")).map((n) => `<li><b>${synDdmm(n.date)}</b> – ${synEsc(n.title)}</li>`).join("");
-    P.push(`<section class="page">${tag}<h2><span class="n">3</span>\xC9cole du billard et vie du club</h2><div class="rule"></div>
-  <p class="lead">L'\xE9cole propose <b>${d.horaires.length} cr\xE9neaux hebdomadaires</b> encadr\xE9s par ${d.formateurs.length} formateurs. Les billards ont \xE9t\xE9 r\xE9serv\xE9s <b>${resaTot} heures</b> sur la saison, par ${names.size} adh\xE9rents diff\xE9rents.</p>
-  <div class="two"><div><h3>L'\xE9cole du billard</h3>${src("page L'\xE9cole du billard")}<table><tr><th>Cr\xE9neau</th><th>Billard</th><th>Formateur</th></tr>${hRows}</table>
-    <p class="note">Formateurs : ${d.formateurs.map((f) => synEsc(f.nom)).join(", ")}.</p>${eleves}</div>
-  <div><h3>Heures r\xE9serv\xE9es par ${useMonths ? "mois" : "semaine"}</h3>${src("page R\xE9servations")}${rl.length ? stacked(rl, rs, ["#0a1628", "#b0413e", "#c9a227"], ["adh\xE9rents", "comp\xE9titions", "cours"], 320, 170) : ""}
-    <p class="note">Par billard : ${Object.entries(tb).sort().map(([t, h]) => synEsc(TBL[t] || t) + " " + h + " h").join(", ")}.</p></div></div>
-  ${newsLis || !final ? `<h3>Actions men\xE9es</h3>` : ""}${src("page d'accueil › Actualit\xE9s")}
-  ${newsLis ? `<ul class="clean" style="columns:2;column-gap:8mm">${newsLis}</ul>` : todo("Actions men\xE9es", "Aucune actualit\xE9 publi\xE9e sur la saison.")}
-  ${vis ? `<p class="note">Fr\xE9quentation du site : ${vis} visites et ${pv} pages vues sur la saison.</p>` : ""}
-  ${foot(4)}</section>`);
-    const prog = projs.map(([k, v]) => `<div class="prog"><span>${synEsc(ptitles[k] || k)}</span><div class="bar"><i class="${(v.progress || 0) >= 90 ? "done" : ""}" style="width:${v.progress || 0}%"></i></div><span>${v.progress || 0} %</span></div>`).join("");
-    const aaf = lines(inp.actionsAVenir);
-    const obj = lines(inp.objectifs).map((l) => l.split(/\s*[;:]\s*/));
-    P.push(`<section class="page">${tag}<h2><span class="n">4</span>Projets et perspectives</h2><div class="rule"></div>
-  <h3>Avancement des projets</h3>${src("page Nos projets")}${prog}
-  ${aaf.length || !final ? `<h3>Actions \xE0 venir</h3>` : ""}${src("formulaire (pr\xE9-rempli depuis Pr\xE9sentation › Actions \xE0 mener)", true)}
-  ${aaf.length ? "<ul class=\"clean\">" + aaf.map((a) => "<li>" + synEsc(a) + "</li>").join("") + "</ul>" : todo("Actions \xE0 venir", "Une ligne par action dans le formulaire.")}
-  ${obj.length || !final ? `<h3>Objectifs pour la saison prochaine</h3>` : ""}${src("formulaire (une ligne : objectif ; cible)", true)}
-  ${obj.length ? `<table><tr><th>Objectif</th><th class="num">Cible</th></tr>${obj.map((o) => `<tr><td>${synEsc(o[0])}</td><td class="num">${synEsc(o[1] || "")}</td></tr>`).join("")}</table>` : todo("Objectifs", "Une ligne par objectif, sous la forme \xAB Nombre d'adh\xE9rents ; 40 \xBB.")}
-  ${foot(5)}</section>`);
-    if (inp.motPresident || inp.finances || !final) {
-      P.push(`<section class="page">${tag}<h2><span class="n">5</span>Le mot du pr\xE9sident</h2><div class="rule"></div>
-  ${inp.motPresident ? `<div style="white-space:pre-wrap;font-size:10.5pt;line-height:1.6">${synEsc(inp.motPresident)}</div>` : todo("Mot du pr\xE9sident", "Texte libre \xE0 saisir dans le formulaire (facultatif).")}
-  ${inp.finances ? `<h3>Point financier</h3><div style="white-space:pre-wrap">${synEsc(inp.finances)}</div>` : todo("Point financier", "R\xE9sum\xE9 du tr\xE9sorier (facultatif).")}
-  <div class="box" style="margin-top:8mm"><b>Remerciements</b> – Le bureau remercie les b\xE9n\xE9voles, les formateurs, la mairie de Prayssac et l'ensemble de nos partenaires pour leur soutien tout au long de la saison.</div>
-  ${foot(6)}</section>`);
-    }
-    return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Synth\xE8se saison ${season} – Billard Club Prayssacois</title><style>${SYN_CSS}</style></head><body>${P.join("\n")}</body></html>`;
-  }
-  function SyntheseFrame({ html, frameRef }) {
-    return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("iframe", { ref: frameRef, srcDoc: html, title: "Synth\xE8se de saison", style: { width: "100%", height: "70vh", border: "1px solid #C9C2AE", borderRadius: 6, background: "#e9e6dd" } });
-  }
-  function SyntheseSaisonPanel({ adminMode }) {
-    const R = import_react14, J = import_jsx_runtime14;
-    const [index, setIndex] = (0, R.useState)([]);
-    const [viewer, setViewer] = (0, R.useState)(null);
-    const [editor, setEditor] = (0, R.useState)(false);
-    const [sy, setSy] = (0, R.useState)(synDefaultStartYear());
-    const [inp, setInp] = (0, R.useState)(null);
-    const [data, setData] = (0, R.useState)(null);
-    const [preview, setPreview] = (0, R.useState)("");
-    const [busy, setBusy] = (0, R.useState)("");
-    const [confirmDel, setConfirmDel] = (0, R.useState)(false);
-    const frameRef = (0, R.useRef)(null);
-    (0, R.useEffect)(() => {
-      (async () => setIndex(await synLoad("p5:syntheses", [])))();
-    }, []);
-    const blank = { agDate: "", effectifPrecedent: "", eleves: "", elevesJeunes: "", diplomes: "", resultats: "", actionsAVenir: "", objectifs: "", motPresident: "", finances: "" };
-    const openEditor = async (year) => {
-      setEditor(true);
-      setPreview("");
-      setBusy("Chargement des donn\xE9es du site…");
-      const draft = await synLoad("p5:synthese:draft:" + year, null);
-      const d = await collectSyntheseData(year);
-      let base = { ...blank, ...draft || {} };
-      if (!draft) {
-        const aaf = (d.actionsAFaire || []).map((a) => typeof a === "string" ? a : a.titre).filter(Boolean);
-        base.actionsAVenir = aaf.join("\n");
-      }
-      setInp(base);
-      setData(d);
-      setPreview(buildSyntheseHTML(d, base, false));
-      setBusy("");
-    };
-    const upd = (k) => (e) => setInp((p) => ({ ...p, [k]: e.target.value }));
-    const refresh = async () => {
-      if (!data) return;
-      setPreview(buildSyntheseHTML(data, inp, false));
-      try {
-        await window.storage.set("p5:synthese:draft:" + sy, JSON.stringify(inp), true);
-      } catch (e) {
-      }
-    };
-    const printFrame = () => {
-      const f = frameRef.current;
-      if (f && f.contentWindow) {
-        f.contentWindow.focus();
-        f.contentWindow.print();
-      }
-    };
-    const keyOf = (x) => x.key || "p5:synthese:" + x.season;
-    const saveIndex = async (next) => {
-      next.sort((a, b) => a.season !== b.season ? a.season < b.season ? 1 : -1 : (a.type === "etape" ? 1 : 0) - (b.type === "etape" ? 1 : 0) || (a.savedAt < b.savedAt ? 1 : -1));
-      await window.storage.set("p5:syntheses", JSON.stringify(next), true);
-      setIndex(next);
-    };
-    const archive = async (asEtape) => {
-      if (!data) return;
-      setBusy("Archivage\u2026");
-      const todayIso2 = (/* @__PURE__ */ new Date()).toISOString().slice(0, 10);
-      const etapeLabel = asEtape ? todayIso2.slice(8, 10) + "/" + todayIso2.slice(5, 7) + "/" + todayIso2.slice(0, 4) : null;
-      const html = buildSyntheseHTML(data, inp, true, etapeLabel);
-      const label = synSeasonLabel(sy);
-      const entry = asEtape ? { season: label, savedAt: todayIso2, type: "etape", key: "p5:synthese:" + label + ":etape:" + todayIso2 } : { season: label, savedAt: todayIso2, type: "final", key: "p5:synthese:" + label };
-      try {
-        await window.storage.set(entry.key, JSON.stringify({ ...entry, html, inputs: inp }), true);
-        await window.storage.set("p5:synthese:draft:" + sy, JSON.stringify(inp), true);
-        await saveIndex([entry].concat(index.filter((x) => keyOf(x) !== entry.key)));
-        setBusy("");
-        setEditor(false);
-        setViewer({ ...entry, html });
-      } catch (e) {
-        setBusy("\xC9chec de l'archivage : v\xE9rifiez la connexion puis r\xE9essayez.");
-      }
-    };
-    const titleOf = (x) => x.type === "etape" ? "Point d'\xE9tape au " + x.savedAt.slice(8, 10) + "/" + x.savedAt.slice(5, 7) + "/" + x.savedAt.slice(0, 4) + " (saison " + x.season + ")" : "Synth\xE8se de la saison " + x.season;
-    const openArchive = async (x) => {
-      setConfirmDel(false);
-      const a = await synLoad(keyOf(x), null);
-      if (a && a.html) setViewer({ ...x, html: a.html });
-    };
-    const delArchive = async () => {
-      const k = keyOf(viewer);
-      try {
-        await window.storage.delete(k);
-      } catch (e) {
-      }
-      try {
-        await saveIndex(index.filter((x) => keyOf(x) !== k));
-      } catch (e) {
-      }
-      setViewer(null);
-    };
-    const btn = { border: "1px solid #c9a227", background: "#c9a227", color: "#0a1628", borderRadius: 4, padding: "7px 12px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" };
-    const btnG = { border: "1px solid #C9C2AE", background: "#fff", color: "#0a1628", borderRadius: 4, padding: "7px 12px", fontSize: 12.5, cursor: "pointer" };
-    const lab = { display: "flex", flexDirection: "column", gap: 3, fontSize: 11.5, fontWeight: 600, color: "#0a1628" };
-    const fld = { padding: "6px 8px", border: "1px solid #C9C2AE", borderRadius: 4, fontSize: 12.5, fontWeight: 400, fontFamily: "inherit" };
-    const overlay = { position: "fixed", inset: 0, background: "rgba(10,22,40,0.7)", zIndex: 400, display: "flex", alignItems: "flex-start", justifyContent: "center", padding: "16px 10px", overflowY: "auto" };
-    const card = { background: "#fdf8f0", borderRadius: 8, borderTop: "4px solid #c9a227", padding: 14, width: "min(1000px, 100%)", display: "flex", flexDirection: "column", gap: 10 };
-    const F = (k, l, ph, area, rows) => J.jsxs("label", { style: { ...lab, gridColumn: area ? "1 / -1" : void 0 }, children: [l, area ? J.jsx("textarea", { value: inp[k], onChange: upd(k), rows: rows || 3, placeholder: ph, style: fld }) : J.jsx("input", { value: inp[k], onChange: upd(k), placeholder: ph, style: fld })] });
-    const yearsOpts = [];
-    for (let y = synDefaultStartYear() + 1; y >= 2025; y--) yearsOpts.push(y);
-    return J.jsxs("div", { className: "no-print", style: { background: "#fff", borderRadius: 10, borderTop: "4px solid #c9a227", padding: "12px 14px", boxShadow: "0 2px 12px rgba(0,0,0,0.08)", display: "flex", flexDirection: "column", gap: 8 }, children: [
-      J.jsxs("div", { style: { display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap" }, children: [
-        J.jsx("p", { className: "p5d-serif", style: { margin: 0, fontSize: 16, fontWeight: 700, color: "#0a1628" }, children: "\u{1F4CA} Synth\xE8ses de saison (AG)" }),
-        adminMode && J.jsx("button", { style: btn, onClick: () => openEditor(sy), children: "Pr\xE9parer la synth\xE8se de la saison" })
-      ] }),
-      index.length ? J.jsx("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: index.map((x) => J.jsx("button", { style: x.type === "etape" ? { ...btnG, fontSize: 11.5, background: "#f6f3ea" } : { ...btnG, fontWeight: 700 }, onClick: () => openArchive(x), children: (x.type === "etape" ? "Point d'\xE9tape " + x.savedAt.slice(8, 10) + "/" + x.savedAt.slice(5, 7) + "/" + x.savedAt.slice(2, 4) + " (" + x.season + ")" : "Saison " + x.season) + " → consulter" }, keyOf(x))) }) : J.jsx("p", { style: { margin: 0, fontSize: 12, color: "#5F5E5A" }, children: "Aucune synth\xE8se archiv\xE9e pour l'instant." }),
-      viewer && J.jsx("div", { style: overlay, onClick: () => setViewer(null), children: J.jsxs("div", { style: card, onClick: (e) => e.stopPropagation(), children: [
-        J.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }, children: [
-          J.jsx("p", { style: { margin: 0, fontWeight: 700, color: "#0a1628", flex: 1 }, children: titleOf(viewer) }),
-          J.jsx("button", { style: btn, onClick: printFrame, children: "\u{1F5A8} Imprimer / PDF" }),
-          adminMode && (confirmDel ? J.jsx("button", { style: { ...btnG, color: "#b0413e", borderColor: "#b0413e" }, onClick: delArchive, children: "Confirmer la suppression" }) : J.jsx("button", { style: btnG, onClick: () => setConfirmDel(true), children: "Supprimer" })),
-          J.jsx("button", { style: btnG, onClick: () => setViewer(null), children: "Fermer" })
-        ] }),
-        J.jsx(SyntheseFrame, { html: viewer.html, frameRef })
-      ] }) }),
-      editor && J.jsx("div", { style: overlay, children: J.jsxs("div", { style: card, children: [
-        J.jsxs("div", { style: { display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }, children: [
-          J.jsx("p", { style: { margin: 0, fontWeight: 700, color: "#0a1628", flex: 1 }, children: "Pr\xE9parer la synth\xE8se" }),
-          J.jsxs("label", { style: { ...lab, flexDirection: "row", alignItems: "center" }, children: ["Saison ", J.jsx("select", { value: sy, onChange: (e) => {
-            const y = parseInt(e.target.value);
-            setSy(y);
-            openEditor(y);
-          }, style: fld, children: yearsOpts.map((y) => J.jsx("option", { value: y, children: synSeasonLabel(y) }, y)) })] }),
-          J.jsx("button", { style: btnG, onClick: () => setEditor(false), children: "Fermer" })
-        ] }),
-        J.jsx("p", { style: { margin: 0, fontSize: 12, color: "#5F5E5A" }, children: "Les chiffres sont calcul\xE9s automatiquement \xE0 partir du site. Compl\xE9tez ci-dessous ce que le site ne conna\xEEt pas, cliquez sur \xAB Mettre \xE0 jour l'aper\xE7u \xBB, puis \xAB Archiver la version d\xE9finitive \xBB (une par saison, pour l'AG) ou \xAB Archiver comme point d'\xE9tape \xBB (version dat\xE9e du jour, conserv\xE9e \xE0 c\xF4t\xE9). Les archives sont consultables par les adh\xE9rents. Les encadr\xE9s orange de l'aper\xE7u n'apparaissent pas dans la version archiv\xE9e." }),
-        busy && J.jsx("p", { style: { margin: 0, fontSize: 12.5, color: "#b5650a", fontWeight: 600 }, children: busy }),
-        inp && J.jsxs("div", { style: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }, children: [
-          F("agDate", "Date de l'AG", "ex. samedi 10 octobre 2027"),
-          F("effectifPrecedent", "Effectif saison pr\xE9c\xE9dente", data && (data.evoPrev || data.pyrPrev) ? "auto si vide" : "ex. 39"),
-          F("eleves", "\xC9l\xE8ves form\xE9s", "auto (s\xE9ances) si vide"),
-          F("elevesJeunes", "dont jeunes", "ex. 5"),
-          F("diplomes", "Dipl\xF4mes / billes obtenus", "ex. 4"),
-          F("resultats", "R\xE9sultats marquants (une ligne par r\xE9sultat)", "ex. Championnat de Ligue libre R2 : J. Dupont champion", true, 4),
-          F("actionsAVenir", "Actions \xE0 venir (une ligne par action)", "", true, 3),
-          F("objectifs", "Objectifs saison suivante (une ligne : objectif ; cible)", "ex. Nombre d'adh\xE9rents ; 40", true, 3),
-          F("motPresident", "Mot du pr\xE9sident (facultatif)", "", true, 4),
-          F("finances", "Point financier (facultatif)", "", true, 2)
-        ] }),
-        inp && J.jsxs("div", { style: { display: "flex", gap: 8, flexWrap: "wrap" }, children: [
-          J.jsx("button", { style: btnG, onClick: refresh, children: "↻ Mettre \xE0 jour l'aper\xE7u" }),
-          J.jsx("button", { style: btnG, onClick: printFrame, children: "\u{1F5A8} Imprimer l'aper\xE7u" }),
-          J.jsx("button", { style: { ...btnG, borderColor: "#c9a227" }, onClick: () => archive(true), children: "\u{1F4CC} Archiver comme point d'\xE9tape" }),
-          J.jsx("button", { style: btn, onClick: () => archive(false), children: "✔ Archiver la version d\xE9finitive" })
-        ] }),
-        preview && J.jsx(SyntheseFrame, { html: preview, frameRef })
-      ] }) })
-    ] });
-  }
   function PageDocumentsInternes({ onNavigate, onSwitchTab, adminMode: adminModeProp, onAdminModeChange, unlocked: unlockedProp, onUnlockedChange, memberPassword: memberPasswordProp, onMemberPasswordChange } = {}) {
     const [showBackToTop, setShowBackToTop] = (0, import_react14.useState)(false);
     (0, import_react14.useEffect)(() => {
@@ -27561,7 +27095,6 @@ Continuer ?`;
                 adminMode && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: styles13.miniAdd, onClick: addDoc, children: "+ Ajouter un document" })
               ] }),
               /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: styles13.pageIntro, children: "Statuts, comptes-rendus d'assembl\xE9es g\xE9n\xE9rales et de r\xE9unions de bureau, r\xE8glement int\xE9rieur \u2014 retrouvez ici les documents officiels du club." }),
-              /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(SyntheseSaisonPanel, { adminMode }),
               /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "no-print", style: styles13.seasonTabs, children: seasonTabs.map((t) => {
                 const on = t.id === activeTab && filterCat !== "archive" && filterCat !== "editos";
                 return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)(
@@ -27825,7 +27358,6 @@ Continuer ?`;
     const [currentPage, setCurrentPage] = (0, import_react15.useState)("p0");
     const [espaceSubTab, setEspaceSubTab] = (0, import_react15.useState)("adherents");
     const [adminMode, setAdminMode] = (0, import_react15.useState)(DEV_SKIP_PASSWORDS);
-    const [adminScope, setAdminScope] = (0, import_react15.useState)("full");
     const [membersUnlocked, setMembersUnlocked] = (0, import_react15.useState)(() => {
       if (DEV_SKIP_PASSWORDS) return true;
       try {
@@ -27934,19 +27466,6 @@ Continuer ?`;
         break;
       default:
         Component = PageAccueil;
-    }
-    if (currentPage === "p4") {
-      extraProps.adminScope = adminMode ? adminScope : "full";
-      extraProps.onAdminModeChange = (v, scope) => {
-        setAdminMode(v);
-        setAdminScope(v && scope === "ecole" ? "ecole" : "full");
-      };
-    } else {
-      if (adminScope === "ecole") extraProps.adminMode = false;
-      extraProps.onAdminModeChange = (v) => {
-        setAdminMode(v);
-        setAdminScope("full");
-      };
     }
     return /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Component, { ...extraProps });
   }
