@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="20/10/2026";</script>
+<script>window.__SITE_BUILD_DATE__="09/11/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -12794,6 +12794,145 @@
       textEl.textContent = kind === "read" ? "\u26A0\uFE0F \xC9chec de la lecture : impossible de contacter le coffre-fort en ligne. Certaines informations personnalis\xE9es (mots de passe, textes modifi\xE9s\u2026) peuvent ne pas s'\xEAtre charg\xE9es et un r\xE9glage par d\xE9faut est utilis\xE9 \xE0 la place. V\xE9rifiez votre connexion internet et rechargez la page. Si le probl\xE8me persiste, le projet Supabase est peut-\xEAtre en pause (inactivit\xE9 prolong\xE9e) \u2014 reconnectez-vous \xE0 votre tableau de bord Supabase pour le r\xE9veiller." : "\u26A0\uFE0F \xC9chec de l'enregistrement : impossible de contacter le coffre-fort en ligne. V\xE9rifiez votre connexion internet et r\xE9essayez. Si le probl\xE8me persiste, le projet Supabase est peut-\xEAtre en pause (inactivit\xE9 prolong\xE9e) \u2014 reconnectez-vous \xE0 votre tableau de bord Supabase pour le r\xE9veiller.";
       el.style.display = "block";
     }
+    const PENDING_KEY = "bcp-pending-writes";
+    const queues = {};
+    const failed = {};
+    function readPending() {
+      try {
+        return JSON.parse(localStorage.getItem(PENDING_KEY) || "{}");
+      } catch (e) {
+        return {};
+      }
+    }
+    function writePending(o) {
+      try {
+        localStorage.setItem(PENDING_KEY, JSON.stringify(o));
+      } catch (e) {
+      }
+    }
+    function setPending(key, value) {
+      const o = readPending();
+      o[key] = value;
+      writePending(o);
+    }
+    function clearPending(key) {
+      const o = readPending();
+      delete o[key];
+      writePending(o);
+    }
+    function fetchWithTimeout(url, opts, ms) {
+      const ctl = typeof AbortController !== "undefined" ? new AbortController() : null;
+      const t = setTimeout(function() {
+        if (ctl) ctl.abort();
+      }, ms);
+      return fetch(url, Object.assign({}, opts, ctl ? { signal: ctl.signal } : {})).finally(function() {
+        clearTimeout(t);
+      });
+    }
+    async function postOnce(key, value) {
+      const res = await fetchWithTimeout(REST, {
+        method: "POST",
+        headers: Object.assign({}, headers, { Prefer: "resolution=merge-duplicates,return=minimal" }),
+        body: JSON.stringify({ key, value, updated_at: (/* @__PURE__ */ new Date()).toISOString() })
+      }, 25e3);
+      if (!res.ok) {
+        let detail = "";
+        try {
+          detail = (await res.text()).slice(0, 160);
+        } catch (e) {
+        }
+        throw new Error("HTTP " + res.status + (detail ? " " + detail : ""));
+      }
+    }
+    async function writeWithRetry(key, value) {
+      let lastErr = null;
+      for (let i = 0; i < 3; i++) {
+        try {
+          await postOnce(key, value);
+          return;
+        } catch (e) {
+          lastErr = e;
+          await new Promise(function(r) {
+            setTimeout(r, 800 * (i + 1));
+          });
+        }
+      }
+      throw lastErr;
+    }
+    function refreshWriteBanner() {
+      const keys = Object.keys(failed);
+      if (keys.length === 0) {
+        const el2 = document.getElementById("bcp-storage-warning");
+        if (el2 && el2.dataset.kind === "write") el2.style.display = "none";
+        return;
+      }
+      const el = ensureBanner();
+      const textEl = el.querySelector("#bcp-storage-warning-text");
+      const k = keys[0];
+      const kb = Math.round((readPending()[k] || "").length / 1024);
+      textEl.textContent = "\u26A0\uFE0F Enregistrement NON effectu\xE9 (" + k + ", " + kb + " Ko) : " + failed[k] + ". Vos donn\xE9es sont gard\xE9es sur cet appareil et le site r\xE9essaie automatiquement. Ne fermez pas la page avant que ce message disparaisse.";
+      let btn = el.querySelector("#bcp-retry");
+      if (!btn) {
+        btn = document.createElement("button");
+        btn.id = "bcp-retry";
+        btn.textContent = "R\xE9essayer maintenant";
+        btn.style.cssText = "margin-left:12px;background:#fff;color:#c0392b;border:0;border-radius:4px;padding:4px 10px;cursor:pointer;font-weight:700;";
+        btn.onclick = function() {
+          retryPending();
+        };
+        el.insertBefore(btn, el.querySelector("button:not(#bcp-retry)"));
+      }
+      el.dataset.kind = "write";
+      el.style.display = "block";
+    }
+    function enqueueWrite(key, value) {
+      setPending(key, value);
+      return new Promise(function(resolve, reject) {
+        let q = queues[key];
+        if (!q) q = queues[key] = { running: false, next: null };
+        if (q.next) q.next.waiters.push({ resolve, reject });
+        else q.next = { waiters: [{ resolve, reject }] };
+        q.next.value = value;
+        if (!q.running) drain(key);
+      });
+    }
+    async function drain(key) {
+      const q = queues[key];
+      q.running = true;
+      while (q.next) {
+        const job = q.next;
+        q.next = null;
+        try {
+          await writeWithRetry(key, job.value);
+          if (!q.next) clearPending(key);
+          delete failed[key];
+          job.waiters.forEach(function(w) {
+            w.resolve({ key, value: job.value });
+          });
+        } catch (e) {
+          failed[key] = String(e && e.message || e);
+          job.waiters.forEach(function(w) {
+            w.reject(e);
+          });
+        }
+        refreshWriteBanner();
+      }
+      q.running = false;
+    }
+    function retryPending() {
+      const o = readPending();
+      Object.keys(o).forEach(function(k) {
+        const q = queues[k];
+        if (q && (q.running || q.next)) return;
+        enqueueWrite(k, o[k]).catch(function() {
+        });
+      });
+    }
+    window.addEventListener("online", retryPending);
+    setInterval(function() {
+      if (Object.keys(failed).length) retryPending();
+    }, 3e4);
+    setTimeout(retryPending, 1500);
     window.storage = {
       async get(key) {
         try {
@@ -12807,19 +12946,8 @@
           throw e;
         }
       },
-      async set(key, value) {
-        try {
-          const res = await fetch(REST, {
-            method: "POST",
-            headers: Object.assign({}, headers, { Prefer: "resolution=merge-duplicates,return=minimal" }),
-            body: JSON.stringify({ key, value, updated_at: (/* @__PURE__ */ new Date()).toISOString() })
-          });
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          return { key, value };
-        } catch (e) {
-          showWarning("write");
-          throw e;
-        }
+      set(key, value) {
+        return enqueueWrite(key, value);
       },
       async delete(key) {
         try {
@@ -24987,6 +25115,8 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
     };
     const [menuOpen, setMenuOpen] = (0, import_react12.useState)(false);
     const [status, setStatus] = (0, import_react12.useState)("");
+    const [competsLoaded, setCompetsLoaded] = (0, import_react12.useState)(true);
+    const saveSeq = (0, import_react12.useRef)(0);
     const [importStatus, setImportStatus] = (0, import_react12.useState)("");
     const importInputRef = (0, import_react12.useRef)(null);
     const menuRef = (0, import_react12.useRef)(null);
@@ -24995,7 +25125,15 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
         setLogos(await loadJSON11("home:logos", DEFAULT_LOGOS10));
         setSocial(await loadJSON11("home:social", DEFAULT_SOCIAL10));
         setPassword(await loadJSON11("p5:password", DEFAULT_PASSWORD3));
-        const loadedCompets = await loadJSON11("p5:competitions", []);
+        let loadedCompets = [];
+        try {
+          const rc = await window.storage.get("p5:competitions", true);
+          loadedCompets = rc && rc.value ? JSON.parse(rc.value) : [];
+          setCompetsLoaded(true);
+        } catch (e) {
+          setCompetsLoaded(false);
+          setStatus("\u26A0 Liste des comp\xE9titions non charg\xE9e (connexion \xE0 la base impossible) : modifications bloqu\xE9es pour ne rien \xE9craser. Rechargez la page (Ctrl+F5).");
+        }
         setCompetitions(loadedCompets.map((c) => ({ photos: [], ...c })));
         setTables(await loadTables2());
         const allAdherents = await loadJSON11("p5:adherents", []);
@@ -25027,8 +25165,20 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
       }
     };
     const persist = (next) => {
+      if (!competsLoaded) {
+        setStatus("\u26A0 Modification refus\xE9e : la liste n'a pas pu \xEAtre charg\xE9e. Rechargez la page (Ctrl+F5) puis recommencez.");
+        return;
+      }
       setCompetitions(next);
-      saveJSON10("p5:competitions", next);
+      const seq = ++saveSeq.current;
+      window.storage.set("p5:competitions", JSON.stringify(next), true).then(
+        () => {
+          if (seq === saveSeq.current) setStatus("\u2713 Comp\xE9titions enregistr\xE9es.");
+        },
+        () => {
+          if (seq === saveSeq.current) setStatus("\u26A0 Enregistrement des comp\xE9titions NON effectu\xE9 (voir bandeau rouge) : le site r\xE9essaie automatiquement.");
+        }
+      );
     };
     const updateCompet = (id, patch) => persist(competitions.map((c) => c.id === id ? { ...c, ...patch } : c));
     const addCompet = () => {
