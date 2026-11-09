@@ -13780,9 +13780,18 @@
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -15355,9 +15364,18 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -16172,9 +16190,18 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -16670,9 +16697,18 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -17652,8 +17688,10 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
     const [syncStatus, setSyncStatus] = (0, import_react6.useState)({});
     const [syncingAll, setSyncingAll] = (0, import_react6.useState)(false);
     const [localAdminMode, setLocalAdminMode] = (0, import_react6.useState)(false);
-    const adminMode = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
+    const adminModeShared = adminModeProp !== void 0 ? adminModeProp : localAdminMode;
     const setAdminMode = onAdminModeChange || setLocalAdminMode;
+    const [trainerMode, setTrainerMode] = (0, import_react6.useState)(false);
+    const adminMode = adminModeShared || trainerMode;
     const [adminPassword, setAdminPassword] = (0, import_react6.useState)("admin2025");
     const [adminGate, setAdminGate] = (0, import_react6.useState)({ open: false, mode: "login", input: "", error: "", show: false });
     (0, import_react6.useEffect)(() => {
@@ -17664,15 +17702,34 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
     const requestAdmin = () => {
       if (adminMode) {
         setAdminMode(false);
+        setTrainerMode(false);
         return;
       }
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
-    const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", which: "admin", input: "", error: "" });
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        let freshTrainerPassword = "";
+        try {
+          const rt = await window.storage.get("p4:trainerpassword", true);
+          if (rt && rt.value) freshTrainerPassword = JSON.parse(rt.value);
+        } catch (e) {
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
+          setAdminGate((g) => ({ ...g, open: false }));
+        } else if (freshTrainerPassword && adminGate.input === freshTrainerPassword) {
+          setTrainerMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
           setAdminGate((g) => ({ ...g, error: "Mot de passe incorrect." }));
@@ -17683,8 +17740,13 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
           setAdminGate((g) => ({ ...g, error: "Entrez un nouveau mot de passe." }));
           return;
         }
-        setAdminPassword(val);
-        saveJSON5("site:adminpassword", val);
+        if (adminGate.which === "trainer") {
+          saveJSON5("p4:trainerpassword", val);
+          setStatus("Mot de passe formateur enregistr\xE9.");
+        } else {
+          setAdminPassword(val);
+          saveJSON5("site:adminpassword", val);
+        }
         setAdminGate((g) => ({ ...g, open: false }));
       }
     };
@@ -17859,7 +17921,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
             ] }),
             menuOpen && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { style: styles5.menuPanel, children: PAGES5.map((p) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: { ...styles5.menuItem, ...p.id === "p4" ? styles5.menuItemActive : {} }, onClick: () => goTo(p), children: p.label }, p.id)) }),
             /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("button", { style: { ...styles5.adminToggle, ...adminMode ? styles5.adminToggleActive : {} }, onClick: requestAdmin, children: adminMode ? "Quitter l'\xE9dition" : "Mode administrateur" }),
-            adminMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+            adminModeShared && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
               "button",
               {
                 style: { border: "1px solid rgba(201,162,39,0.6)", background: "transparent", color: "#c9a227", borderRadius: 5, padding: "9px 10px", fontSize: 11 },
@@ -17880,7 +17942,17 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
                     style: { background: "#fff", borderRadius: 8, padding: 20, width: "min(340px, 100%)", borderTop: "4px solid #c9a227", boxShadow: "0 10px 40px rgba(0,0,0,0.3)" },
                     onClick: (e) => e.stopPropagation(),
                     children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { margin: "0 0 10px", fontSize: 15, fontWeight: 700, color: "#0a1628" }, children: adminGate.mode === "login" ? "Acc\xE8s administrateur" : "Changer le mot de passe admin" }),
+                      /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("p", { style: { margin: "0 0 10px", fontSize: 15, fontWeight: 700, color: "#0a1628" }, children: adminGate.mode === "login" ? "Acc\xE8s administrateur ou formateur" : "Changer un mot de passe" }),
+                      adminGate.mode === "change" && /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { display: "flex", gap: 12, marginBottom: 8, fontSize: 12.5 }, children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("input", { type: "radio", checked: adminGate.which !== "trainer", onChange: () => setAdminGate((g) => ({ ...g, which: "admin" })) }),
+                          " Administrateur"
+                        ] }),
+                        /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("label", { children: [
+                          /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("input", { type: "radio", checked: adminGate.which === "trainer", onChange: () => setAdminGate((g) => ({ ...g, which: "trainer" })) }),
+                          " Formateurs (page \xC9cole seule)"
+                        ] })
+                      ] }),
                       /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", { style: { position: "relative" }, children: [
                         /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
                           "input",
@@ -17892,7 +17964,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
                             onKeyDown: (e) => {
                               if (e.key === "Enter") submitAdminGate();
                             },
-                            placeholder: adminGate.mode === "login" ? "Mot de passe administrateur" : "Nouveau mot de passe",
+                            placeholder: adminGate.mode === "login" ? "Mot de passe" : "Nouveau mot de passe",
                             style: { width: "100%", padding: "8px 34px 8px 10px", border: "1px solid #C9C2AE", borderRadius: 4, marginBottom: 8, boxSizing: "border-box" }
                           }
                         ),
@@ -18675,9 +18747,18 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -19416,9 +19497,18 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -19945,9 +20035,18 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -23358,9 +23457,18 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -25110,9 +25218,18 @@ Supprimer quand m\xEAme ?`)) removeAdherent(a.id);
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -26308,9 +26425,18 @@ Continuer ?`;
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
@@ -26969,9 +27095,18 @@ Continuer ?`;
       setAdminGate({ open: true, mode: "login", input: "", error: "" });
     };
     const openChangeAdminPwd = () => setAdminGate({ open: true, mode: "change", input: "", error: "" });
-    const submitAdminGate = () => {
+    const submitAdminGate = async () => {
       if (adminGate.mode === "login") {
-        if (adminGate.input === adminPassword) {
+        let freshAdminPassword = adminPassword;
+        try {
+          const res = await window.storage.get("site:adminpassword", true);
+          if (res && res.value) freshAdminPassword = JSON.parse(res.value);
+          setAdminPassword(freshAdminPassword);
+        } catch (e) {
+          setAdminGate((g) => ({ ...g, error: "Connexion \xE0 la base impossible : impossible de v\xE9rifier le mot de passe. Rechargez la page (Ctrl+F5) et r\xE9essayez." }));
+          return;
+        }
+        if (adminGate.input === freshAdminPassword) {
           setAdminMode(true);
           setAdminGate((g) => ({ ...g, open: false }));
         } else {
