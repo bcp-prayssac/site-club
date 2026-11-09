@@ -20588,7 +20588,7 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
         const lastSeen = {};
         for (let i = 0; i < 3; i++) {
           for (const b of weeks[i] || []) {
-            if (!b.recurringGroup || b.recurringGroup.startsWith("block-") || inLast.has(b.recurringGroup)) continue;
+            if (!b.recurringGroup || /^(block|compet|course|tournoi)-/.test(b.recurringGroup) || inLast.has(b.recurringGroup)) continue;
             lastSeen[b.recurringGroup] = { off: i, b };
           }
         }
@@ -20805,6 +20805,22 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
       setLoading(false);
       setEditTarget(null);
       setStatus("R\xE9servation annul\xE9e pour cette semaine.");
+    };
+    const removeLinkedBlock = async (booking) => {
+      if (!adminMode) return;
+      const g = booking.recurringGroup;
+      const label = g.startsWith("compet-") ? "cette comp\xE9tition" : "ce tournoi";
+      if (!window.confirm(`Lib\xE9rer toutes les tables bloqu\xE9es pour ${label} (\xAB ${booking.name} \xBB) sur cette semaine ?`)) return;
+      setLoading(true);
+      const key = weekStorageKey2(weekOffset);
+      const arr = await getWeekBookings(key);
+      try {
+        await window.storage.set(key, JSON.stringify(arr.filter((b) => b.recurringGroup !== g)), true);
+      } catch (e) {
+      }
+      await loadWeek(weekOffset);
+      setLoading(false);
+      setStatus("Tables lib\xE9r\xE9es.");
     };
     const cancelSeries = async (booking) => {
       setLoading(true);
@@ -21287,8 +21303,8 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                           "button",
                           {
                             className: "resa-cell-btn",
-                            disabled: isDayLocked(dIdx) || isBlocked,
-                            onClick: () => openEditBooking(booking),
+                            disabled: isDayLocked(dIdx) || isBlocked && !(adminMode && (isCompet || isTournoi)),
+                            onClick: () => isBlocked ? removeLinkedBlock(booking) : openEditBooking(booking),
                             children: isIndisp ? booking.name : displayBooking(booking)
                           }
                         ) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -21309,7 +21325,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
             ] }, t.id);
           }) }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles9.legend, className: "no-print", children: [
-            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 gris ray\xE9 = horaire bloqu\xE9 ou table ferm\xE9e par l'administrateur (travaux) \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages respectives) \xB7 ",
+            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 gris ray\xE9 = horaire bloqu\xE9 ou table ferm\xE9e par l'administrateur (travaux) \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages ; en mode administrateur, un clic sur une case ros\xE9e lib\xE8re les tables) \xB7 ",
             loading ? "Chargement\u2026" : "Cliquez sur une case libre pour r\xE9server (avec possibilit\xE9 d'ajouter jusqu'\xE0 3 invit\xE9s), ou sur une case occup\xE9e pour la modifier ou l'annuler."
           ] })
         ] }),
