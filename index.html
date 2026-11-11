@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="09/11/2026";</script>
+<script>window.__SITE_BUILD_DATE__="11/11/2026";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -26957,14 +26957,15 @@ Continuer ?`;
       categorie: "Compte-rendu de bureau",
       date: todayIso(),
       texte: "",
-      lien: ""
+      lien: "",
+      permanent: false
     };
   }
   function LogoBox12({ label, url, href }) {
     const box = /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: styles13.logoImgWrap, children: url ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("img", { src: url, alt: label, style: styles13.logoImg }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: styles13.logoPlaceholderText, children: label }) });
     return href ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("a", { href, target: "_blank", rel: "noreferrer", style: { display: "inline-flex" }, children: box }) : box;
   }
-  function DocModal2({ doc, adminMode, onChange, onClose, onDelete }) {
+  function DocModal2({ doc, adminMode, onChange, onClose, onDelete, cats = DOC_CATEGORIES }) {
     return /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { style: styles13.modalOverlay, className: "no-print", onClick: onClose, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: styles13.modal, onClick: (e) => e.stopPropagation(), children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: styles13.modalHead, children: [
         adminMode ? /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { value: doc.titre, onChange: (e) => onChange({ titre: e.target.value }), style: { fontWeight: 700, fontSize: 15, flex: 1 } }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { className: "p5d-serif", style: styles13.modalTitle, children: doc.titre }),
@@ -26976,7 +26977,11 @@ Continuer ?`;
       adminMode ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 10 }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { style: styles13.fieldRow, children: [
           /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: styles13.fieldLabel, children: "Cat\xE9gorie" }),
-          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("select", { value: doc.categorie, onChange: (e) => onChange({ categorie: e.target.value }), children: DOC_CATEGORIES.map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: c, children: c }, c)) })
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("select", { value: doc.categorie, onChange: (e) => onChange({ categorie: e.target.value }), children: (cats.includes(doc.categorie) ? cats : [...cats, doc.categorie]).map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("option", { value: c, children: c }, c)) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { style: { ...styles13.fieldRow, flexDirection: "row", alignItems: "center", gap: 6, alignSelf: "flex-end", paddingBottom: 6, background: "#fff3d6", border: "1px solid #c9a227", borderRadius: 4, padding: "6px 10px" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { type: "checkbox", "data-testid": "doc-permanent", checked: doc.permanent === true || doc.permanent === void 0 && PERMANENT_CATEGORIES.includes(doc.categorie), onChange: (e) => onChange({ permanent: e.target.checked }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: { fontSize: 12.5, fontWeight: 600 }, children: "Document permanent (valable toutes saisons)" })
         ] }),
         /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("label", { style: styles13.fieldRow, children: [
           /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: styles13.fieldLabel, children: "Date" }),
@@ -26988,6 +26993,7 @@ Continuer ?`;
         ] })
       ] }) : /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 10, fontSize: 12, color: "#5F5E5A" }, children: [
         /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: styles13.tournoiTag, children: doc.categorie }),
+        (doc.permanent === true || doc.permanent === void 0 && PERMANENT_CATEGORIES.includes(doc.categorie)) && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { style: styles13.tournoiTag, children: "Permanent" }),
         doc.date && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("span", { children: fmtDateShort2(doc.date) })
       ] }),
       doc.lien && !adminMode && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { marginBottom: 10 }, children: /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("a", { href: doc.lien, target: "_blank", rel: "noreferrer", style: { color: "#1E5A48", fontWeight: 600 }, children: "Consulter le document complet (lien externe) \u2192" }) }),
@@ -27039,6 +27045,9 @@ Continuer ?`;
     const [showDocsPwd, setShowDocsPwd] = (0, import_react14.useState)(false);
     const [docsPwdError, setDocsPwdError] = (0, import_react14.useState)("");
     const [filterCat, setFilterCat] = (0, import_react14.useState)("toutes");
+    const [cats, setCats] = (0, import_react14.useState)(DOC_CATEGORIES);
+    const [catPanel, setCatPanel] = (0, import_react14.useState)(false);
+    const [newCat, setNewCat] = (0, import_react14.useState)("");
     const [seasonTab, setSeasonTab] = (0, import_react14.useState)(currentSeasonLabelDocs());
     const [openId, setOpenId] = (0, import_react14.useState)(null);
     (0, import_react14.useEffect)(() => {
@@ -27048,6 +27057,7 @@ Continuer ?`;
         setPassword(await loadJSON13("p5:password", DEFAULT_PASSWORD5));
         setAdminPassword(await loadJSON13("site:adminpassword", "admin2025"));
         setDocs(await loadJSON13("p5:documents", []));
+        setCats(await loadJSON13("p5:doccategories", DOC_CATEGORIES));
         setNewsArchive(await loadJSON13("home:news:archive", []));
         setEditoArchive(await loadJSON13("p1:edito:archive", []));
         const dp = await loadJSON13("p5:docsPassword", "");
@@ -27123,6 +27133,34 @@ Continuer ?`;
         setAdminGate((g) => ({ ...g, open: false }));
       }
     };
+    const saveCats = (list) => {
+      setCats(list);
+      saveJSON12("p5:doccategories", list);
+    };
+    const isPermDoc = (d) => d.permanent === true || d.permanent === void 0 && PERMANENT_CATEGORIES.includes(d.categorie);
+    const renameCat = (oldName, raw) => {
+      const name = raw.trim();
+      if (!name || name === oldName) return;
+      if (cats.includes(name)) { setStatus("Cette cat\xE9gorie existe d\xE9j\xE0."); return; }
+      saveCats(cats.map((c) => c === oldName ? name : c));
+      persist(docs.map((d) => d.categorie === oldName ? { ...d, categorie: name, permanent: isPermDoc(d) } : d));
+      if (filterCat === oldName) setFilterCat(name);
+    };
+    const addCat = () => {
+      const name = newCat.trim();
+      if (!name || cats.includes(name)) return;
+      saveCats([...cats, name]);
+      setNewCat("");
+    };
+    const removeCat = (name) => {
+      const used = docs.filter((d) => d.categorie === name).length;
+      if (!window.confirm(used ? `Supprimer la cat\xE9gorie \xAB ${name} \xBB ? Les ${used} document(s) concern\xE9(s) passeront dans \xAB Autre \xBB.` : `Supprimer la cat\xE9gorie \xAB ${name} \xBB ?`)) return;
+      let next = cats.filter((c) => c !== name);
+      if (used && !next.includes("Autre")) next = [...next, "Autre"];
+      saveCats(next);
+      if (used) persist(docs.map((d) => d.categorie === name ? { ...d, categorie: "Autre", permanent: isPermDoc(d) } : d));
+      if (filterCat === name) setFilterCat("toutes");
+    };
     const persist = (next) => {
       setDocs(next);
       saveJSON12("p5:documents", next);
@@ -27144,7 +27182,7 @@ Continuer ?`;
       saveJSON12("p5:docsPassword", val);
       if (!val) setDocsUnlocked(true);
     };
-    const tabOfDoc = (d) => PERMANENT_CATEGORIES.includes(d.categorie) ? "perm" : seasonOfDateStr(d.date) || "sans-date";
+    const tabOfDoc = (d) => (d.permanent === true || d.permanent === void 0 && PERMANENT_CATEGORIES.includes(d.categorie)) ? "perm" : seasonOfDateStr(d.date) || "sans-date";
     const seasonTabs = (0, import_react14.useMemo)(() => {
       const cur = currentSeasonLabelDocs();
       const set = /* @__PURE__ */ new Set([cur]);
@@ -27420,7 +27458,7 @@ Continuer ?`;
                 );
               }) }),
               /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: styles13.chipRow, className: "no-print", children: [
-                ["toutes", ...DOC_CATEGORIES].map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+                ["toutes", ...cats].map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
                   "button",
                   {
                     onClick: () => setFilterCat(c),
@@ -27452,7 +27490,19 @@ Continuer ?`;
                       ")"
                     ]
                   }
-                )
+                ),
+                adminMode && /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { "data-testid": "cat-manage", onClick: () => setCatPanel((v) => !v), style: { ...styles13.chip, borderStyle: "dashed" }, children: catPanel ? "Fermer la gestion" : "\u2699 G\xE9rer les cat\xE9gories" })
+              ] }),
+              adminMode && catPanel && /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { margin: "8px 0", padding: 10, background: "#fff3d6", border: "1px solid #c9a227", borderRadius: 6 }, className: "no-print", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: { margin: "0 0 6px", fontSize: 12.5, fontWeight: 700 }, children: "Cat\xE9gories de documents : modifiez un nom puis quittez la case pour l'enregistrer." }),
+                cats.map((c) => /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 6, alignItems: "center", marginBottom: 4 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { defaultValue: c, "data-testid": "cat-input", onBlur: (e) => renameCat(c, e.target.value), onKeyDown: (e) => { if (e.key === "Enter") e.target.blur(); }, style: { flex: 1, maxWidth: 280 } }),
+                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: styles13.btnGhostSmall, onClick: () => removeCat(c), title: "Supprimer cette cat\xE9gorie", children: "\u2715" })
+                ] }, c)),
+                /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: { display: "flex", gap: 6, marginTop: 6 }, children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("input", { value: newCat, onChange: (e) => setNewCat(e.target.value), onKeyDown: (e) => { if (e.key === "Enter") addCat(); }, placeholder: "Nouvelle cat\xE9gorie\u2026", "data-testid": "cat-new", style: { flex: 1, maxWidth: 280 } }),
+                  /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("button", { style: styles13.btnPrimarySmall || styles13.btnGhostSmall, onClick: addCat, children: "Ajouter" })
+                ] })
               ] }),
               filterCat === "editos" ? /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { style: styles13.docList, children: [
                 /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("p", { style: styles13.pageIntro, children: "Chaque fois qu'un nouvel \xE9dito est publi\xE9 sur la page \xAB Pr\xE9sentation du club \xBB, le pr\xE9c\xE9dent est conserv\xE9 ici." }),
@@ -27502,7 +27552,8 @@ Continuer ?`;
             adminMode,
             onChange: (patch) => updateDoc(openDoc.id, patch),
             onClose: () => setOpenId(null),
-            onDelete: () => removeDoc(openDoc.id)
+            onDelete: () => removeDoc(openDoc.id),
+            cats
           }
         )
       ] }),
