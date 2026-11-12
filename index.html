@@ -4,7 +4,7 @@
 <meta name="description" content="Site officiel du Billard Club Prayssacois (Lot) : présentation du club, écoles de billard, compétitions, tournois internes, réservation des tables et espace réservé aux adhérents.">
 <title>Billard Club Prayssacois</title><style>html,body,#root { margin:0; padding:0; height:100%; }</style></head>
 <body><div id="root"></div>
-<script>window.__SITE_BUILD_DATE__="11/11/2026";</script>
+<script>window.__SITE_BUILD_DATE__="12/11/2026 (b)";</script>
 <script>(() => {
   var __create = Object.create;
   var __defProp = Object.defineProperty;
@@ -20567,8 +20567,8 @@ En d\xE9cembre 2025, **Claude Bouysset**, fondateur et pr\xE9sident pendant plus
       })();
       (async () => {
         try {
-          const res = await window.storage.get("resa:myname", false);
-          if (res && res.value) setMyName(res.value);
+          // Le nom n'est plus mémorisé : à chaque connexion, le champ repart vide (et rouge) pour éviter de réserver sous le nom du précédent utilisateur.
+          await window.storage.set("resa:myname", "", false);
         } catch (e) {
         }
       })();
@@ -20941,8 +20941,19 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
       setEditTarget(null);
       setStatus("R\xE9servation r\xE9currente annul\xE9e \xE0 partir de cette semaine.");
     };
+    const courseOnOther = (tableId, day, hour) => bookings.find((b) => b.tableId !== tableId && b.day === day && b.hour === hour && b.recurringGroup && b.recurringGroup.startsWith("course-"));
+    const [courseWarn, setCourseWarn] = (0, import_react10.useState)(null);
     const openNewBooking = (tableId, day, hours) => {
       if (adherents.length === 0) return;
+      const hrs = Array.isArray(hours) ? hours : [hours];
+      const conflicts = hrs.map((h) => courseOnOther(tableId, day, h)).filter(Boolean);
+      if (conflicts.length > 0) {
+        setCourseWarn({ tableId, day, hours: hrs });
+        return;
+      }
+      openNewBookingNow(tableId, day, hours);
+    };
+    const openNewBookingNow = (tableId, day, hours) => {
       setPendingNew({ tableId, day, hours: Array.isArray(hours) ? hours : [hours] });
       setPendingPrincipal(myName && adherents.includes(myName) ? myName : "");
       setPendingGuests(["", "", ""]);
@@ -21033,6 +21044,8 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
         .resa-cell.course .resa-cell-btn { color: #fff !important; font-weight: 700; }
         .resa-cell.indispo { background: repeating-linear-gradient(45deg, #5a5a5a, #5a5a5a 6px, #6c6c6c 6px, #6c6c6c 12px) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
         .resa-cell.indispo .resa-cell-btn { color: #fff !important; font-weight: 700; }
+        .resa-cell.warn-course { background: #FFF1C2; }
+        .resa-cell.warn-course .resa-cell-empty-btn { color: #8a5a00; font-weight: 700; font-size: 10.5px; }
         .resa-cell.compet { background: #F0D2CC; }
         .resa-cell.compet .resa-cell-btn { color: #7E2C1C; font-weight: 600; }
         @media print {
@@ -21182,7 +21195,9 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                   background: myName ? "#fff" : "#B1432F",
                   color: myName ? "#0a1628" : "#fff",
                   fontWeight: myName ? 400 : 700,
-                  borderColor: myName ? "#C9C2AE" : "#8a2f1f"
+                  borderColor: myName ? "#C9C2AE" : "#8a2f1f",
+                  borderWidth: 2,
+                  outline: myName ? "none" : "2px solid #ff8a75"
                 },
                 children: [
                   /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("option", { value: "", children: "Choisir un adh\xE9rent\u2026" }),
@@ -21190,6 +21205,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                 ]
               }
             ),
+            !myName && adherents.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { "data-testid": "name-required", style: { fontSize: 12.5, color: "#fff", background: "#B1432F", padding: "3px 8px", borderRadius: 4, fontWeight: 700 }, children: "\u26A0 Obligatoire : choisissez votre nom avant de r\xE9server" }),
             adherents.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("span", { style: { fontSize: 11.5, color: "#c9a227" }, children: "Aucun adh\xE9rent enregistr\xE9 \u2014 ajoutez-en en mode administrateur." })
           ] }),
           status && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: styles9.status, className: "no-print", children: status })
@@ -21394,8 +21410,8 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                       "td",
                       {
                         rowSpan: span,
-                        className: `resa-cell ${isDayLocked(dIdx) ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isIndisp ? "indispo" : ""} ${isCompet || isTournoi ? "compet" : ""} ${selected ? "selected" : ""}`,
-                        title,
+                        className: `resa-cell ${isDayLocked(dIdx) ? "locked" : ""} ${booking ? "filled" : ""} ${booking && booking.recurringGroup && !isBlocked ? "recurring" : ""} ${isCourse ? "course" : ""} ${isIndisp ? "indispo" : ""} ${isCompet || isTournoi ? "compet" : ""} ${!booking && courseOnOther(t.id, dIdx, h) ? "warn-course" : ""} ${selected ? "selected" : ""}`,
+                        title: !booking && courseOnOther(t.id, dIdx, h) ? "Attention : cours sur une autre table \u2014 nuisances sonores possibles" : title,
                         onMouseDown: () => !booking && !isDayLocked(dIdx) && handleCellMouseDown(t.id, dIdx, h),
                         onMouseEnter: () => !booking && !isDayLocked(dIdx) && handleCellMouseEnter(t.id, dIdx, h),
                         children: booking ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(
@@ -21412,7 +21428,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
                             className: `resa-cell-btn resa-cell-empty-btn ${selected ? "selected" : ""}`,
                             disabled: isDayLocked(dIdx) || adherents.length === 0,
                             onClick: () => handleCellClick(t.id, dIdx, h),
-                            children: selected ? "\u2713" : "+"
+                            children: selected ? "\u2713" : !isDayLocked(dIdx) && courseOnOther(t.id, dIdx, h) ? "\u26A0 Attention" : "+"
                           }
                         )
                       },
@@ -21424,7 +21440,7 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
             ] }, t.id);
           }) }),
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("p", { style: styles9.legend, className: "no-print", children: [
-            "Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 gris ray\xE9 = horaire bloqu\xE9 ou table ferm\xE9e par l'administrateur (travaux) \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages ; en mode administrateur, un clic sur une case ros\xE9e lib\xE8re les tables) \xB7 ",
+            "jaune \u26A0 = cours en cours sur une autre table (bruit possible) \xB7 Case surlign\xE9e = r\xE9servation r\xE9currente \xB7 rouge = cr\xE9neau de cours de l'\xE9cole du billard \xB7 gris ray\xE9 = horaire bloqu\xE9 ou table ferm\xE9e par l'administrateur (travaux) \xB7 ros\xE9e = comp\xE9tition \xE0 domicile ou tournoi interne (verrouill\xE9es, g\xE9r\xE9es depuis leurs pages ; en mode administrateur, un clic sur une case ros\xE9e lib\xE8re les tables) \xB7 ",
             loading ? "Chargement\u2026" : "Cliquez sur une case libre pour r\xE9server (avec possibilit\xE9 d'ajouter jusqu'\xE0 3 invit\xE9s), ou sur une case occup\xE9e pour la modifier ou l'annuler."
           ] })
         ] }),
@@ -21451,6 +21467,13 @@ Motif affich\xE9 (facultatif, ex. \xAB r\xE9fection du tapis \xBB) :`,
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnPrimary, onClick: () => openNewBooking(selection.tableId, selection.day, selection.hours), children: "R\xE9server \u2192" })
           ] })
         ] }),
+        courseWarn && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: { ...styles9.modalOverlay, zIndex: 70 }, className: "no-print", "data-testid": "course-warn", children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { ...styles9.modal, maxWidth: 420, border: "3px solid #c9a227", background: "#fff8e1" }, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { style: { margin: "0 0 14px", fontSize: 15, lineHeight: 1.5, color: "#3b2a00" }, children: "\u26A0\uFE0F Il y a un cours sur l'autre table et peut-\xEAtre des nuisances sonores. Voulez-vous continuer \xE0 r\xE9server ?" }),
+          /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: { display: "flex", gap: 10, justifyContent: "flex-end" }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnGhostSmall || {}, onClick: () => { setCourseWarn(null); setSelection(null); }, children: "Non" }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("button", { style: styles9.btnPrimarySmall || styles9.btnGhostSmall, "data-testid": "course-warn-yes", onClick: () => { const w = courseWarn; setCourseWarn(null); openNewBookingNow(w.tableId, w.day, w.hours); }, children: "Oui, continuer" })
+          ] })
+        ] }) }),
         pendingNew && /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", { style: styles9.modalOverlay, className: "no-print", onClick: cancelPendingNew, children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.modal, onClick: (e) => e.stopPropagation(), children: [
           /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)("div", { style: styles9.modalHead, children: [
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("p", { className: "resa-serif", style: styles9.modalTitle, children: "Confirmer la r\xE9servation" }),
